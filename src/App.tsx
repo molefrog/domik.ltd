@@ -2,10 +2,15 @@ import { useState } from "react";
 
 import styled from "@emotion/styled";
 import css from "@emotion/css";
+import ChapterOne from "./chapters/1-one/story.mdx";
 
 const Body = styled.div`
-  width: 704px;
-  margin: 32px auto;
+  max-width: 700px;
+  margin: 16px auto;
+
+  img {
+    width: 70%;
+  }
 `;
 
 function App() {
@@ -13,7 +18,9 @@ function App() {
 
   return (
     <div className="App">
-      <Body>Nothing to see here yet!</Body>
+      <Body>
+        <ChapterOne />
+      </Body>
     </div>
   );
 }

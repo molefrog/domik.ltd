@@ -8,9 +8,10 @@ const styles = css`
   :root {
     --color-bg: #fffff9;
     --color-text: #002129;
+    --color-text-highlight: #e386b2;
 
-    font-size: 19px;
-    line-height: 32px;
+    font-size: 20px;
+    line-height: 30px;
     font-weight: normal;
     font-family: Grato Marker;
 
@@ -18,12 +19,20 @@ const styles = css`
     color: var(--color-text);
     background-color: var(--color-bg);
 
+    box-sizing: border-box;
+
     font-synthesis: none;
     text-rendering: optimizeLegibility;
     /* Grato Marker looks better when it's subpixel-antialiased */
     -webkit-font-smoothing: subpixel-antialiased;
     -moz-osx-font-smoothing: grayscale;
     -webkit-text-size-adjust: 100%;
+  }
+
+  *,
+  *:before,
+  *:after {
+    box-sizing: inherit;
   }
 
   a {
