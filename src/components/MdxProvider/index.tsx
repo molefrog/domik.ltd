@@ -18,13 +18,13 @@ const Image = (props: ImageProps) => <Img_ {...props} />;
 
 const A = styled.a`
   color: inherit;
-  text-decoration: var(--color-selected) underline;
-  text-decoration-thickness: 4px;
-  text-decoration-skip-ink: none;
-  text-decoration-style: dotted;
+  text-decoration: var(--color-embossed-dark) underline;
+  text-decoration-thickness: 3px;
+  text-decoration-style: solid;
 
   :hover {
-    color: var(--color-selected);
+    background-color: var(--color-selected);
+    text-decoration: none;
   }
 
   :after {
@@ -45,9 +45,15 @@ const Em = styled.em`
   text-decoration-skip-ink: none;
 `;
 
+const H1 = styled.h1`
+  text-align: center;
+  max-width: 400px;
+  margin: 16px auto 40px auto;
+`;
+
 export const MdxProvider = (props: { children: ReactNode }) => {
   return (
-    <Provider components={{ a: A, em: Em, p: P, Image }}>
+    <Provider components={{ h1: H1, a: A, em: Em, p: P, Image }}>
       {props.children}
     </Provider>
   );
