@@ -9,10 +9,6 @@ import ChapterOne from "./chapters/1-one/story.mdx";
 const ChapterContent = styled.div`
   max-width: 700px;
   margin: 16px auto;
-
-  img {
-    width: 70%;
-  }
 `;
 
 const EnterCipher = styled.div`

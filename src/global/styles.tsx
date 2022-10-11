@@ -8,12 +8,15 @@ const styles = css`
   :root {
     /* color pallete */
     --color-banana-yellow: #f9e9b3;
+    --color-banana-dark-yellow: #f5d97b;
     --color-carrara: #efefe5;
 
     --color-bg: #fffff9;
     --color-text: #002129;
-    --color-selected: var(--color-banana-yellow);
+    --color-selected: var(--color-banana-dark-yellow);
+    --color-selected-light: var(--color-banana-yellow);
     --color-embossed: var(--color-carrara);
+    --color-embossed-dark: #cbcbab;
     --color-text-highlight: #e386b2;
 
     font-size: 20px;
