@@ -1,9 +1,10 @@
-import { useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRoute, useLocation } from "wouter";
 
 import styled from "@emotion/styled";
 
 import { CipherInput } from "~/components/CipherInput";
+import { Compass } from "~/components/Compass";
 import { rand } from "~/utils/rand";
 
 /*
@@ -20,6 +21,7 @@ const useCipher = (): [number, (x: number) => void] => {
 
 export function CipherPage() {
   const [cipher, setCipher] = useCipher();
+  const [arrow, setArrow] = useState(0);
   const firstRender = useRef(true);
 
   // randomize on start
@@ -38,6 +40,10 @@ export function CipherPage() {
     }
   }, []);
 
+  useEffect(() => {
+    setArrow(rand(-360, 180));
+  }, [cipher]);
+
   return (
     <Container>
       <EnterCipher>
@@ -48,25 +54,38 @@ export function CipherPage() {
         </EnterCipherTitle>
         <CipherInput cipher={cipher} onChange={(x) => setCipher(x)} />
       </EnterCipher>
+
+      <Bottom>
+        <Compass size={80} angle={arrow} />
+      </Bottom>
     </Container>
   );
 }
 
+const Bottom = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 0;
+  opacity: 0.2;
+`;
+
 const Container = styled.div`
   min-height: 100vh;
   display: flex;
-  align-items: center;
-  justify-content: stretch;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
 `;
 
 const EnterCipher = styled.div`
   text-align: center;
   flex: 1 1;
-  padding-bottom: 220px;
+  padding-top: 64px;
 `;
 
 const EnterCipherHeader = styled.h1`
-  font-size: 36px;
+  font-size: 32px;
   line-height: 1.2;
 `;
 
@@ -74,7 +93,7 @@ const EnterCipherTitle = styled.h2`
   font-weight: normal;
   margin: 0 auto;
   margin-bottom: 48px;
-  font-size: 24px;
+  font-size: 22px;
   max-width: 640px;
   line-height: 1.4;
 `;
