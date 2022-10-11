@@ -10,6 +10,7 @@ const styles = css`
     --color-banana-yellow: #f9e9b3;
     --color-banana-dark-yellow: #f5d97b;
     --color-carrara: #efefe5;
+    --color-iron-gray: #d6d6d6;
 
     --color-bg: #fffff9;
     --color-text: #002129;

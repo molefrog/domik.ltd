@@ -1,8 +1,7 @@
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { useRoute, useLocation } from "wouter";
 
 import styled from "@emotion/styled";
-import css from "@emotion/css";
 
 import { CipherInput } from "~/components/CipherInput";
 import { rand } from "~/utils/rand";
@@ -29,7 +28,7 @@ export function CipherPage() {
     if (firstRender.current) {
       firstRender.current = false;
 
-      for (let i = 0, ms = 100; i < 4; ++i) {
+      for (let i = 0, ms = 0; i < 3; ++i) {
         ms += rand(200, 800);
 
         setTimeout(() => {

@@ -51,9 +51,9 @@ export const CipherCharSelect = ({
   if (direction !== undefined) dir = direction;
 
   const transitions = useTransition<number, TransitionItem>(value, {
-    from: (item) => ({ offset: -200 * dir }),
-    enter: () => ({ offset: 0 }),
-    leave: (item) => ({ offset: 100 * dir }),
+    from: { offset: -200 * dir },
+    enter: { offset: 0 },
+    leave: { offset: 100 * dir },
   });
 
   return (
