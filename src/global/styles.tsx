@@ -11,14 +11,15 @@ const styles = css`
     --color-banana-dark-yellow: #f5d97b;
     --color-carrara: #efefe5;
     --color-iron-gray: #d6d6d6;
+    --color-twilight-blue: #f6f6ed;
 
     --color-bg: #fffff9;
     --color-text: #002129;
     --color-text-gray: #627474;
     --color-selected: var(--color-banana-dark-yellow);
     --color-selected-light: var(--color-banana-yellow);
-    --color-embossed: var(--color-carrara);
-    --color-embossed-dark: #cbcbab;
+    --color-embossed: var(--color-twilight-blue);
+    --color-embossed-dark: var(--color-carrara);
     --color-text-highlight: #e386b2;
 
     font-size: 20px;

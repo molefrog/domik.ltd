@@ -5,9 +5,12 @@ import styled from "@emotion/styled";
 import ChapterOne from "~/chapters/1-one/story.mdx";
 import { NextChapterBanner } from "~/components/NextChapterBanner";
 
+import car from "~/assets/bumper-car.svg";
+
 export const StoryPage = () => {
   return (
     <Story>
+      <Car src={car} />
       <Chapters>
         <ChapterContent>
           <ChapterOne />
@@ -17,6 +20,12 @@ export const StoryPage = () => {
     </Story>
   );
 };
+
+const Car = styled.img`
+  width: 160px;
+  filter: drop-shadow(0px 1px 3px rgba(0, 0, 0, 0.2))
+    drop-shadow(1px 1px 0px rgba(0, 0, 0, 0.2));
+`;
 
 const Chapters = styled.article`
   max-width: 700px;

@@ -124,7 +124,7 @@ const Box = styled.div`
   user-select: none;
 
   background-color: var(--color-embossed);
-  border: 8px solid var(--color-embossed);
+  border: 8px solid var(--color-embossed-dark);
 
   :hover {
     border-color: var(--color-selected);
