@@ -16,7 +16,8 @@
     "colord": "^2.9.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-spring": "^9.5.5"
+    "react-spring": "^9.5.5",
+    "wouter": "^2.8.0-alpha.2"
   },
   "devDependencies": {
     "@mdx-js/rollup": "^2.1.4",

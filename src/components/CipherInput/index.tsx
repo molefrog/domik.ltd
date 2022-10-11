@@ -29,7 +29,7 @@ function pickRandomBit(current: Bit): Bit {
 }
 
 export function CipherInput({ cipher, onChange, shuffleRest = true }: Props) {
-  const [lastChangeAt, setLastChangeAt] = useState(0);
+  const [lastChangeAt, setLastChangeAt] = useState(-1);
   const bits = toOct(cipher);
 
   const change = (position: number) => {
