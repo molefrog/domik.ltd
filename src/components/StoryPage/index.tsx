@@ -7,7 +7,8 @@ import { NextChapterBanner } from "~/components/NextChapterBanner";
 
 const ChapterContent = styled.div`
   max-width: 700px;
-  margin: 16px auto;
+  margin: 0 auto;
+  padding: 0 16px;
 `;
 
 export const StoryPage = () => {

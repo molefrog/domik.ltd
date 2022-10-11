@@ -7,6 +7,9 @@ import { CipherInput } from "~/components/CipherInput";
 import { Compass } from "~/components/Compass";
 import { rand } from "~/utils/rand";
 
+import useSound from "use-sound";
+import clickVfx from "~/assets/sounds/click.m4a?url";
+
 /*
  * Syncs currently selected cipher with the route
  */
@@ -23,6 +26,8 @@ export function CipherPage() {
   const [cipher, setCipher] = useCipher();
   const [arrow, setArrow] = useState(0);
   const firstRender = useRef(true);
+
+  const [play] = useSound(clickVfx);
 
   // randomize on start
   useEffect(() => {
@@ -42,6 +47,7 @@ export function CipherPage() {
 
   useEffect(() => {
     setArrow(rand(-360, 180));
+    play();
   }, [cipher]);
 
   return (
@@ -66,7 +72,7 @@ const Bottom = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 64px 0;
+  padding: 32px 0;
   opacity: 0.2;
 `;
 
@@ -76,12 +82,13 @@ const Container = styled.div`
   flex-direction: column;
   align-items: stretch;
   justify-content: center;
+  padding: 16px;
 `;
 
 const EnterCipher = styled.div`
   text-align: center;
   flex: 1 1;
-  padding-top: 64px;
+  padding-top: 32px;
 `;
 
 const EnterCipherHeader = styled.h1`

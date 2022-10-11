@@ -17,6 +17,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-spring": "^9.5.5",
+    "use-sound": "^4.0.1",
     "wouter": "^2.8.0-alpha.2"
   },
   "devDependencies": {
