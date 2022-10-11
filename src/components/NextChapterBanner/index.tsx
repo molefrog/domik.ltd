@@ -78,6 +78,12 @@ const Button = styled.a`
   .next-chapter-banner:hover & {
     background: var(--color-selected);
   }
+
+  @media (max-width: 640px) {
+    width: 100%;
+    margin-top: 32px;
+    text-align: center;
+  }
 `;
 
 const Container = styled.div`
