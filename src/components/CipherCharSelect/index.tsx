@@ -51,7 +51,7 @@ export const CipherCharSelect = ({
   if (direction !== undefined) dir = direction;
 
   const transitions = useTransition<number, TransitionItem>(value, {
-    from: { offset: -200 * dir },
+    from: { offset: -100 * dir },
     enter: { offset: 0 },
     leave: { offset: 100 * dir },
   });
@@ -77,13 +77,21 @@ export const CipherCharSelect = ({
 
 const AnimatedLayer = styled(animated.div)`
   position: absolute;
+  top: -8px;
+  bottom: -8px;
+  border-bottom: 8px solid transparent;
+  border-top: 8px solid transparent;
+  left: 0;
+  width: 100%;
+`;
+
+const ShadowLayer = styled.div`
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-`;
+  position: absolute;
 
-const ShadowLayer = styled(AnimatedLayer)`
   box-shadow: 0px 1px 1px 0px rgb(0 0 0 / 5%) inset,
     0px 0px 1px 0px rgb(0 0 0 / 5%) inset,
     0px 4px 6px -4px rgb(0 0 0 / 10%) inset;
@@ -105,6 +113,7 @@ const SymbolContainer = styled.div`
   background-color: white;
   border-radius: 10px;
   z-index: 1;
+  box-shadow: 0px 1px 1px 0px rgb(0 0 0 / 5%);
 
   img {
     width: 60%;
