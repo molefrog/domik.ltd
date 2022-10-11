@@ -6,9 +6,10 @@ import { useTick } from "~/hooks/useTick";
 
 interface Props {
   launchDate: Date;
+  title?: string;
 }
 
-export function NextChapterBanner({ launchDate }: Props) {
+export function NextChapterBanner({ launchDate, title }: Props) {
   const [countdown, setCountdown] = useState<Array<number>>([0, 0, 0, 0]);
 
   useTick(
@@ -19,7 +20,7 @@ export function NextChapterBanner({ launchDate }: Props) {
 
       setCountdown([
         Math.floor(diff / 1000 / 60 / 60 / 24), // days
-        Math.floor((diff / 1000 / 60 / 60) % 60), // hours
+        Math.floor((diff / 1000 / 60 / 60) % 24), // hours
         Math.floor((diff / 1000 / 60) % 60), // mins
         Math.floor((diff / 1000) % 60), // seconds
       ]);
@@ -31,10 +32,14 @@ export function NextChapterBanner({ launchDate }: Props) {
     <Link to="/enc">
       <Container className="next-chapter-banner">
         <AvailableIn>
-          <AvailableLabel>
-            Интересно, что будет дальше? <br />
-            Ждите анонса следующей главы
-          </AvailableLabel>
+          {title === undefined && (
+            <AvailableLabel>
+              Интересно, что будет дальше? <br />
+              Ждите анонса следующей главы
+            </AvailableLabel>
+          )}
+
+          {title && <AvailableLabel>{title}</AvailableLabel>}
 
           <Countdown>
             {countdown.map((t) => String(t).padStart(2, "0")).join(" : ")}
@@ -71,10 +76,13 @@ const Button = styled.a`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin: 16px 0;
 
   .next-chapter-banner:hover & {
     background: var(--color-selected);
+  }
+
+  @container (min-width: 400px) {
+    color: red;
   }
 `;
 
