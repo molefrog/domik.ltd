@@ -17,21 +17,30 @@ import oct7 from "~/assets/symbols/7.svg";
 
 const symbols = [oct0, oct1, oct2, oct3, oct4, oct5, oct6, oct7];
 
+export enum Direction {
+  Backward = -1,
+  Forward = 1,
+}
+
 interface SelectProps {
   value: number;
   onClick: () => void;
+  direction?: Direction;
 }
 
 interface TransitionItem {
   offset: number;
 }
 
-export const CipherCharSelect = ({ value, onClick }: SelectProps) => {
-  const direction = (current: number, next: number) =>
-    current <= next ? -1 : 1;
-
+export const CipherCharSelect = ({
+  value,
+  onClick,
+  direction,
+}: SelectProps) => {
   const prevValue = usePrevious(value);
-  const dir = value > (prevValue || 0) ? 1 : -1;
+
+  let dir = value > (prevValue || 0) ? 1 : -1;
+  if (direction !== undefined) dir = direction;
 
   const transitions = useTransition<number, TransitionItem>(value, {
     from: (item) => ({ offset: -200 * dir }),
@@ -41,10 +50,10 @@ export const CipherCharSelect = ({ value, onClick }: SelectProps) => {
 
   return (
     <Box onClick={onClick}>
-      {transitions(({ offset }, item) => {
+      {transitions(({ offset }, item, t) => {
         return (
           <AnimatedLayer
-            key={item}
+            key={t.key}
             style={{
               translateY: offset.to((x) => `${x}%`),
             }}
