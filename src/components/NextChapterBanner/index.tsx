@@ -29,7 +29,7 @@ export function NextChapterBanner({ launchDate, title }: Props) {
   );
 
   return (
-    <Link to="/enc">
+    <Link to="/x">
       <Container className="next-chapter-banner">
         <AvailableIn>
           {title === undefined && (

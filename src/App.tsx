@@ -19,7 +19,7 @@ function App() {
   return (
     <Body>
       <Switch>
-        <Route path="/enc/:any*" component={CipherPage} />
+        <Route path="/x/:any*" component={CipherPage} />
         <Route path="/story" component={StoryPage} />
         <Route component={DefaultRoute} />
       </Switch>
