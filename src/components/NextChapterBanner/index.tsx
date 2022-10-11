@@ -1,6 +1,6 @@
-import { useRef, useState, useEffect } from "react";
-import styled from "@emotion/styled";
+import { useState } from "react";
 import { Link } from "wouter";
+import styled from "@emotion/styled";
 
 import { useTick } from "~/hooks/useTick";
 
@@ -10,7 +10,6 @@ interface Props {
 
 export function NextChapterBanner({ launchDate }: Props) {
   const [countdown, setCountdown] = useState<Array<number>>([0, 0, 0, 0]);
-  const [days, hours, minutes, seconds] = countdown;
 
   useTick(
     () => {
@@ -19,10 +18,10 @@ export function NextChapterBanner({ launchDate }: Props) {
       if (diff <= 0) setCountdown([0, 0, 0]);
 
       setCountdown([
-        Math.floor(diff / 1000 / 60 / 60 / 24),
-        Math.floor((diff / 1000 / 60 / 60) % 60),
-        Math.floor((diff / 1000 / 60) % 60),
-        Math.floor((diff / 1000) % 60),
+        Math.floor(diff / 1000 / 60 / 60 / 24), // days
+        Math.floor((diff / 1000 / 60 / 60) % 60), // hours
+        Math.floor((diff / 1000 / 60) % 60), // mins
+        Math.floor((diff / 1000) % 60), // seconds
       ]);
     },
     { ms: 1000 }
@@ -36,6 +35,7 @@ export function NextChapterBanner({ launchDate }: Props) {
             Интересно, что будет дальше? <br />
             Ждите анонса следующей главы
           </AvailableLabel>
+
           <Countdown>
             {countdown.map((t) => String(t).padStart(2, "0")).join(" : ")}
           </Countdown>
