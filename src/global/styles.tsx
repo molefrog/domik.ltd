@@ -14,6 +14,7 @@ const styles = css`
 
     --color-bg: #fffff9;
     --color-text: #002129;
+    --color-text-gray: #627474;
     --color-selected: var(--color-banana-dark-yellow);
     --color-selected-light: var(--color-banana-yellow);
     --color-embossed: var(--color-carrara);

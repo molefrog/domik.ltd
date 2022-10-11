@@ -10,7 +10,7 @@ import { NextChapterBanner } from "./components/NextChapterBanner";
 const DefaultRoute = () => {
   return (
     <Centered>
-      <NextChapterBanner title={""} launchDate={new Date("2022-10-14")} />
+      <NextChapterBanner launchDate={new Date("2022-10-14")} />
     </Centered>
   );
 };

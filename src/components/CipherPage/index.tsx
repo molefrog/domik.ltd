@@ -53,10 +53,10 @@ export function CipherPage() {
   return (
     <Container>
       <EnterCipher>
-        <EnterCipherHeader>Знаешь ли ты секретный код?</EnterCipherHeader>
+        <EnterCipherHeader>Знаешь секретный шифр?</EnterCipherHeader>
         <EnterCipherTitle>
-          Нет кода — нет и истории, таковы правила. Наберись терпения, дорогой
-          друг.
+          Нет кода — нет и истории. Открывай доступ к новым главам, используя
+          секретную последовательность символов.
         </EnterCipherTitle>
         <CipherInput cipher={cipher} onChange={(x) => setCipher(x)} />
       </EnterCipher>
@@ -101,6 +101,6 @@ const EnterCipherTitle = styled.h2`
   margin: 0 auto;
   margin-bottom: 48px;
   font-size: 22px;
-  max-width: 640px;
+  max-width: 680px;
   line-height: 1.4;
 `;

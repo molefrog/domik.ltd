@@ -33,10 +33,7 @@ export function NextChapterBanner({ launchDate, title }: Props) {
       <Container className="next-chapter-banner">
         <AvailableIn>
           {title === undefined && (
-            <AvailableLabel>
-              Интересно, что будет дальше? <br />
-              Ждите анонса следующей главы
-            </AvailableLabel>
+            <AvailableLabel>Интересно, что будет же дальше?</AvailableLabel>
           )}
 
           {title && <AvailableLabel>{title}</AvailableLabel>}
@@ -45,7 +42,7 @@ export function NextChapterBanner({ launchDate, title }: Props) {
             {countdown.map((t) => String(t).padStart(2, "0")).join(" : ")}
           </Countdown>
         </AvailableIn>
-        <Button>Я не могу больше ждать!</Button>
+        <Button>Не могу больше ждать!</Button>
       </Container>
     </Link>
   );
@@ -59,7 +56,8 @@ const AvailableIn = styled.div`
 const AvailableLabel = styled.div`
   max-width: 320px;
   line-height: 1.4;
-  margin-bottom: 16px;
+  margin-bottom: 10px;
+  color: var(--color-text-gray);
 `;
 
 const Countdown = styled.div`
@@ -79,10 +77,6 @@ const Button = styled.a`
 
   .next-chapter-banner:hover & {
     background: var(--color-selected);
-  }
-
-  @container (min-width: 400px) {
-    color: red;
   }
 `;
 
