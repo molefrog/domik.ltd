@@ -6,8 +6,14 @@ import gratoBold from "./fonts/Grato Marker-Bold-Web.woff2";
 
 const styles = css`
   :root {
+    /* color pallete */
+    --color-banana-yellow: #f9e9b3;
+    --color-carrara: #efefe5;
+
     --color-bg: #fffff9;
     --color-text: #002129;
+    --color-selected: var(--color-banana-yellow);
+    --color-embossed: var(--color-carrara);
     --color-text-highlight: #e386b2;
 
     font-size: 20px;

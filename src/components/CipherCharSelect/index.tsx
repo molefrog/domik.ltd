@@ -32,6 +32,14 @@ interface TransitionItem {
   offset: number;
 }
 
+const Symbol = (props: { value: number }) => {
+  return (
+    <SymbolContainer>
+      <img src={symbols[props.value % 8]} />
+    </SymbolContainer>
+  );
+};
+
 export const CipherCharSelect = ({
   value,
   onClick,
@@ -50,6 +58,7 @@ export const CipherCharSelect = ({
 
   return (
     <Box onClick={onClick}>
+      <ShadowLayer />
       {transitions(({ offset }, item, t) => {
         return (
           <AnimatedLayer
@@ -66,20 +75,25 @@ export const CipherCharSelect = ({
   );
 };
 
-const Symbol = (props: { value: number }) => {
-  return (
-    <SymbolContainer>
-      <img src={symbols[props.value % 8]} />
-    </SymbolContainer>
-  );
-};
-
 const AnimatedLayer = styled(animated.div)`
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+`;
+
+const ShadowLayer = styled(AnimatedLayer)`
+  box-shadow: 0px 1px 1px 0px rgb(0 0 0 / 5%) inset,
+    0px 0px 1px 0px rgb(0 0 0 / 5%) inset,
+    0px 4px 6px -4px rgb(0 0 0 / 10%) inset;
+
+  transition: box-shadow 0.25s ease, border-color 0s;
+  z-index: 10;
+
+  :hover {
+    box-shadow: none;
+  }
 `;
 
 const SymbolContainer = styled.div`
@@ -104,21 +118,16 @@ const Box = styled.div`
   width: 100px;
   height: 140px;
   border-radius: 16px;
-  box-shadow: 0px 1px 1px 0px rgb(0 0 0 / 5%) inset,
-    0px 0px 1px 0px rgb(0 0 0 / 5%) inset,
-    0px 4px 6px -4px rgb(0 0 0 / 10%) inset;
-
-  transition: box-shadow 0.25s ease, border-color 0s;
-  border: 8px solid #efefe5;
   cursor: pointer;
   position: relative;
   overflow: hidden;
   user-select: none;
-  background-color: #f5f5f5;
+
+  background-color: var(--color-embossed);
+  border: 8px solid var(--color-embossed);
 
   :hover {
-    box-shadow: none;
-    border-color: #f9e9b3;
+    border-color: var(--color-selected);
 
     img {
       transform: translateY(-2px);
