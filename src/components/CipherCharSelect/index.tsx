@@ -1,8 +1,5 @@
-import { ReactNode, useRef, useEffect } from "react";
 import { useTransition, animated } from "react-spring";
-import { colord } from "colord";
 import styled from "@emotion/styled";
-import { css } from "@emotion/react";
 
 import { usePrevious } from "~/hooks/usePrevious";
 
@@ -26,6 +23,7 @@ interface SelectProps {
   value: number;
   onClick: () => void;
   direction?: Direction;
+  selected?: boolean;
 }
 
 interface TransitionItem {
@@ -44,6 +42,7 @@ export const CipherCharSelect = ({
   value,
   onClick,
   direction,
+  selected = false,
 }: SelectProps) => {
   const prevValue = usePrevious(value);
 
@@ -57,7 +56,7 @@ export const CipherCharSelect = ({
   });
 
   return (
-    <Box onClick={onClick}>
+    <Box data-selected={selected} onClick={onClick}>
       <ShadowLayer />
       {transitions(({ offset }, item, t) => {
         return (
@@ -135,7 +134,8 @@ const Box = styled.div`
   background-color: var(--color-embossed);
   border: 8px solid var(--color-embossed-dark);
 
-  :hover {
+  :hover,
+  &[data-selected="true"] {
     border-color: var(--color-selected);
 
     img {

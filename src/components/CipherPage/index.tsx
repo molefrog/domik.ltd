@@ -3,7 +3,7 @@ import { useRoute, useLocation } from "wouter";
 
 import styled from "@emotion/styled";
 
-import { CipherInput } from "~/components/CipherInput";
+import { CipherInput, CipherInputRef } from "~/components/CipherInput";
 import { Compass } from "~/components/Compass";
 import { rand } from "~/utils/rand";
 import { useDocumentTitle } from "~/hooks/useDocumentTitle";
@@ -44,15 +44,18 @@ const cipherToTitle = (cipher: number) => {
 };
 
 export function CipherPage() {
+  const firstRender = useRef(true);
+  const inputRef = useRef<CipherInputRef>(null);
+
   const [cipher, setCipher] = useCipher();
   const [arrow, setArrow] = useState(0);
-  const firstRender = useRef(true);
 
-  const [play] = useSound(clickVfx);
+  const [playClick] = useSound(clickVfx);
 
+  // customize page title
   useDocumentTitle(cipherToTitle(cipher));
 
-  // randomize on start
+  // randomize on the start
   useEffect(() => {
     // TODO: figure out why `useEffect` triggers twice
     if (firstRender.current) {
@@ -68,9 +71,10 @@ export function CipherPage() {
     }
   }, []);
 
+  // move the compass when the cipher is changed
   useEffect(() => {
     setArrow(rand(-360, 180));
-    play();
+    playClick();
   }, [cipher]);
 
   return (
@@ -81,7 +85,15 @@ export function CipherPage() {
           Нет кода — нет и истории. Открывай доступ к новым главам, используя
           секретную последовательность символов.
         </EnterCipherTitle>
-        <CipherInput cipher={cipher} onChange={(x) => setCipher(x)} />
+
+        <CipherInput
+          ref={inputRef}
+          cipher={cipher}
+          onChange={(x) => {
+            setCipher(x);
+            if (inputRef.current) inputRef.current.cipherAccepted();
+          }}
+        />
       </EnterCipher>
 
       <Bottom>
