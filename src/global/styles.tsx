@@ -25,7 +25,7 @@ const styles = css`
     font-size: 20px;
     line-height: 30px;
     font-weight: normal;
-    font-family: Grato Marker;
+    font-family: Grato Marker, system-ui;
 
     color-scheme: normal;
     color: var(--color-text);
@@ -60,18 +60,21 @@ const styles = css`
     font-family: Grato Marker;
     font-weight: 400;
     src: url("${gratoRegular}") format("woff2");
+    font-display: fallback;
   }
 
   @font-face {
     font-family: Grato Marker;
     font-weight: 700;
     src: url("${gratoMedium}") format("woff2");
+    font-display: fallback;
   }
 
   @font-face {
     font-family: Grato Marker;
     font-weight: 900;
     src: url("${gratoBold}") format("woff2");
+    font-display: fallback;
   }
 
   @media (prefers-color-scheme: dark) {
