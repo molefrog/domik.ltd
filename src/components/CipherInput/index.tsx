@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 
 import { CipherCharSelect, Direction } from "~/components/CipherCharSelect";
 import { rand } from "~/utils/rand";
+import { delay } from "~/utils/promises";
 
 export type Cipher = number;
 export type Bit = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
@@ -18,7 +19,7 @@ interface Props {
  * Ref interface to control the input from the outside
  */
 export interface CipherInputRef {
-  cipherAccepted: () => void;
+  cipherAccepted: () => Promise<void>;
 }
 
 const toOct = (num: number, max: number = 8): Array<Bit> => {
@@ -47,8 +48,11 @@ export const CipherInput = forwardRef<CipherInputRef, Props>(
 
     // Customize the ref
     useImperativeHandle(ref, () => ({
-      cipherAccepted: () => {
-        setSelectedIndex(7);
+      async cipherAccepted() {
+        for (let i = 0; i < 8; ++i) {
+          setSelectedIndex(i);
+          await delay(40);
+        }
       },
     }));
 

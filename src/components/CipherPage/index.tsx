@@ -8,6 +8,7 @@ import { Compass } from "~/components/Compass";
 import { rand } from "~/utils/rand";
 import { useDocumentTitle } from "~/hooks/useDocumentTitle";
 import { useClickSound, useSuccessSound } from "~/hooks/useSounds";
+import { delay } from "~/utils/promises";
 
 const DEFAULT_VALUE = 0o0;
 
@@ -44,23 +45,36 @@ const cipherToTitle = (cipher: number) => {
 };
 
 export function CipherPage() {
-  const firstRender = useRef(true);
-  const inputRef = useRef<CipherInputRef>(null);
-
   const [cipher, setCipher] = useCipher();
   const [arrow, setArrow] = useState(0);
   const [inputDisabled, setInputDisabled] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const firstRender = useRef(true);
+  const inputRef = useRef<CipherInputRef>(null);
+
+  const [, navigate] = useLocation();
 
   // sound fx
   const [playClick] = useClickSound();
   const [playSuccess] = useSuccessSound();
 
-  const acceptCipher = (cipher: Cipher) => {
+  // when the sequence entered matches the secret
+  const acceptCipher = async (cipher: Cipher) => {
     setCipher(cipher);
     setInputDisabled(true);
 
     playSuccess();
-    if (inputRef.current) inputRef.current.cipherAccepted();
+
+    if (inputRef.current) {
+      await inputRef.current.cipherAccepted();
+    }
+
+    await delay(1000);
+    setIsLoading(true);
+    await delay(250);
+
+    navigate("/story");
   };
 
   // customize page title
@@ -72,8 +86,8 @@ export function CipherPage() {
     if (firstRender.current && cipher === DEFAULT_VALUE) {
       firstRender.current = false;
 
-      for (let i = 0, ms = 0; i < 3; ++i) {
-        ms += rand(200, 800);
+      for (let i = 0, ms = 0; i < 4; ++i) {
+        ms += rand(100, 500);
 
         setTimeout(() => {
           setCipher(rand(0o777777));
@@ -88,8 +102,14 @@ export function CipherPage() {
     playClick();
   }, [cipher]);
 
+  useEffect(() => {
+    if (cipher === 0o11111115) {
+      acceptCipher(cipher);
+    }
+  }, [cipher]);
+
   return (
-    <Container>
+    <Container fadeOut={isLoading}>
       <EnterCipher>
         <EnterCipherHeader>Знаешь секретный шифр?</EnterCipherHeader>
         <EnterCipherTitle>
@@ -101,10 +121,7 @@ export function CipherPage() {
           ref={inputRef}
           cipher={cipher}
           readonly={inputDisabled}
-          onChange={(x) => {
-            setCipher(x);
-            acceptCipher(0o10101010);
-          }}
+          onChange={(x) => setCipher(x)}
         />
       </EnterCipher>
 
@@ -127,13 +144,22 @@ const Bottom = styled.div`
   opacity: 0.2;
 `;
 
-const Container = styled.div`
+const Container = styled.div<{ fadeOut?: boolean }>`
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: stretch;
   justify-content: center;
   padding: 16px;
+
+  transition: opacity 0.3s ease, transform 1s ease;
+
+  ${(props) =>
+    props.fadeOut &&
+    `
+    opacity: 0;
+    transform: translateY(100px);
+    `}
 `;
 
 const EnterCipher = styled.div`
