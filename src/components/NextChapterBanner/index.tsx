@@ -16,24 +16,28 @@ export function NextChapterBanner({ launchDate, title }: Props) {
     () => {
       const diff = launchDate.getTime() - Date.now();
 
-      if (diff <= 0) setCountdown([0, 0, 0]);
-
       setCountdown([
-        Math.floor(diff / 1000 / 60 / 60 / 24), // days
-        Math.floor((diff / 1000 / 60 / 60) % 24), // hours
-        Math.floor((diff / 1000 / 60) % 60), // mins
-        Math.floor((diff / 1000) % 60), // seconds
+        Math.max(0, Math.floor(diff / 1000 / 60 / 60 / 24)), // days
+        Math.max(0, Math.floor((diff / 1000 / 60 / 60) % 24)), // hours
+        Math.max(0, Math.floor((diff / 1000 / 60) % 60)), // mins
+        Math.max(0, Math.floor((diff / 1000) % 60)), // seconds
       ]);
     },
     { ms: 1000 }
   );
+
+  const isPastLaunchDate = countdown.every((c) => c === 0);
 
   return (
     <Link to="/x">
       <Container className="next-chapter-banner">
         <AvailableIn>
           {title === undefined && (
-            <AvailableLabel>Интересно, что будет же дальше?</AvailableLabel>
+            <AvailableLabel>
+              {!isPastLaunchDate
+                ? "Интересно, что будет же дальше?"
+                : "Новая глава уже доступна!"}
+            </AvailableLabel>
           )}
 
           {title && <AvailableLabel>{title}</AvailableLabel>}
@@ -42,7 +46,9 @@ export function NextChapterBanner({ launchDate, title }: Props) {
             {countdown.map((t) => String(t).padStart(2, "0")).join(" : ")}
           </Countdown>
         </AvailableIn>
-        <Button>Не могу больше ждать!</Button>
+        <Button>
+          {!isPastLaunchDate ? "Не могу больше ждать!" : "Ввести код"}
+        </Button>
       </Container>
     </Link>
   );
