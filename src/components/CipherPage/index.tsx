@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useRoute, useLocation } from "wouter";
-
+import { useDebounce } from "use-debounce";
 import styled from "@emotion/styled";
 
 import { CipherInput, CipherInputRef, Cipher } from "~/components/CipherInput";
@@ -9,6 +9,7 @@ import { rand } from "~/utils/rand";
 import { useDocumentTitle } from "~/hooks/useDocumentTitle";
 import { useClickSound, useSuccessSound } from "~/hooks/useSounds";
 import { delay } from "~/utils/promises";
+import { isValidCode } from "~/chapters";
 
 const DEFAULT_VALUE = 0o0;
 
@@ -102,11 +103,18 @@ export function CipherPage() {
     playClick();
   }, [cipher]);
 
+  /*
+   * Check the cipher validity. These checks involve hashing which could be expensive,
+   * so we only run the check no often than in 300ms
+   */
+  const [debouncedCipher] = useDebounce(cipher, 300);
+
+  // check the cipher validity
   useEffect(() => {
-    if (cipher === 0o11111115) {
-      acceptCipher(cipher);
-    }
-  }, [cipher]);
+    isValidCode(debouncedCipher).then((valid) => {
+      if (valid) acceptCipher(debouncedCipher);
+    });
+  }, [debouncedCipher]);
 
   return (
     <Container fadeOut={isLoading}>

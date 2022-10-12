@@ -5,12 +5,13 @@ import styled from "@emotion/styled";
 
 import { CipherPage } from "~/components/CipherPage";
 import { StoryPage } from "~/components/StoryPage";
-import { NextChapterBanner } from "./components/NextChapterBanner";
+import { NextChapterBanner } from "~/components/NextChapterBanner";
+import { getLaunchDateForChapter } from "~/chapters";
 
 const DefaultRoute = () => {
   return (
     <Centered>
-      <NextChapterBanner launchDate={new Date("2022-10-14")} />
+      <NextChapterBanner launchDate={getLaunchDateForChapter(0)} />
     </Centered>
   );
 };
