@@ -3,22 +3,22 @@ import { useRoute, useLocation } from "wouter";
 
 import styled from "@emotion/styled";
 
-import { CipherInput, CipherInputRef } from "~/components/CipherInput";
+import { CipherInput, CipherInputRef, Cipher } from "~/components/CipherInput";
 import { Compass } from "~/components/Compass";
 import { rand } from "~/utils/rand";
 import { useDocumentTitle } from "~/hooks/useDocumentTitle";
+import { useClickSound, useSuccessSound } from "~/hooks/useSounds";
 
-import useSound from "use-sound";
-import clickVfx from "~/assets/sounds/click.m4a?url";
+const DEFAULT_VALUE = 0o0;
 
 /*
  * Syncs currently selected cipher with the route
  */
-const useCipher = (): [number, (x: number) => void] => {
+const useCipher = (): [Cipher, (x: Cipher) => void] => {
   const [match, params] = useRoute<{ cipher: string }>("/x/0o:cipher");
   const [, navigate] = useLocation();
 
-  const val = match ? parseInt(params.cipher, 8) : 0o0;
+  const val = match ? parseInt(params.cipher, 8) : DEFAULT_VALUE;
 
   return [
     val,
@@ -49,8 +49,19 @@ export function CipherPage() {
 
   const [cipher, setCipher] = useCipher();
   const [arrow, setArrow] = useState(0);
+  const [inputDisabled, setInputDisabled] = useState(false);
 
-  const [playClick] = useSound(clickVfx);
+  // sound fx
+  const [playClick] = useClickSound();
+  const [playSuccess] = useSuccessSound();
+
+  const acceptCipher = (cipher: Cipher) => {
+    setCipher(cipher);
+    setInputDisabled(true);
+
+    playSuccess();
+    if (inputRef.current) inputRef.current.cipherAccepted();
+  };
 
   // customize page title
   useDocumentTitle(cipherToTitle(cipher));
@@ -58,7 +69,7 @@ export function CipherPage() {
   // randomize on the start
   useEffect(() => {
     // TODO: figure out why `useEffect` triggers twice
-    if (firstRender.current) {
+    if (firstRender.current && cipher === DEFAULT_VALUE) {
       firstRender.current = false;
 
       for (let i = 0, ms = 0; i < 3; ++i) {
@@ -89,9 +100,10 @@ export function CipherPage() {
         <CipherInput
           ref={inputRef}
           cipher={cipher}
+          readonly={inputDisabled}
           onChange={(x) => {
             setCipher(x);
-            if (inputRef.current) inputRef.current.cipherAccepted();
+            acceptCipher(0o10101010);
           }}
         />
       </EnterCipher>

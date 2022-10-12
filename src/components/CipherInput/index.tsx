@@ -1,4 +1,4 @@
-import { useState, useCallback, forwardRef, useImperativeHandle } from "react";
+import { useState, forwardRef, useImperativeHandle } from "react";
 import styled from "@emotion/styled";
 
 import { CipherCharSelect, Direction } from "~/components/CipherCharSelect";
@@ -34,7 +34,7 @@ function pickRandomBit(current: Bit): Bit {
   const options: Array<Bit> = [0, 1, 2, 3, 4, 5, 6, 7];
 
   const pickFrom = options.filter((x) => x !== current);
-  return pickFrom[rand(options.length)];
+  return pickFrom[rand(pickFrom.length)];
 }
 
 export const CipherInput = forwardRef<CipherInputRef, Props>(
@@ -48,39 +48,39 @@ export const CipherInput = forwardRef<CipherInputRef, Props>(
     // Customize the ref
     useImperativeHandle(ref, () => ({
       cipherAccepted: () => {
-        setSelectedIndex(3);
+        setSelectedIndex(7);
       },
     }));
 
-    const change = (position: number) => {
+    const clickHandler = (position: number) => {
+      if (readonly) {
+        return;
+      }
+
       let newNumber = bits.slice();
 
       newNumber.forEach((val, index) => {
         const shouldChange =
           index === position || (shuffleRest && index > position);
-        if (shouldChange) newNumber[index] = pickRandomBit(val);
+
+        if (shouldChange) {
+          newNumber[index] = pickRandomBit(val);
+        }
       });
 
       onChange?.(parseInt(newNumber.join(""), 8));
       setLastChangeAt(position);
     };
 
-    const clickHandler = useCallback(
-      (bit: number) => {
-        if (!readonly) change(bit);
-      },
-      [readonly]
-    );
-
     return (
       <Cipher>
-        {bits.map((digit, bit) => {
+        {bits.map((digit, index) => {
           return (
             <CipherCharSelect
-              key={bit}
-              selected={bit <= selectedIndex}
-              direction={lastChangeAt === bit ? Direction.Forward : undefined}
-              onClick={() => clickHandler(bit)}
+              key={index}
+              selected={index <= selectedIndex}
+              direction={lastChangeAt === index ? Direction.Forward : undefined}
+              onClick={() => clickHandler(index)}
               value={digit}
             />
           );
