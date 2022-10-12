@@ -57,7 +57,7 @@ export const CipherCharSelect = ({
 
   return (
     <Box data-selected={selected} onClick={onClick}>
-      <ShadowLayer />
+      <ShadowLayer data-selected={selected} />
       {transitions(({ offset }, item, t) => {
         return (
           <AnimatedLayer
@@ -97,10 +97,6 @@ const ShadowLayer = styled.div`
 
   transition: box-shadow 0.25s ease, border-color 0s;
   z-index: 10;
-
-  :hover {
-    box-shadow: none;
-  }
 `;
 
 const SymbolContainer = styled.div`
@@ -140,6 +136,10 @@ const Box = styled.div`
 
     img {
       transform: translateY(-2px);
+    }
+
+    > div {
+      box-shadow: none;
     }
   }
 `;
