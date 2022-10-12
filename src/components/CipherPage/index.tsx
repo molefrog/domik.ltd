@@ -1,11 +1,13 @@
 import { useState, useRef, useEffect } from "react";
 import { useRoute, useLocation } from "wouter";
 import { useDebounce } from "use-debounce";
+
 import styled from "@emotion/styled";
 
 import { CipherInput, CipherInputRef, Cipher } from "~/components/CipherInput";
 import { Compass } from "~/components/Compass";
 import { rand } from "~/utils/rand";
+import { useLocalStorage } from "~/hooks/useLocalStorage";
 import { useDocumentTitle } from "~/hooks/useDocumentTitle";
 import { useClickSound, useSuccessSound } from "~/hooks/useSounds";
 import { delay } from "~/utils/promises";
@@ -50,6 +52,7 @@ export function CipherPage() {
   const [arrow, setArrow] = useState(0);
   const [inputDisabled, setInputDisabled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [_, setStoredCipher] = useLocalStorage<Cipher>("cipher", 0);
 
   const firstRender = useRef(true);
   const inputRef = useRef<CipherInputRef>(null);
@@ -75,6 +78,8 @@ export function CipherPage() {
     setIsLoading(true);
     await delay(250);
 
+    // save the matched cipher
+    setStoredCipher(cipher);
     navigate("/story");
   };
 
