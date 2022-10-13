@@ -5,7 +5,11 @@ import { CipherPage } from "~/components/CipherPage";
 import { StoryPage } from "~/components/StoryPage";
 import { IndexPage } from "~/components/IndexPage";
 
+import { usePreloadedResources } from "~/preloadResources";
+
 function App() {
+  usePreloadedResources();
+
   return (
     <Body>
       <Switch>
