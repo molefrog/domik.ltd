@@ -13,7 +13,7 @@ export const IndexPage = () => {
 
   useEffect(() => {
     isValidCode(storedCipher).then((valid) => {
-      if (valid) navigate("story");
+      if (valid) navigate("/s");
     });
   });
 

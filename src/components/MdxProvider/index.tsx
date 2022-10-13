@@ -18,8 +18,8 @@ const Image = (props: ImageProps) => <Img_ {...props} />;
 
 const A = styled.a`
   color: inherit;
-  text-decoration: var(--color-selected) underline;
-  text-decoration-thickness: 3px;
+  text-decoration: var(--color-text) underline;
+  text-decoration-thickness: 2px;
   text-decoration-style: solid;
 
   :hover {

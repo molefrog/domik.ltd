@@ -80,7 +80,7 @@ export function CipherPage() {
 
     // save the matched cipher
     setStoredCipher(cipher);
-    navigate("/story");
+    navigate("/s");
   };
 
   // customize page title

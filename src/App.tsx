@@ -11,7 +11,7 @@ function App() {
       <Switch>
         <Route path="/" component={IndexPage} />
         <Route path="/x/:any*" component={CipherPage} />
-        <Route path="/story" component={StoryPage} />
+        <Route path="/s" component={StoryPage} />
 
         <Route>
           <Redirect to="/" />
