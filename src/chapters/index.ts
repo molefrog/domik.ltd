@@ -24,7 +24,13 @@ export async function digest(code: Code): Promise<Code> {
  * Builds a sequence of valid codes from the given end code
  * If a sequence can't be built, returns an empty array
  */
-export async function genCodeSeq(code: Code, tries = 16) {
+export async function buildCodeSequence(code?: Code | number, tries = 16) {
+  if (!code) return [];
+
+  if (typeof code === "number") {
+    code = code.toString(8).padStart(8, "0");
+  }
+
   let seq = [];
 
   while (--tries > 0) {
@@ -40,12 +46,8 @@ export async function genCodeSeq(code: Code, tries = 16) {
 /*
  * Checks if the code matches any chapter from the book
  */
-export async function isValidCode(code: Code | number) {
-  if (typeof code === "number") {
-    code = code.toString(8).padStart(8, "0");
-  }
-
-  const codes = await genCodeSeq(code);
+export async function isValidCode(code?: Code | number) {
+  const codes = await buildCodeSequence(code);
   return codes.length > 0;
 }
 
