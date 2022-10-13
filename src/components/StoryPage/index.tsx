@@ -1,30 +1,125 @@
-import { useRef, useEffect } from "react";
-
 import styled from "@emotion/styled";
 
-import ChapterOne from "~/chapters/1-one/story.mdx";
-import { NextChapterBanner } from "~/components/NextChapterBanner";
+import { useState, useEffect } from "react";
+import { useLocation } from "wouter";
+import { useLocalStorage } from "~/hooks/useLocalStorage";
 
-import car from "~/assets/bumper-car.svg";
+import { buildCodeSequence, getLaunchDateForChapter } from "~/chapters";
+import { NextChapterBanner } from "~/components/NextChapterBanner";
+import { BumperCar } from "~/components/BumperCar";
+
+import { delay } from "~/utils/promises";
+
+type ChapterComponent = React.FunctionComponent;
+
+// TODO: make sure chunk names are not exposed in the final bundle
+const chapterModules = [
+  () =>
+    import("~/chapters/1-one/story.mdx") as unknown as Promise<{
+      default: ChapterComponent;
+    }>,
+  () =>
+    import("~/chapters/2-two/story.mdx") as unknown as Promise<{
+      default: ChapterComponent;
+    }>,
+];
 
 export const StoryPage = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [storedCipher, setStoredCipher] = useLocalStorage<number>("cipher", 0);
+  const [, navigate] = useLocation();
+  const [chapterComponents, setChapterComponents] = useState<
+    Array<ChapterComponent>
+  >([]);
+
+  useEffect(() => {
+    (async () => {
+      setIsLoading(true);
+
+      try {
+        const codes = await buildCodeSequence(storedCipher);
+
+        // invalid secret code provided
+        if (!codes.length) {
+          throw new Error("Provided cipher is not valid!");
+        }
+
+        // dynamically load chapter modules
+        const [, ...modules] = await Promise.all([
+          delay(2000), // artificial delay
+          ...(await Promise.all(
+            chapterModules
+              .slice(0, codes.length)
+              .map((fn) => fn().then((mod) => mod.default))
+          )),
+        ]);
+
+        setChapterComponents(modules);
+      } catch (err) {
+        console.error(err);
+        setStoredCipher(0);
+        navigate("/");
+      } finally {
+        setIsLoading(false);
+      }
+    })();
+  }, [storedCipher]);
+
+  if (isLoading) {
+    return (
+      <Story>
+        <Loader>
+          <div>
+            <BumperCar animation width={240} />
+          </div>
+          <LoaderText>
+            подождите немножко
+            <br /> готовим для вас историю...
+          </LoaderText>
+        </Loader>
+      </Story>
+    );
+  }
+
   return (
     <Story>
-      <Car src={car} />
       <Chapters>
-        <ChapterContent>
-          <ChapterOne />
-        </ChapterContent>
-        <NextChapterBanner launchDate={new Date("2022-10-15")} />
+        {chapterComponents.map((C, index) => {
+          return (
+            <ChapterContent key={index}>
+              <C />
+            </ChapterContent>
+          );
+        })}
+
+        <NextChapterBanner
+          launchDate={getLaunchDateForChapter(chapterComponents.length)}
+        />
       </Chapters>
     </Story>
   );
 };
 
-const Car = styled.img`
-  width: 160px;
-  filter: drop-shadow(0px 1px 3px rgba(0, 0, 0, 0.2))
-    drop-shadow(1px 1px 0px rgba(0, 0, 0, 0.2));
+const Loader = styled.div`
+  text-align: center;
+  opacity: 0.3;
+  min-height: 100vh;
+  display: flex;
+  flex-flow: column nowrap;
+  padding-bottom: 128px;
+
+  align-items: center;
+  justify-content: center;
+
+  & > div:first-of-type {
+    transform: scale(-1, 1);
+  }
+`;
+
+const LoaderText = styled.div`
+  font-size: 20px;
+  // font-weight: bold;
+  color: var(--color-text-gray);
 `;
 
 const Chapters = styled.article`
