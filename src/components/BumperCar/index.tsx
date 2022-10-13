@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { keyframes } from "@emotion/react";
 
-import carImage from "~/assets/bumper-car.svg";
+import carImage from "~/assets/sprites/bumper-car.png";
 
 interface Props {
   width?: number;
@@ -9,7 +9,7 @@ interface Props {
 }
 
 export const BumperCar = (props: Props) => {
-  const props_ = Object.assign({ animation: true, width: 320 }, props);
+  const props_ = Object.assign({ animation: true, width: 128 }, props);
   return <Car src={carImage} {...props_} />;
 };
 
@@ -34,7 +34,7 @@ const drivingAnimation = keyframes`
 const Car = styled.img<Props>`
   width: ${(props) => `${props.width}px`};
 
-  // filter: drop-shadow(0px 1px 1px rgba(0, 0, 0, 0.2))
-  //   drop-shadow(1px 1px 0px rgba(0, 0, 0, 0.2));
+  filter: drop-shadow(0px 1px 0px rgba(0, 0, 0, 0.2))
+    drop-shadow(0px -1px 0px rgba(0, 0, 0, 0.1));
   animation: 0.8s ease-in infinite 0s both ${drivingAnimation};
 `;

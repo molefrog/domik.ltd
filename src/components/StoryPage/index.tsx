@@ -67,17 +67,15 @@ export const StoryPage = () => {
 
   if (isLoading) {
     return (
-      <Story>
-        <Loader>
-          <div>
-            <BumperCar animation width={240} />
-          </div>
-          <LoaderText>
-            подождите немножко
-            <br /> готовим для вас историю...
-          </LoaderText>
-        </Loader>
-      </Story>
+      <Loader>
+        <div>
+          <BumperCar animation width={128} />
+        </div>
+        <LoaderText>
+          Подождите немножко,
+          <br /> мы готовим для вас историю...
+        </LoaderText>
+      </Loader>
     );
   }
 
@@ -102,14 +100,17 @@ export const StoryPage = () => {
 
 const Loader = styled.div`
   text-align: center;
-  opacity: 0.3;
+  opacity: 0.7;
   min-height: 100vh;
+  width: 100%;
   display: flex;
   flex-flow: column nowrap;
   padding-bottom: 128px;
 
   align-items: center;
   justify-content: center;
+  user-select: none;
+  cursor: wait;
 
   & > div:first-of-type {
     transform: scale(-1, 1);
@@ -118,11 +119,12 @@ const Loader = styled.div`
 
 const LoaderText = styled.div`
   font-size: 20px;
-  // font-weight: bold;
   color: var(--color-text-gray);
+  margin-top: 12px;
+  line-height: 32px;
 `;
 
-const Chapters = styled.article`
+const Chapters = styled.div`
   max-width: 700px;
   margin: 0 auto;
 `;
@@ -132,7 +134,7 @@ const ChapterContent = styled.div`
 `;
 
 const Story = styled.article`
-  padding: 32px 16px 128px 16px;
+  padding: 48px 16px 128px 16px;
   max-width: 700px;
   margin: 0 auto;
 `;

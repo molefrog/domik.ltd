@@ -16,7 +16,7 @@ interface ResourceDeclaration {
 }
 
 const resources: ResourceDeclaration[] = [
-  { load: () => import("~/assets/bumper-car.svg"), type: "image" },
+  { load: () => import("~/assets/sprites/bumper-car.png"), type: "image" },
   { load: () => import("~/assets/symbols/0.svg"), type: "image" },
   { load: () => import("~/assets/symbols/1.svg"), type: "image" },
   { load: () => import("~/assets/symbols/2.svg"), type: "image" },
