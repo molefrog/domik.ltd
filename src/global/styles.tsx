@@ -60,21 +60,21 @@ const styles = css`
     font-family: Grato Marker;
     font-weight: 400;
     src: url("${gratoRegular}") format("woff2");
-    font-display: fallback;
+    font-display: swap;
   }
 
   @font-face {
     font-family: Grato Marker;
     font-weight: 700;
     src: url("${gratoMedium}") format("woff2");
-    font-display: fallback;
+    font-display: swap;
   }
 
   @font-face {
     font-family: Grato Marker;
     font-weight: 900;
     src: url("${gratoBold}") format("woff2");
-    font-display: fallback;
+    font-display: swap;
   }
 
   @media (prefers-color-scheme: dark) {
