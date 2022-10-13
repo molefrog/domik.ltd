@@ -1,0 +1,20 @@
+/*.js
+  Cache-Control: public max-age=604800 immutable;
+
+/*.css
+  Cache-Control: public max-age=604800 immutable;
+
+/*.m4a
+  Cache-Control: public max-age=604800 immutable;
+
+/*.woff2
+  Cache-Control: public max-age=604800 immutable;
+
+/*.png
+  Cache-Control: public max-age=604800 immutable;
+
+/*.svg
+  Cache-Control: public max-age=604800 immutable;
+
+/*.jpg
+  Cache-Control: public max-age=604800 immutable;
