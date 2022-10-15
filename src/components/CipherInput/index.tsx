@@ -64,8 +64,7 @@ export const CipherInput = forwardRef<CipherInputRef, Props>(
       let newNumber = bits.slice();
 
       newNumber.forEach((val, index) => {
-        const shouldChange =
-          index === position || (shuffleRest && index > position);
+        const shouldChange = index === position || (shuffleRest && index > position);
 
         if (shouldChange) {
           newNumber[index] = pickRandomBit(val);

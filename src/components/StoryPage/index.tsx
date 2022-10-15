@@ -28,9 +28,7 @@ export const StoryPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [storedCipher, setStoredCipher] = useLocalStorage<number>("cipher", 0);
   const [, navigate] = useLocation();
-  const [chapterComponents, setChapterComponents] = useState<
-    Array<ChapterComponent>
-  >([]);
+  const [chapterComponents, setChapterComponents] = useState<Array<ChapterComponent>>([]);
 
   useEffect(() => {
     (async () => {
@@ -46,11 +44,9 @@ export const StoryPage = () => {
 
         // dynamically load chapter modules
         const [, ...modules] = await Promise.all([
-          delay(2000), // artificial delay
+          delay(import.meta.env.DEV ? 0 : 2000), // artificial delay
           ...(await Promise.all(
-            chapterModules
-              .slice(0, codes.length)
-              .map((fn) => fn().then((mod) => mod.default))
+            chapterModules.slice(0, codes.length).map((fn) => fn().then((mod) => mod.default))
           )),
         ]);
 
@@ -90,9 +86,7 @@ export const StoryPage = () => {
           );
         })}
 
-        <NextChapterBanner
-          launchDate={getLaunchDateForChapter(chapterComponents.length)}
-        />
+        <NextChapterBanner launchDate={getLaunchDateForChapter(chapterComponents.length)} />
       </Chapters>
     </Story>
   );
