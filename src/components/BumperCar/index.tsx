@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { keyframes } from "@emotion/react";
+import { keyframes, css } from "@emotion/react";
 
 import carImage from "~/assets/sprites/bumper-car.png";
 
@@ -34,7 +34,11 @@ const drivingAnimation = keyframes`
 const Car = styled.img<Props>`
   width: ${(props) => `${props.width}px`};
 
-  filter: drop-shadow(0px 1px 0px rgba(0, 0, 0, 0.2))
-    drop-shadow(0px -1px 0px rgba(0, 0, 0, 0.1));
-  animation: 0.8s ease-in infinite 0s both ${drivingAnimation};
+  filter: drop-shadow(0px 1px 0px rgba(0, 0, 0, 0.2)) drop-shadow(0px -1px 0px rgba(0, 0, 0, 0.1));
+
+  ${(props) =>
+    props.animation &&
+    css`
+      animation: 0.8s ease-in infinite 0s both ${drivingAnimation};
+    `}
 `;
