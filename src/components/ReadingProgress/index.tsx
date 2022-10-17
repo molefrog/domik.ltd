@@ -1,25 +1,21 @@
-import styled from "@emotion/styled";
-
 import { useState, useEffect, useCallback } from "react";
-
 import { ProgressBar } from "./ProgressBar";
-import { BumperCar } from "~/components/BumperCar";
 
 interface ReadingProgressProps {
-  startElement: HTMLElement | null;
-  endElement: HTMLElement | null;
+  /*
+   * The refs of elements that define start and end of the scroll
+   */
+  startRef: React.RefObject<HTMLDivElement>;
+  endRef: React.RefObject<HTMLDivElement>;
 }
 
-export const ReadingProgress = (props: ReadingProgressProps) => {
-  const [progress, setProgress] = useState(0);
+export const ReadingProgress = ({ startRef, endRef }: ReadingProgressProps) => {
+  const [progress, setProgress] = useState(0.0);
 
-  const onScroll = useCallback((ev: Event) => {
-    const startel = document.querySelector(".chapter-0");
-    const endel = document.querySelector(".chapter-1");
-
-    if (startel && endel) {
-      const { top: startY } = startel.getBoundingClientRect();
-      const { bottom } = endel.getBoundingClientRect();
+  const onScroll = useCallback((ev?: Event) => {
+    if (startRef.current && endRef.current) {
+      const { top: startY } = startRef.current.getBoundingClientRect();
+      const { bottom } = endRef.current.getBoundingClientRect();
 
       const endY = bottom - window.innerHeight;
 
@@ -29,7 +25,7 @@ export const ReadingProgress = (props: ReadingProgressProps) => {
         setProgress(1.0);
       } else {
         const x = startY / (startY - endY);
-        setProgress(Math.round(x * 1000.0) / 1000.0);
+        setProgress(Math.round(x * 1000.0) / 1000.0); // round up 1 digit after the fpoint
       }
     }
   }, []);
@@ -43,6 +39,10 @@ export const ReadingProgress = (props: ReadingProgressProps) => {
       window.removeEventListener("resize", onScroll);
     };
   }, []);
+
+  useEffect(() => {
+    onScroll();
+  });
 
   return <ProgressBar progress={progress} />;
 };

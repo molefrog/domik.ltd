@@ -66,7 +66,7 @@ const Bar = styled.div`
   justify-content: flex-start;
 
   border-radius: 12px;
-  background: var(--color-subtle-gray);
+  background: #c1c1c1;
   border: 2px solid white;
 
   box-shadow: 0 0 12px 0 rgba(179, 179, 179, 0.6), 0 1px 2px 0 rgba(0, 0, 0, 0.15);
