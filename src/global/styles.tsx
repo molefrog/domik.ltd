@@ -21,6 +21,7 @@ const styles = css`
     --color-embossed: var(--color-twilight-blue);
     --color-embossed-dark: var(--color-carrara);
     --color-text-highlight: #e386b2;
+    --color-subtle-gray: #eaeaea;
 
     font-size: 20px;
     line-height: 30px;
