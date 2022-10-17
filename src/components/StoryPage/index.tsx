@@ -79,9 +79,13 @@ export const StoryPage = () => {
     );
   }
 
+  // i hope there will be more chapters soon
+  const maxProgress = Math.min(chapterComponents.length / 4.0, 1.0);
+
   return (
     <Story>
-      <ReadingProgress startRef={firstChapterRef} endRef={lastChapterRef} />
+      <ReadingProgress startRef={firstChapterRef} endRef={lastChapterRef} max={maxProgress} />
+
       <Chapters>
         {chapterComponents.map((C, index) => {
           let ref = null;

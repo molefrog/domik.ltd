@@ -7,12 +7,16 @@ interface ReadingProgressProps {
    */
   startRef: React.RefObject<HTMLDivElement>;
   endRef: React.RefObject<HTMLDivElement>;
+
+  max?: number;
 }
 
-export const ReadingProgress = ({ startRef, endRef }: ReadingProgressProps) => {
+export const ReadingProgress = ({ startRef, endRef, max }: ReadingProgressProps) => {
   const [progress, setProgress] = useState(0.0);
 
   const onScroll = useCallback((ev?: Event) => {
+    if (endRef.current && !startRef.current) startRef = endRef;
+
     if (startRef.current && endRef.current) {
       const { top: startY } = startRef.current.getBoundingClientRect();
       const { bottom } = endRef.current.getBoundingClientRect();
@@ -44,5 +48,5 @@ export const ReadingProgress = ({ startRef, endRef }: ReadingProgressProps) => {
     onScroll();
   });
 
-  return <ProgressBar progress={progress} />;
+  return <ProgressBar progress={progress} max={max} />;
 };
