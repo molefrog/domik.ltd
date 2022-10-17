@@ -1,12 +1,13 @@
 import styled from "@emotion/styled";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useLocation } from "wouter";
 import { useLocalStorage } from "~/hooks/useLocalStorage";
 
 import { buildCodeSequence, getLaunchDateForChapter } from "~/chapters";
 import { NextChapterBanner } from "~/components/NextChapterBanner";
 import { BumperCar } from "~/components/BumperCar";
+import { ReadingProgress } from "../ReadingProgress";
 
 import { delay } from "~/utils/promises";
 
@@ -29,6 +30,9 @@ export const StoryPage = () => {
   const [storedCipher, setStoredCipher] = useLocalStorage<number>("cipher", 0);
   const [, navigate] = useLocation();
   const [chapterComponents, setChapterComponents] = useState<Array<ChapterComponent>>([]);
+
+  const firstChapterRef = useRef<HTMLDivElement>(null);
+  const lastChapterRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     (async () => {
@@ -77,10 +81,16 @@ export const StoryPage = () => {
 
   return (
     <Story>
+      <ReadingProgress startRef={firstChapterRef} endRef={lastChapterRef} />
       <Chapters>
         {chapterComponents.map((C, index) => {
+          let ref = null;
+
+          if (index === 0) ref = firstChapterRef;
+          if (index === chapterComponents.length - 1) ref = lastChapterRef;
+
           return (
-            <ChapterContent key={index}>
+            <ChapterContent key={index} ref={ref}>
               <C />
             </ChapterContent>
           );
