@@ -57,8 +57,11 @@ export const StoryPage = () => {
         setChapterComponents(modules);
       } catch (err) {
         console.error(err);
-        setStoredCipher(0);
-        navigate("/");
+
+        if (!import.meta.env.DEV) {
+          setStoredCipher(0);
+          navigate("/");
+        }
       } finally {
         setIsLoading(false);
       }
