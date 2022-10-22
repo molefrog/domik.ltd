@@ -2,6 +2,8 @@ import { MDXProvider as Provider } from "@mdx-js/react";
 import { ReactNode } from "react";
 import styled from "@emotion/styled";
 
+import { TV } from "~/attractions/TV";
+
 interface ImageProps {
   width?: string;
   float?: "left" | "right";
@@ -53,8 +55,6 @@ const H1 = styled.h1`
 
 export const MdxProvider = (props: { children: ReactNode }) => {
   return (
-    <Provider components={{ h1: H1, a: A, em: Em, p: P, Image }}>
-      {props.children}
-    </Provider>
+    <Provider components={{ h1: H1, a: A, em: Em, p: P, Image, TV }}>{props.children}</Provider>
   );
 };

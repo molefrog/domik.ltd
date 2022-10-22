@@ -4,6 +4,7 @@ import { keyframes } from "@emotion/react";
 import YouTube, { YouTubeProps } from "react-youtube";
 
 import sprite from "~/assets/sprites/wondering-eyes.png";
+import tvFrame from "~/assets/sprites/tv.svg";
 
 interface TVProps extends React.ComponentProps<"a"> {
   video: string; // YouTube video ID
@@ -40,8 +41,8 @@ export const TV = ({ video, ...linkProps }: TVProps) => {
 
   const videoOptions = useMemo(
     () => ({
-      width: 320,
-      height: 320,
+      width: 220,
+      height: 220,
       playerVars: {
         autoplay: 1,
         controls: 0,
@@ -59,7 +60,9 @@ export const TV = ({ video, ...linkProps }: TVProps) => {
     <>
       {shouldRenderTV && (
         <Scene visible={layerVisible}>
-          <YouTube opts={videoOptions} onReady={videoReady} onEnd={videoEnded} videoId={video} />
+          <TVFrame>
+            <Screen opts={videoOptions} onReady={videoReady} onEnd={videoEnded} videoId={video} />
+          </TVFrame>
         </Scene>
       )}
 
@@ -81,6 +84,32 @@ export const TV = ({ video, ...linkProps }: TVProps) => {
 /**
  * Styles
  */
+
+const Screen = styled(YouTube)`
+  position: absolute;
+  z-index: 101;
+  inset: 30px 0 0 0;
+
+  clip-path: inset(50px 40px 20px 20px);
+  background: black;
+`;
+
+const TVFrame = styled.div`
+  width: 240px;
+  aspect-ratio: 1/1;
+  position: relative;
+
+  :after {
+    position: absolute;
+    inset: 0 0 0 0;
+    content: "";
+    display: inline-block;
+    z-index: 102;
+    background: no-repeat center/contain url(${tvFrame});
+  }
+`;
+
+// overlay with the TV
 const Scene = styled.div<{ visible: boolean }>`
   position: fixed;
   inset: 0 0 0 0;
