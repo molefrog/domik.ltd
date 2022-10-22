@@ -1,4 +1,3 @@
-import { atom, useAtom } from "jotai";
+import { atom } from "jotai";
 
 export const newChapterUnlocked = atom<boolean>(false);
-export const useNewChapterUnlocked = () => useAtom(newChapterUnlocked);

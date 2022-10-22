@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 
 import { useState, useEffect, useRef } from "react";
 import { useLocation } from "wouter";
+import { useAtom } from "jotai";
 import { useLocalStorage } from "~/hooks/useLocalStorage";
 
 import { buildCodeSequence, getLaunchDateForChapter } from "~/chapters";
@@ -9,7 +10,7 @@ import { NextChapterBanner } from "~/components/NextChapterBanner";
 import { BumperCar } from "~/components/BumperCar";
 import { ReadingProgress } from "../ReadingProgress";
 
-import { useNewChapterUnlocked } from "~/state";
+import { newChapterUnlocked as newChapterUnlockedAtom } from "~/state";
 import { delay } from "~/utils/promises";
 
 type ChapterComponent = React.FunctionComponent;
@@ -31,7 +32,7 @@ export const StoryPage = () => {
   const [storedCipher, setStoredCipher] = useLocalStorage<number>("cipher", 0);
   const [, navigate] = useLocation();
   const [chapterComponents, setChapterComponents] = useState<Array<ChapterComponent>>([]);
-  const [newChapterUnlocked] = useNewChapterUnlocked();
+  const [newChapterUnlocked] = useAtom(newChapterUnlockedAtom);
 
   const firstChapterRef = useRef<HTMLDivElement>(null);
   const lastChapterRef = useRef<HTMLDivElement>(null);

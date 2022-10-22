@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useRoute, useLocation } from "wouter";
 import { useDebounce } from "use-debounce";
+import { useAtom } from "jotai";
 
 import styled from "@emotion/styled";
 
@@ -12,7 +13,7 @@ import { useDocumentTitle } from "~/hooks/useDocumentTitle";
 import { useClickSound, useSuccessSound } from "~/hooks/useSounds";
 import { delay } from "~/utils/promises";
 import { isValidCode } from "~/chapters";
-import { useNewChapterUnlocked } from "~/state";
+import { newChapterUnlocked } from "~/state";
 
 const DEFAULT_VALUE = 0o0;
 
@@ -50,7 +51,7 @@ export function CipherPage() {
   const [inputDisabled, setInputDisabled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [, setStoredCipher] = useLocalStorage<Cipher>("cipher", 0);
-  const [, setNewChapterUnlocked] = useNewChapterUnlocked();
+  const [, setNewChapterUnlocked] = useAtom(newChapterUnlocked);
 
   const firstRender = useRef(true);
   const inputRef = useRef<CipherInputRef>(null);
