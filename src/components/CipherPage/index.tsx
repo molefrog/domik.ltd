@@ -12,6 +12,7 @@ import { useDocumentTitle } from "~/hooks/useDocumentTitle";
 import { useClickSound, useSuccessSound } from "~/hooks/useSounds";
 import { delay } from "~/utils/promises";
 import { isValidCode } from "~/chapters";
+import { useNewChapterUnlocked } from "~/state";
 
 const DEFAULT_VALUE = 0o0;
 
@@ -24,11 +25,7 @@ const useCipher = (): [Cipher, (x: Cipher) => void] => {
 
   const val = match ? parseInt(params.cipher, 8) : DEFAULT_VALUE;
 
-  return [
-    val,
-    (x) =>
-      navigate(`/x/0o${x.toString(8).padStart(8, "0")}`, { replace: true }),
-  ];
+  return [val, (x) => navigate(`/x/0o${x.toString(8).padStart(8, "0")}`, { replace: true })];
 };
 
 const cipherToTitle = (cipher: number) => {
@@ -52,7 +49,8 @@ export function CipherPage() {
   const [arrow, setArrow] = useState(0);
   const [inputDisabled, setInputDisabled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [_, setStoredCipher] = useLocalStorage<Cipher>("cipher", 0);
+  const [, setStoredCipher] = useLocalStorage<Cipher>("cipher", 0);
+  const [, setNewChapterUnlocked] = useNewChapterUnlocked();
 
   const firstRender = useRef(true);
   const inputRef = useRef<CipherInputRef>(null);
@@ -77,6 +75,9 @@ export function CipherPage() {
     await delay(1000);
     setIsLoading(true);
     await delay(250);
+
+    // let other components know
+    setNewChapterUnlocked(true);
 
     // save the matched cipher
     setStoredCipher(cipher);
@@ -126,8 +127,8 @@ export function CipherPage() {
       <EnterCipher>
         <EnterCipherHeader>Знаешь секретный шифр?</EnterCipherHeader>
         <EnterCipherTitle>
-          Нет кода — нет и истории. Открывай доступ к новым главам, используя
-          секретную последовательность символов.
+          Нет кода — нет и истории. Открывай доступ к новым главам, используя секретную
+          последовательность символов.
         </EnterCipherTitle>
 
         <CipherInput
