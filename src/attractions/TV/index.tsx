@@ -9,9 +9,20 @@ import tvFrame from "~/assets/sprites/tv.svg";
 
 interface TVProps extends React.ComponentProps<"a"> {
   video: string; // YouTube video ID
+  from?: string; // Start playing video from this timestamp, e.g. "6:40"
 }
 
-export const TV = ({ video, ...linkProps }: TVProps) => {
+// Converts "1:30" to 90
+const parseTimestamp = (ts?: string): number => {
+  if (!ts) return 0;
+
+  let [min, sec] = ts.split(":").map(Number);
+  if (!sec) [min, sec] = [0, min];
+
+  return min * 60 + sec;
+};
+
+export const TV = ({ video, from, ...linkProps }: TVProps) => {
   const [shouldRenderTV, setShouldRenderTV] = useDelayedSwitch(false, 2000);
   const [layerVisible, setLayerVisible] = useState(false);
 
@@ -38,6 +49,7 @@ export const TV = ({ video, ...linkProps }: TVProps) => {
       width: 220,
       height: 220,
       playerVars: {
+        start: parseTimestamp(from),
         autoplay: 1,
         controls: 0,
         disablekb: 1,
