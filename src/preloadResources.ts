@@ -27,6 +27,7 @@ const resources: ResourceDeclaration[] = [
   { load: () => import("~/assets/symbols/7.svg"), type: "image" },
   { load: () => import("~/assets/sounds/click.m4a?url"), type: "audio" },
   { load: () => import("~/assets/sounds/success.m4a?url"), type: "audio" },
+  { load: () => import("~/assets/sprites/tv.svg?url"), type: "image" },
 ];
 
 export const usePreloadedResources = () => {
@@ -36,10 +37,7 @@ export const usePreloadedResources = () => {
 
     (async () => {
       try {
-        await Promise.race([
-          delay(3000),
-          Promise.allSettled(resources.map((r) => load(r))),
-        ]);
+        await Promise.race([delay(3000), Promise.allSettled(resources.map((r) => load(r)))]);
 
         preloadStatus = PreloadStatus.finished;
       } catch {
