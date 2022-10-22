@@ -1,7 +1,9 @@
 import { useState, useCallback, useMemo } from "react";
 import styled from "@emotion/styled";
 import { keyframes } from "@emotion/react";
-import YouTube, { YouTubeProps } from "react-youtube";
+import YouTube, { YouTubeEvent } from "react-youtube";
+
+import { useDelayedSwitch } from "~/hooks/useDelayedSwitch";
 
 import sprite from "~/assets/sprites/wondering-eyes.png";
 import tvFrame from "~/assets/sprites/tv.svg";
@@ -11,24 +13,16 @@ interface TVProps extends React.ComponentProps<"a"> {
 }
 
 export const TV = ({ video, ...linkProps }: TVProps) => {
-  const [shouldRenderTV, setShouldRenderTV] = useState(false);
+  const [shouldRenderTV, setShouldRenderTV] = useDelayedSwitch(false, 2000);
   const [layerVisible, setLayerVisible] = useState(false);
 
-  const videoReady = useCallback(
-    (): YouTubeProps["onReady"] =>
-      ({ target: video }) => {
-        video.playVideo();
-      },
-    []
-  );
+  const videoReady = useCallback(({ target: video }: YouTubeEvent) => {
+    video.playVideo();
+  }, []);
 
-  const videoEnded = useCallback(
-    (): YouTubeProps["onEnd"] =>
-      ({ target: video }) => {
-        video.playVideo();
-      },
-    []
-  );
+  const videoEnded = useCallback(({ target: video }: YouTubeEvent) => {
+    video.playVideo();
+  }, []);
 
   const mouseEntered = () => {
     setShouldRenderTV(true);
@@ -37,6 +31,7 @@ export const TV = ({ video, ...linkProps }: TVProps) => {
 
   const mouseLeft = () => {
     setLayerVisible(false);
+    setShouldRenderTV(false);
   };
 
   const videoOptions = useMemo(
