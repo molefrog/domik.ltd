@@ -32,7 +32,7 @@ const Em = styled.em`
 const H1 = styled.h1`
   text-align: center;
   max-width: 400px;
-  margin: 16px auto 40px auto;
+  margin: 0px auto 40px auto;
 `;
 
 export const MdxProvider = (props: { children: ReactNode }) => {

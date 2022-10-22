@@ -68,6 +68,13 @@ export const StoryPage = () => {
     })();
   }, [storedCipher]);
 
+  // automatically scroll to the last chapter
+  useEffect(() => {
+    if (chapterComponents) {
+      setTimeout(() => lastChapterRef.current?.scrollIntoView({ behavior: "smooth" }), 600);
+    }
+  }, [chapterComponents]);
+
   if (isLoading) {
     return (
       <Loader>
@@ -103,7 +110,9 @@ export const StoryPage = () => {
           );
         })}
 
-        <NextChapterBanner launchDate={getLaunchDateForChapter(chapterComponents.length)} />
+        <Banner>
+          <NextChapterBanner launchDate={getLaunchDateForChapter(chapterComponents.length)} />
+        </Banner>
       </Chapters>
     </Story>
   );
@@ -141,11 +150,15 @@ const Chapters = styled.div`
 `;
 
 const ChapterContent = styled.div`
-  margin-bottom: 48px;
+  padding-top: 48px;
 `;
 
 const Story = styled.article`
-  padding: 48px 16px 128px 16px;
+  padding: 0px 16px 128px 16px;
   max-width: 700px;
   margin: 0 auto;
+`;
+
+const Banner = styled.div`
+  margin-top: 48px;
 `;
