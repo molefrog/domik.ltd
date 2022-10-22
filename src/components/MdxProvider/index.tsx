@@ -3,6 +3,7 @@ import { ReactNode } from "react";
 import styled from "@emotion/styled";
 
 import { TV } from "~/attractions/TV";
+import { EyedLink } from "~/attractions/EyedLink";
 
 interface ImageProps {
   width?: string;
@@ -17,25 +18,6 @@ const Img_ = styled.img<ImageProps>`
 `;
 
 const Image = (props: ImageProps) => <Img_ {...props} />;
-
-const A = styled.a`
-  color: inherit;
-  text-decoration: var(--color-text) underline;
-  text-decoration-thickness: 2px;
-  text-decoration-style: solid;
-
-  :hover {
-    background-color: var(--color-selected);
-    text-decoration: none;
-  }
-
-  :after {
-    content: "↗";
-    font-size: small;
-    font-weight: bold;
-    translate: 10px;
-  }
-`;
 
 const P = styled.p`
   hyphens: auto;
@@ -55,6 +37,8 @@ const H1 = styled.h1`
 
 export const MdxProvider = (props: { children: ReactNode }) => {
   return (
-    <Provider components={{ h1: H1, a: A, em: Em, p: P, Image, TV }}>{props.children}</Provider>
+    <Provider components={{ h1: H1, a: EyedLink, em: Em, p: P, Image, TV, EyedLink }}>
+      {props.children}
+    </Provider>
   );
 };
