@@ -8,12 +8,11 @@ import styled from "@emotion/styled";
 import { CipherInput, CipherInputRef, Cipher } from "~/components/CipherInput";
 import { Compass } from "~/components/Compass";
 import { rand } from "~/utils/rand";
-import { useLocalStorage } from "~/hooks/useLocalStorage";
 import { useDocumentTitle } from "~/hooks/useDocumentTitle";
 import { useClickSound, useSuccessSound } from "~/hooks/useSounds";
 import { delay } from "~/utils/promises";
 import { isValidCode } from "~/chapters";
-import { newChapterUnlocked } from "~/state";
+import { newChapterUnlocked, acceptedCipher } from "~/state";
 
 const DEFAULT_VALUE = 0o0;
 
@@ -50,7 +49,7 @@ export function CipherPage() {
   const [arrow, setArrow] = useState(0);
   const [inputDisabled, setInputDisabled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [, setStoredCipher] = useLocalStorage<Cipher>("cipher", 0);
+  const [, setStoredCipher] = useAtom(acceptedCipher);
   const [, setNewChapterUnlocked] = useAtom(newChapterUnlocked);
 
   const firstRender = useRef(true);

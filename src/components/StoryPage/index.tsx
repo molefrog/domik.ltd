@@ -3,14 +3,14 @@ import styled from "@emotion/styled";
 import { useState, useEffect, useRef } from "react";
 import { useLocation } from "wouter";
 import { useAtom } from "jotai";
-import { useLocalStorage } from "~/hooks/useLocalStorage";
+import { RESET } from "jotai/utils";
 
 import { buildCodeSequence, getLaunchDateForChapter } from "~/chapters";
 import { NextChapterBanner } from "~/components/NextChapterBanner";
 import { BumperCar } from "~/components/BumperCar";
 import { ReadingProgress } from "../ReadingProgress";
 
-import { newChapterUnlocked as newChapterUnlockedAtom } from "~/state";
+import { newChapterUnlocked as newChapterUnlockedAtom, acceptedCipher } from "~/state";
 import { delay } from "~/utils/promises";
 
 type ChapterComponent = React.FunctionComponent;
@@ -29,7 +29,7 @@ const chapterModules = [
 
 export const StoryPage = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [storedCipher, setStoredCipher] = useLocalStorage<number>("cipher", 0);
+  const [storedCipher, setStoredCipher] = useAtom(acceptedCipher);
   const [, navigate] = useLocation();
   const [chapterComponents, setChapterComponents] = useState<Array<ChapterComponent>>([]);
   const [newChapterUnlocked] = useAtom(newChapterUnlockedAtom);
@@ -62,7 +62,7 @@ export const StoryPage = () => {
         console.error(err);
 
         if (!import.meta.env.DEV) {
-          setStoredCipher(0);
+          setStoredCipher(RESET);
           navigate("/");
         }
       } finally {

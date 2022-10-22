@@ -1,14 +1,15 @@
-import { useState, useRef, useEffect } from "react";
+import { useEffect } from "react";
 import { useLocation } from "wouter";
+import { useAtom } from "jotai";
 
 import styled from "@emotion/styled";
 
 import { NextChapterBanner } from "~/components/NextChapterBanner";
 import { getLaunchDateForChapter, isValidCode } from "~/chapters";
-import { useLocalStorage } from "~/hooks/useLocalStorage";
+import { acceptedCipher } from "~/state";
 
 export const IndexPage = () => {
-  const [storedCipher] = useLocalStorage<number>("cipher", 0);
+  const [storedCipher] = useAtom(acceptedCipher);
   const [, navigate] = useLocation();
 
   useEffect(() => {
