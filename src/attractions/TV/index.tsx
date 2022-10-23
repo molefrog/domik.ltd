@@ -5,7 +5,7 @@ import YouTube, { YouTubeEvent } from "react-youtube";
 import { useDelayedSwitch } from "~/hooks/useDelayedSwitch";
 import { EyedLink } from "~/attractions/EyedLink";
 
-import tvFrame from "~/assets/sprites/tv.svg";
+import tvFrame from "~/assets/sprites/tv.png";
 
 interface TVProps extends React.ComponentProps<"a"> {
   video: string; // YouTube video ID
@@ -46,8 +46,8 @@ export const TV = ({ video, from, ...linkProps }: TVProps) => {
 
   const videoOptions = useMemo(
     () => ({
-      width: 220,
-      height: 220,
+      width: 230,
+      height: 200,
       playerVars: {
         start: parseTimestamp(from),
         autoplay: 1,
@@ -89,14 +89,18 @@ export const TV = ({ video, from, ...linkProps }: TVProps) => {
 const Screen = styled(YouTube)`
   position: absolute;
   z-index: 101;
-  inset: 30px 0 0 0;
+  inset: 0 0 0 0;
 
-  clip-path: inset(50px 40px 20px 20px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  clip-path: inset(70px 45px 50px 45px);
   background: black;
 `;
 
 const TVFrame = styled.div`
-  width: 240px;
+  width: 260px;
   aspect-ratio: 1/1;
   position: relative;
 
