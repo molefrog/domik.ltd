@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect, memo } from "react";
 import styled from "@emotion/styled";
 import YouTube, { YouTubeEvent } from "react-youtube";
 
@@ -6,6 +6,7 @@ import { useDelayedSwitch } from "~/hooks/useDelayedSwitch";
 import { EyedLink } from "~/attractions/EyedLink";
 
 import tvFrame from "~/assets/sprites/tv.png";
+import noise from "~/assets/sprites/noise.gif";
 
 interface TVProps extends React.ComponentProps<"a"> {
   video: string; // YouTube video ID
@@ -22,11 +23,13 @@ const parseTimestamp = (ts?: string): number => {
   return min * 60 + sec;
 };
 
-export const TV = ({ video, from, ...linkProps }: TVProps) => {
+export const TV = memo(function TV({ video, from, ...linkProps }: TVProps) {
   const [shouldRenderTV, setShouldRenderTV] = useDelayedSwitch(false, 2000);
   const [layerVisible, setLayerVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const videoReady = useCallback(({ target: video }: YouTubeEvent) => {
+    setIsLoading(false);
     video.playVideo();
   }, []);
 
@@ -62,11 +65,17 @@ export const TV = ({ video, from, ...linkProps }: TVProps) => {
     []
   );
 
+  useEffect(() => {
+    if (!shouldRenderTV) {
+      setIsLoading(true);
+    }
+  }, [shouldRenderTV]);
+
   return (
     <>
       {shouldRenderTV && (
         <Scene visible={layerVisible}>
-          <TVFrame>
+          <TVFrame noise={isLoading}>
             <Screen opts={videoOptions} onReady={videoReady} onEnd={videoEnded} videoId={video} />
           </TVFrame>
         </Scene>
@@ -80,7 +89,7 @@ export const TV = ({ video, from, ...linkProps }: TVProps) => {
       />
     </>
   );
-};
+});
 
 /**
  * Styles
@@ -99,7 +108,7 @@ const Screen = styled(YouTube)`
   background: black;
 `;
 
-const TVFrame = styled.div`
+const TVFrame = styled.div<{ noise: boolean }>`
   width: 260px;
   aspect-ratio: 1/1;
   position: relative;
@@ -109,8 +118,17 @@ const TVFrame = styled.div`
     inset: 0 0 0 0;
     content: "";
     display: inline-block;
-    z-index: 102;
+    z-index: 103;
     background: no-repeat center/contain url(${tvFrame});
+  }
+
+  :before {
+    position: absolute;
+    inset: 55px 60px 80px 60px;
+    content: "";
+    display: ${({ noise }) => (noise ? "inline-block" : "none")};
+    z-index: 102;
+    background: no-repeat center/contain url(${noise});
   }
 `;
 
