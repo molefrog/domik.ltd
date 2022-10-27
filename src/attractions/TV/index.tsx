@@ -11,6 +11,7 @@ import noise from "~/assets/sprites/noise.gif";
 interface TVProps extends React.ComponentProps<"a"> {
   video: string; // YouTube video ID
   from?: string; // Start playing video from this timestamp, e.g. "6:40"
+  withSound?: boolean;
 }
 
 // Converts "1:30" to 90
@@ -23,7 +24,7 @@ const parseTimestamp = (ts?: string): number => {
   return min * 60 + sec;
 };
 
-export const TV = memo(function TV({ video, from, ...linkProps }: TVProps) {
+export const TV = memo(function TV({ video, from, withSound = false, ...linkProps }: TVProps) {
   const [shouldRenderTV, setShouldRenderTV] = useDelayedSwitch(false, 2000);
   const [layerVisible, setLayerVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -59,7 +60,7 @@ export const TV = memo(function TV({ video, from, ...linkProps }: TVProps) {
         playsinline: 1,
         fs: 0,
         loop: 1,
-        mute: 1,
+        mute: withSound ? 0 : 1,
       },
     }),
     []

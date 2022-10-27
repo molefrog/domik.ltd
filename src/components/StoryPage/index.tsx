@@ -88,7 +88,7 @@ export const StoryPage = () => {
   }
 
   // i hope there will be more chapters soon
-  const maxProgress = Math.min(chapterComponents.length / 4.0, 1.0);
+  const maxProgress = Math.min(chapterComponents.length / 5.0, 1.0);
 
   return (
     <Story>
