@@ -1,52 +1,73 @@
-import { useState, useCallback, useMemo, useEffect, memo } from "react";
+import { useState, useCallback, useMemo, useEffect, useRef, memo } from "react";
+import { useAtom } from "jotai";
 import YouTube, { YouTubeEvent } from "react-youtube";
 import styled from "@emotion/styled";
 
+import { currentCassette } from "./state";
 import tvFrame from "~/assets/sprites/tv.png";
 import noise from "~/assets/sprites/noise.gif";
 
-export const Scene = memo(function TV({ video, from, withSound = false, ...linkProps }: TVProps) {
-  // const [shouldRenderTV, setShouldRenderTV] = useDelayedSwitch(false, 2000);
-  // const [layerVisible, setLayerVisible] = useState(false);
-  // const [isLoading, setIsLoading] = useState(true);
+// Converts "1:30" to 90
+const parseTimestamp = (ts?: string): number => {
+  if (!ts) return 0;
 
-  // const videoReady = useCallback(({ target: video }: YouTubeEvent) => {
-  //   setIsLoading(false);
-  //   video.playVideo();
-  // }, []);
+  let [min, sec] = ts.split(":").map(Number);
+  if (!sec) [min, sec] = [0, min];
 
-  // const videoEnded = useCallback(({ target: video }: YouTubeEvent) => {
-  //   video.playVideo();
-  // }, []);
+  return min * 60 + sec;
+};
+
+export const Scene = memo(function TV() {
+  const [isVisible, setIsVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const playerRef = useRef<YouTube>(null);
+
+  const [cassette] = useAtom(currentCassette);
+
+  useEffect(() => {
+    if (cassette) {
+      console.log("cassette loaded", cassette?.video);
+    } else {
+      console.log("cassette unloaded");
+    }
+
+    setIsVisible(cassette ? true : false);
+  }, [cassette]);
+
+  const videoReady = useCallback(({ target: video }: YouTubeEvent) => {
+    // console.log("ready");
+    // setIsLoading(false);
+    // video.playVideo();
+  }, []);
+
+  const videoEnded = useCallback(({ target: video }: YouTubeEvent) => {
+    // video.playVideo();
+  }, []);
 
   const videoOptions = useMemo(
     () => ({
       width: 230,
       height: 200,
       playerVars: {
-        start: parseTimestamp(from),
+        // start: parseTimestamp(from),
         autoplay: 1,
         controls: 0,
         disablekb: 1,
         playsinline: 1,
         fs: 0,
         loop: 1,
-        mute: withSound ? 0 : 1,
+        // mute: withSound ? 0 : 1,
       },
     }),
     []
   );
 
   return (
-    <>
-      {shouldRenderTV && (
-        <Overlay visible={layerVisible}>
-          <TVFrame noise={isLoading}>
-            <Screen opts={videoOptions} onReady={videoReady} onEnd={videoEnded} videoId={video} />
-          </TVFrame>
-        </Overlay>
-      )}
-    </>
+    <Overlay visible={isVisible}>
+      <TVFrame noise={isLoading}>
+        <Screen ref={playerRef} opts={videoOptions} onReady={videoReady} onEnd={videoEnded} />
+      </TVFrame>
+    </Overlay>
   );
 });
 

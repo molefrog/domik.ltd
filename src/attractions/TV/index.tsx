@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef, memo, lazy } from "react";
+import { useState, useCallback, useEffect, useRef, memo, lazy, Suspense } from "react";
 import { useAtom } from "jotai";
 
 import { EyedLink } from "~/attractions/EyedLink";
@@ -10,18 +10,8 @@ interface TVProps extends React.ComponentProps<"a"> {
   withSound?: boolean;
 }
 
-// Converts "1:30" to 90
-const parseTimestamp = (ts?: string): number => {
-  if (!ts) return 0;
-
-  let [min, sec] = ts.split(":").map(Number);
-  if (!sec) [min, sec] = [0, min];
-
-  return min * 60 + sec;
-};
-
 /*
- * Turn on with debounce, turn off immediately
+ * Turn on TV with debounce, but turn off immediately
  */
 function useDelayedHover(hover: boolean, delay: number, defValue: boolean = false) {
   type Timeout = ReturnType<typeof setTimeout>;
@@ -46,7 +36,7 @@ function useDelayedHover(hover: boolean, delay: number, defValue: boolean = fals
 
 export const TV = memo(function TV({ video, from, withSound = false, ...linkProps }: TVProps) {
   const [hoverOver, setHoverOver] = useState(false);
-  const isPlaying = useDelayedHover(hoverOver, 300);
+  const isPlaying = useDelayedHover(hoverOver, 250);
   const [cassette, loadCassette] = useAtom(currentCassette);
 
   const mouseEntered = useCallback(() => setHoverOver(true), []);
@@ -71,20 +61,20 @@ export const TV = memo(function TV({ video, from, withSound = false, ...linkProp
 /**
  * TV Scene
  */
-
 const LazyScene = lazy(() => import("./Scene"));
 
 export const TVPlayer = () => {
   const [shouldRender, setShouldRender] = useState(false);
-  const [cassette, loadCassette] = useAtom(currentCassette);
+  const [cassette] = useAtom(currentCassette);
 
+  // load the player when the first cassette is set
   useEffect(() => {
-    if (cassette && !shouldRender) {
-      setShouldRender(true);
-      console.log("load new cassette");
-    }
+    if (cassette && !shouldRender) setShouldRender(true);
   }, [cassette]);
 
-  return null;
-  // return shouldRender ? <LazyScene /> : null;
+  return shouldRender ? (
+    <Suspense>
+      <LazyScene />
+    </Suspense>
+  ) : null;
 };
