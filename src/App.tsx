@@ -5,6 +5,7 @@ import styled from "@emotion/styled";
 import { CipherPage } from "~/components/CipherPage";
 import { StoryPage } from "~/components/StoryPage";
 import { IndexPage } from "~/components/IndexPage";
+import { TVPlayer } from "./attractions/TV";
 
 import { usePreloadedResources } from "~/preloadResources";
 
@@ -27,6 +28,8 @@ function App() {
           <Redirect to="/" />
         </Route>
       </Switch>
+
+      <TVPlayer />
     </Body>
   );
 }
