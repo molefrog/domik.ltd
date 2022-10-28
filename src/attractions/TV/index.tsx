@@ -37,13 +37,13 @@ function useDelayedHover(hover: boolean, delay: number, defValue: boolean = fals
 export const TV = memo(function TV({ video, from, withSound = false, ...linkProps }: TVProps) {
   const [hoverOver, setHoverOver] = useState(false);
   const isPlaying = useDelayedHover(hoverOver, 250);
-  const [cassette, loadCassette] = useAtom(currentCassette);
+  const [, loadCassette] = useAtom(currentCassette);
 
   const mouseEntered = useCallback(() => setHoverOver(true), []);
   const mouseLeft = useCallback(() => setHoverOver(false), []);
 
   useEffect(() => {
-    loadCassette(isPlaying ? { video, from } : null);
+    loadCassette(isPlaying ? { video, from, withSound } : null);
   }, [isPlaying]);
 
   return (

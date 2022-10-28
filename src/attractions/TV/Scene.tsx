@@ -3,7 +3,7 @@ import { useAtom } from "jotai";
 import YouTube, { YouTubeEvent } from "react-youtube";
 import styled from "@emotion/styled";
 
-import { currentCassette } from "./state";
+import { currentCassette, Cassette } from "./state";
 import tvFrame from "~/assets/sprites/tv.png";
 import noise from "~/assets/sprites/noise.gif";
 
@@ -18,54 +18,66 @@ const parseTimestamp = (ts?: string): number => {
 };
 
 export const Scene = memo(function TV() {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const playerRef = useRef<YouTube>(null);
+  const [insertedCassette, setInsertedCassette] = useState<Cassette>();
 
+  const playerRef = useRef<YouTube>(null);
   const [cassette] = useAtom(currentCassette);
 
   useEffect(() => {
-    if (cassette) {
-      console.log("cassette loaded", cassette?.video);
-    } else {
-      console.log("cassette unloaded");
-    }
+    const player = playerRef.current?.getInternalPlayer();
 
-    setIsVisible(cassette ? true : false);
+    if (cassette) {
+      setIsPlaying(true);
+      setInsertedCassette(cassette);
+      player?.playVideo();
+    } else {
+      setIsPlaying(false);
+      player?.pauseVideo();
+    }
   }, [cassette]);
 
-  const videoReady = useCallback(({ target: video }: YouTubeEvent) => {
-    // console.log("ready");
-    // setIsLoading(false);
-    // video.playVideo();
+  const playerReady = useCallback(({ target: video }: YouTubeEvent) => {
+    setIsLoading(false);
+    video.playVideo();
   }, []);
 
   const videoEnded = useCallback(({ target: video }: YouTubeEvent) => {
-    // video.playVideo();
+    video.playVideo();
   }, []);
 
-  const videoOptions = useMemo(
-    () => ({
+  const videoOptions = useMemo(() => {
+    if (!insertedCassette) return {};
+
+    return {
       width: 230,
       height: 200,
       playerVars: {
-        // start: parseTimestamp(from),
         autoplay: 1,
         controls: 0,
         disablekb: 1,
         playsinline: 1,
         fs: 0,
         loop: 1,
-        // mute: withSound ? 0 : 1,
+        start: parseTimestamp(insertedCassette.from),
+        mute: insertedCassette.withSound ? 0 : 1,
       },
-    }),
-    []
-  );
+    };
+  }, [insertedCassette]);
 
   return (
-    <Overlay visible={isVisible}>
+    <Overlay visible={isPlaying}>
       <TVFrame noise={isLoading}>
-        <Screen ref={playerRef} opts={videoOptions} onReady={videoReady} onEnd={videoEnded} />
+        {insertedCassette && (
+          <Screen
+            ref={playerRef}
+            opts={videoOptions}
+            onReady={playerReady}
+            onEnd={videoEnded}
+            videoId={insertedCassette.video}
+          />
+        )}
       </TVFrame>
     </Overlay>
   );

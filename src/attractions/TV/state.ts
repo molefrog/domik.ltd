@@ -1,8 +1,9 @@
 import { atom } from "jotai";
 
-export interface Cassete {
+export interface Cassette {
   video: string;
   from?: string;
+  withSound?: boolean;
 }
 
-export const currentCassette = atom<Cassete | null>(null);
+export const currentCassette = atom<Cassette | null>(null);
