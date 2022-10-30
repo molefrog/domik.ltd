@@ -20,7 +20,6 @@ export default function PlaygroundPage() {
             [562, 315],
             [404, 312],
           ]}
-          image={mapImage}
         />
       </Block>
     </Container>

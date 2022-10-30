@@ -1,6 +1,8 @@
 import styled from "@emotion/styled";
 import { useRef, useState, useCallback } from "react";
 
+import { usePopSound } from "~/hooks/useSounds";
+
 type Coords = [number, number];
 
 interface Props {
@@ -10,17 +12,19 @@ interface Props {
 }
 
 export const ConnectTheDots = ({ dots, image, baseWidth = 670 }: Props) => {
+  const svgRef = useRef<SVGSVGElement>(null);
+
   const [pointer, setPointer] = useState<Coords>();
   const [isDrawing, setIsDrawing] = useState(false);
   const [connIndices, setConnIndices] = useState<number[]>([]);
 
-  const svgRef = useRef<SVGSVGElement>(null);
+  const [playPop] = usePopSound({
+    // increase sound pitch with every dot selected
+    playbackRate: 0.5 + 0.1 * Math.min(connIndices.length, 8),
+  });
 
   // the path that is currently being built
   const wipPath = buildPath([...connIndices.map((i) => dots[i]), pointer]);
-
-  // to draw the final path
-  const finalPath = buildPath(connIndices.map((i) => dots[i]));
 
   const reset = useCallback(() => {
     setConnIndices([]);
@@ -37,6 +41,8 @@ export const ConnectTheDots = ({ dots, image, baseWidth = 670 }: Props) => {
 
       setConnIndices((arr) => [...arr, idx]);
       setIsDrawing(true);
+
+      playPop();
     },
     [connIndices]
   );
