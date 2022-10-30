@@ -20,7 +20,9 @@ export default function PlaygroundPage() {
             [562, 315],
             [404, 312],
           ]}
-          image={false && mapImage}
+          initialPath={[]}
+          successPredicate={(seq) => seq[seq.length - 1] === 2 && seq[0] === 0}
+          image={mapImage}
         />
       </Block>
     </Container>

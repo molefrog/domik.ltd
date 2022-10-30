@@ -1,17 +1,27 @@
 import styled from "@emotion/styled";
 import { useRef, useState, useMemo, useCallback } from "react";
 
-import { usePopSound, useResetSound } from "~/hooks/useSounds";
+import { usePopSound, useResetSound, useSuccessSound } from "~/hooks/useSounds";
 import { Dot } from "./Dot";
 import { type Coords } from "./types";
 
 interface Props {
   dots: Coords[];
+  initialPath: number[];
   baseWidth?: number;
   image?: string;
+  successPredicate?: (p: number[]) => boolean;
 }
 
-export const ConnectTheDots = ({ dots: providedDots, image, baseWidth = 670 }: Props) => {
+const matchNone = () => false;
+
+export const ConnectTheDots = ({
+  dots: providedDots,
+  initialPath,
+  image,
+  baseWidth = 670,
+  successPredicate = matchNone,
+}: Props) => {
   const svgRef = useRef<SVGSVGElement>(null);
 
   // State
@@ -19,61 +29,90 @@ export const ConnectTheDots = ({ dots: providedDots, image, baseWidth = 670 }: P
 
   const [pointer, setPointer] = useState<Coords>();
   const [isDrawing, setIsDrawing] = useState(false);
-  const [connIndices, setConnIndices] = useState<number[]>([]);
+  const [path, setPath] = useState<number[]>(() => initialPath);
+  const [isSuccess, setIsSuccess] = useState<boolean>(() => !!initialPath.length);
 
   const [playPop] = usePopSound({
     // increase sound pitch with every dot selected
-    playbackRate: 0.5 + 0.1 * Math.min(connIndices.length, 8),
+    playbackRate: 0.5 + 0.1 * Math.min(path.length, 8),
   });
   const [playReset] = useResetSound();
+  const [playSuccess] = useSuccessSound();
 
   // the path that is currently being built
-  const wipPath = buildPath([...connIndices.map((i) => dots[i]), pointer]);
+  const svgPath = buildPath([...path.map((i) => dots[i]), ...(isDrawing ? [pointer] : [])]);
 
   // erase everything
-  const reset = useCallback(() => {
-    if (isDrawing) {
-      setConnIndices([]);
+  const reset = useCallback(
+    ({ silent } = { silent: false }) => {
+      setPath([]);
       setIsDrawing(false);
-      setPointer(undefined);
-      playReset();
-    }
-  }, [isDrawing]);
+      setIsSuccess(false);
+      if (!silent) playReset();
+    },
+    [playReset]
+  );
+
+  const accept = useCallback(() => {
+    setIsDrawing(false);
+    setIsSuccess(true);
+    playSuccess();
+  }, [playSuccess]);
+
+  const checkSequence = useCallback(
+    (seq: number[]) => {
+      // all dots must be present at least once
+      const progression = [...Array(dots.length)].map((_, i) => i);
+      const allDotsConnected = progression.every((i) => seq.includes(i));
+
+      if (allDotsConnected) {
+        if (successPredicate(seq)) {
+          accept();
+        } else {
+          reset();
+        }
+      }
+    },
+    [dots, reset, accept, successPredicate]
+  );
 
   const handleDotClick = useCallback(
     (idx: number, e: React.MouseEvent) => {
       e.stopPropagation();
 
-      const dotIndices = Array(dots.length)
-        .fill(0)
-        .map((_, idx) => idx);
-
-      const allDotsConnected = dotIndices.every((i) => connIndices.includes(i));
+      if (!isDrawing) {
+        // start over
+        reset({ silent: true });
+        setIsDrawing(true);
+      }
 
       // don't allow two sequential points
-      if (connIndices[connIndices.length - 1] === idx) return reset();
+      if (path[path.length - 1] === idx) return reset();
 
-      setConnIndices((arr) => [...arr, idx]);
+      setPath((indices) => {
+        const updated = [...indices, idx];
+        checkSequence(updated);
+
+        return updated;
+      });
+
+      // play sound
       playPop();
-
-      if (allDotsConnected) return reset();
-      setIsDrawing(true);
     },
-    [connIndices, dots]
+    [reset, isDrawing, path, dots, playPop]
   );
 
   // Update pointer position
-  const handleMouseMove = useCallback(
-    (e: React.MouseEvent) => {
-      if (!isDrawing || !svgRef.current) return;
-      setPointer(getSVGCoords(e, svgRef.current));
-    },
-    [isDrawing]
-  );
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    if (!svgRef.current) return;
+    setPointer(getSVGCoords(e, svgRef.current));
+  }, []);
 
   // Stop drawing when gets out of bounds
-  const handleClick = reset;
-  const handleMouseLeave = reset;
+  const handleClick = useCallback(() => reset(), [reset]);
+  const handleMouseLeave = useCallback(() => {
+    if (isDrawing) reset();
+  }, [isDrawing, reset]);
 
   return (
     <Figure drawing={isDrawing}>
@@ -88,14 +127,14 @@ export const ConnectTheDots = ({ dots: providedDots, image, baseWidth = 670 }: P
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
       >
-        {wipPath && <Path d={wipPath} />}
+        {svgPath && <Path d={svgPath} success={isSuccess} />}
 
         {dots.map((pos, index) => (
           <Dot
             key={pos.toString()}
             position={pos}
             onMouseDown={handleDotClick.bind(this, index)}
-            selected={connIndices.includes(index)}
+            selected={path.includes(index)}
             isDrawing={isDrawing}
           />
         ))}
@@ -122,15 +161,13 @@ const buildPath = (dots: Array<Coords | undefined>): string => {
     .map(([x, y], index) => {
       if (index === 0) {
         return `M ${x} ${y}`;
-      } else if (index == 1) {
-        const [px, py] = filtered[0];
+      } else if (index >= 1) {
+        const [px, py] = filtered[index - 1];
         const [nx, ny] = norm([px, py], [x, y]);
 
-        return `L ${x} ${y}`;
-        // return `Q ${px + nx} ${py + ny} ${x} ${y}`;
-      } else {
-        return `L ${x} ${y}`;
-        // return `T ${x} ${y}`;
+        const t: number = index % 2 === 0 ? 0.2 : -0.3;
+
+        return `Q ${px + (0.5 - t) * (x - px)} ${py + (0.5 + t) * (y - py)} ${x} ${y}`;
       }
     })
     .join(",");
@@ -158,6 +195,7 @@ const Figure = styled.figure<{ drawing: boolean }>`
   display: block;
   margin: 0;
   position: relative;
+  user-select: none;
 
   ${(props) => props.drawing && "cursor: cell;"}
 
@@ -171,10 +209,20 @@ const SVG = styled.svg`
   inset: 0 0 0 0;
 `;
 
-const Path = styled.path`
+const Path = styled.path<{ success: boolean }>`
   fill: none;
   stroke-width: 6;
-  stroke: var(--color-selected);
+
   stroke-linecap: round;
   stroke-linejoin: round;
+  stroke: var(--color-selected);
+  stroke-dasharray: 10;
+
+  ${(props) =>
+    props.success
+      ? ``
+      : `
+      opacity: 0.5;
+      stroke: black;
+      `}
 `;
