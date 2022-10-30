@@ -76,7 +76,7 @@ export const ConnectTheDots = ({ dots: providedDots, image, baseWidth = 670 }: P
   const handleMouseLeave = reset;
 
   return (
-    <Figure>
+    <Figure drawing={isDrawing}>
       {image && <img src={image} />}
 
       <SVG
@@ -84,20 +84,19 @@ export const ConnectTheDots = ({ dots: providedDots, image, baseWidth = 670 }: P
         xmlns="http://www.w3.org/2000/svg"
         viewBox={`0 0 ${baseWidth} ${baseWidth}`}
         ref={svgRef}
-        onClick={handleClick}
+        onMouseDown={handleClick}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
       >
-        {wipPath && (
-          <path d={wipPath} fill="none" stroke="#ccc" strokeWidth={6} strokeDasharray="6, 1" />
-        )}
+        {wipPath && <Path d={wipPath} />}
 
         {dots.map((pos, index) => (
           <Dot
             key={pos.toString()}
             position={pos}
-            onClick={handleDotClick.bind(this, index)}
+            onMouseDown={handleDotClick.bind(this, index)}
             selected={connIndices.includes(index)}
+            isDrawing={isDrawing}
           />
         ))}
       </SVG>
@@ -155,10 +154,12 @@ const getSVGCoords = (event: React.MouseEvent, svg: SVGSVGElement): Coords => {
 /**
  * Styles
  */
-const Figure = styled.figure`
+const Figure = styled.figure<{ drawing: boolean }>`
   display: block;
   margin: 0;
   position: relative;
+
+  ${(props) => props.drawing && "cursor: cell;"}
 
   > img {
     width: 100%;
@@ -168,4 +169,12 @@ const Figure = styled.figure`
 const SVG = styled.svg`
   position: absolute;
   inset: 0 0 0 0;
+`;
+
+const Path = styled.path`
+  fill: none;
+  stroke-width: 6;
+  stroke: var(--color-selected);
+  stroke-linecap: round;
+  stroke-linejoin: round;
 `;

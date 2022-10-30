@@ -4,12 +4,13 @@ import { type Coords } from "./types";
 interface DotProps extends React.ComponentProps<"circle"> {
   position: Coords;
   selected?: boolean;
+  isDrawing?: boolean;
 }
 
-export const Dot = ({ position: [x, y], selected, ...rest }: DotProps) => {
+export const Dot = ({ position: [x, y], selected, isDrawing, ...rest }: DotProps) => {
   return (
     <G>
-      <HoverZone cx={x} cy={y} r={26} {...rest} />
+      <HoverZone cx={x} cy={y} r={26} isDrawing={Boolean(isDrawing)} {...rest} />
 
       {/* Outer circle */}
       <InnerDotCircle r={10} cx={x} cy={y} border={Boolean(selected)} />
@@ -25,7 +26,7 @@ const G = styled.g`
   --stroke-width: 2.5;
 `;
 
-const HoverZone = styled.circle`
+const HoverZone = styled.circle<{ isDrawing: boolean }>`
   fill: transparent;
   cursor: pointer;
   opacity: 0;
@@ -40,6 +41,8 @@ const HoverZone = styled.circle`
     cursor: grabbing;
     transition-duration: 0.1s;
   }
+
+  ${(props) => props.isDrawing && "cursor: cell;"}
 `;
 
 const DotCircle = styled.circle`
