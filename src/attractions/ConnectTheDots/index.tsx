@@ -1,9 +1,9 @@
 import styled from "@emotion/styled";
-import { useRef, useState, useCallback } from "react";
+import { useRef, useState, useMemo, useCallback } from "react";
 
-import { usePopSound } from "~/hooks/useSounds";
-
-type Coords = [number, number];
+import { usePopSound, useResetSound } from "~/hooks/useSounds";
+import { Dot } from "./Dot";
+import { type Coords } from "./types";
 
 interface Props {
   dots: Coords[];
@@ -11,8 +11,11 @@ interface Props {
   image?: string;
 }
 
-export const ConnectTheDots = ({ dots, image, baseWidth = 670 }: Props) => {
+export const ConnectTheDots = ({ dots: providedDots, image, baseWidth = 670 }: Props) => {
   const svgRef = useRef<SVGSVGElement>(null);
+
+  // State
+  const dots = useMemo(() => providedDots, []);
 
   const [pointer, setPointer] = useState<Coords>();
   const [isDrawing, setIsDrawing] = useState(false);
@@ -22,29 +25,41 @@ export const ConnectTheDots = ({ dots, image, baseWidth = 670 }: Props) => {
     // increase sound pitch with every dot selected
     playbackRate: 0.5 + 0.1 * Math.min(connIndices.length, 8),
   });
+  const [playReset] = useResetSound();
 
   // the path that is currently being built
   const wipPath = buildPath([...connIndices.map((i) => dots[i]), pointer]);
 
+  // erase everything
   const reset = useCallback(() => {
-    setConnIndices([]);
-    setIsDrawing(false);
-    setPointer(undefined);
-  }, []);
+    if (isDrawing) {
+      setConnIndices([]);
+      setIsDrawing(false);
+      setPointer(undefined);
+      playReset();
+    }
+  }, [isDrawing]);
 
   const handleDotClick = useCallback(
     (idx: number, e: React.MouseEvent) => {
       e.stopPropagation();
 
+      const dotIndices = Array(dots.length)
+        .fill(0)
+        .map((_, idx) => idx);
+
+      const allDotsConnected = dotIndices.every((i) => connIndices.includes(i));
+
       // don't allow two sequential points
       if (connIndices[connIndices.length - 1] === idx) return reset();
 
       setConnIndices((arr) => [...arr, idx]);
-      setIsDrawing(true);
-
       playPop();
+
+      if (allDotsConnected) return reset();
+      setIsDrawing(true);
     },
-    [connIndices]
+    [connIndices, dots]
   );
 
   // Update pointer position
@@ -57,8 +72,8 @@ export const ConnectTheDots = ({ dots, image, baseWidth = 670 }: Props) => {
   );
 
   // Stop drawing when gets out of bounds
-  const handleClick = useCallback(() => reset(), []);
-  const handleMouseLeave = useCallback(() => reset(), []);
+  const handleClick = reset;
+  const handleMouseLeave = reset;
 
   return (
     <Figure>
@@ -77,10 +92,13 @@ export const ConnectTheDots = ({ dots, image, baseWidth = 670 }: Props) => {
           <path d={wipPath} fill="none" stroke="#ccc" strokeWidth={6} strokeDasharray="6, 1" />
         )}
 
-        {pointer && <circle fill="purple" r={10} cx={pointer[0]} cy={pointer[1]} />}
-
         {dots.map((pos, index) => (
-          <Dot key={pos.toString()} position={pos} onClick={handleDotClick.bind(this, index)} />
+          <Dot
+            key={pos.toString()}
+            position={pos}
+            onClick={handleDotClick.bind(this, index)}
+            selected={connIndices.includes(index)}
+          />
         ))}
       </SVG>
     </Figure>
@@ -118,30 +136,6 @@ const buildPath = (dots: Array<Coords | undefined>): string => {
     })
     .join(",");
 };
-
-interface DotProps extends React.ComponentProps<"circle"> {
-  position: Coords;
-}
-
-const Dot = ({ position: [x, y], ...rest }: DotProps) => {
-  return (
-    <>
-      <circle r={12} cx={x} cy={y} fill="white" />
-      <DotCircle r={7} cx={x} cy={y} {...rest}></DotCircle>
-    </>
-  );
-};
-
-const DotCircle = styled.circle`
-  fill: white;
-  stroke: black;
-  stroke-width: 2.5;
-
-  cursor: pointer;
-  &:hover {
-    fill: var(--color-selected-light);
-  }
-`;
 
 /**
  * Translates page event coordinates to SVG coordinates
