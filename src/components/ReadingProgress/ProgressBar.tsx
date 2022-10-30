@@ -49,6 +49,7 @@ const Container = styled.div`
   ${(props) => props.hidden && `opacity: 0;`}
   will-change: opacity;
   transition: opacity 0.3s ease;
+  z-index: 300;
 `;
 
 const Car = styled.div`

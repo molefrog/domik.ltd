@@ -4,6 +4,8 @@ import { useRef, useState, useMemo, useCallback } from "react";
 import { usePopSound, useResetSound, useSuccessSound } from "~/hooks/useSounds";
 import { Dot } from "./Dot";
 import { type Coords } from "./types";
+import { WonderingEyes } from "~/attractions/EyedLink";
+import { InteractionBadge } from "./InteractionBadge";
 
 interface Props {
   dots: Coords[];
@@ -117,6 +119,8 @@ export const ConnectTheDots = ({
   return (
     <Figure drawing={isDrawing}>
       {image && <img src={image} />}
+
+      <InteractionBadge />
 
       <SVG
         version="1.1"

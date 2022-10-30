@@ -4,6 +4,7 @@ import styled from "@emotion/styled";
 
 import { TV } from "~/attractions/TV";
 import { EyedLink } from "~/attractions/EyedLink";
+import { ConnectTheDots } from "~/attractions/ConnectTheDots";
 
 interface ImageProps {
   width?: string;
@@ -37,7 +38,9 @@ const H1 = styled.h1`
 
 export const MdxProvider = (props: { children: ReactNode }) => {
   return (
-    <Provider components={{ h1: H1, a: EyedLink, em: Em, p: P, Image, TV, EyedLink }}>
+    <Provider
+      components={{ h1: H1, a: EyedLink, em: Em, p: P, Image, TV, EyedLink, ConnectTheDots }}
+    >
       {props.children}
     </Provider>
   );

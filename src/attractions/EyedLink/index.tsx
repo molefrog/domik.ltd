@@ -9,7 +9,7 @@ export const EyedLink = (props: React.ComponentProps<"a">) => {
   return (
     <Link target="_blank" rel="noreferrer noopener" {...props}>
       {props.children}
-      <Eyes />
+      <InlineEyes />
     </Link>
   );
 };
@@ -47,18 +47,22 @@ const spriteAnimation = keyframes`
  100% {  background-position-x: calc(100% / (var(--total-frames) - 1) * var(--total-frames)); }
 `;
 
-const Eyes = styled.span`
+export const WonderingEyes = styled.span<{ speed?: number }>`
   --total-frames: 4;
   background-image: url(${sprite});
   background-size: auto 100%;
   aspect-ratio: 1 / 1;
 
-  animation: 1s normal infinite ${spriteAnimation};
+  animation: ${(p) => p.speed || 1}s normal infinite ${spriteAnimation};
   animation-timing-function: steps(var(--total-frames), jump-start);
 
-  // position and alignment within a link
-  display: inline-block;
-  vertical-align: sub;
   width: 1em;
+  height: 1em;
+  display: inline-block;
+`;
+
+const InlineEyes = styled(WonderingEyes)`
+  // position and alignment within a link
   margin-left: 0.08em;
+  vertical-align: sub;
 `;
