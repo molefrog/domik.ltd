@@ -222,7 +222,7 @@ const Path = styled.path<{ success: boolean }>`
     props.success
       ? ``
       : `
-      opacity: 0.5;
-      stroke: black;
+      stroke: #777;
+      stroke-dasharray: 2 10;
       `}
 `;
