@@ -219,14 +219,8 @@ const Path = styled.path<{ success: boolean }>`
 
   stroke-linecap: round;
   stroke-linejoin: round;
-  stroke: var(--color-selected);
-  stroke-dasharray: 10;
 
-  ${(props) =>
-    props.success
-      ? ``
-      : `
-      stroke: #777;
-      stroke-dasharray: 2 10;
-      `}
+  stroke-dasharray: 2 10;
+
+  ${(props) => (props.success ? `stroke: var(--color-selected-vivid);` : `stroke: #777;`)}
 `;

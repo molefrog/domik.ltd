@@ -18,6 +18,7 @@ const styles = css`
     --color-text-gray: #627474;
     --color-selected: var(--color-banana-dark-yellow);
     --color-selected-light: var(--color-banana-yellow);
+    --color-selected-vivid: #fac753;
     --color-embossed: var(--color-twilight-blue);
     --color-embossed-dark: var(--color-carrara);
     --color-text-highlight: #e386b2;

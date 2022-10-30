@@ -30,14 +30,17 @@ const HoverZone = styled.circle<{ isDrawing: boolean }>`
   fill: transparent;
   cursor: pointer;
   opacity: 0;
-  transition: opacity 0.8s ease;
+  transition: opacity 1s ease;
+  fill: var(--color-selected);
 
   &:hover {
-    fill: var(--color-selected);
+    & + circle {
+      stroke: var(--stroke-color);
+    }
   }
 
   &:active {
-    opacity: 0.3;
+    opacity: 0.5;
     cursor: grabbing;
     transition-duration: 0.1s;
   }
