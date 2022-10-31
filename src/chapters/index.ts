@@ -52,7 +52,7 @@ export async function isValidCode(code?: Code | number) {
 }
 
 export function getLaunchDateForChapter(num: number): Date {
-  const startDate = new Date("2022-10-14"); // every Friday
+  const startDate = new Date("2022-10-17"); // every Monday
 
   return new Date(startDate.getTime() + num * 7 * 24 * 60 * 60 * 1000);
 }
