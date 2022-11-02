@@ -21,7 +21,7 @@
     "react-youtube": "^10.0.0",
     "use-debounce": "^8.0.4",
     "use-sound": "^4.0.1",
-    "wouter": "^2.8.0-alpha.2"
+    "wouter": "^2.8.0"
   },
   "devDependencies": {
     "@mdx-js/rollup": "^2.1.4",
