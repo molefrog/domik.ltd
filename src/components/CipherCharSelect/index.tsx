@@ -1,4 +1,4 @@
-import { useTransition, animated } from "react-spring";
+import { useTransition, animated } from "@react-spring/web";
 import styled from "@emotion/styled";
 
 import { usePrevious } from "~/hooks/usePrevious";
@@ -38,12 +38,7 @@ const Symbol = (props: { value: number }) => {
   );
 };
 
-export const CipherCharSelect = ({
-  value,
-  onClick,
-  direction,
-  selected = false,
-}: SelectProps) => {
+export const CipherCharSelect = ({ value, onClick, direction, selected = false }: SelectProps) => {
   const prevValue = usePrevious(value);
 
   let dir = value > (prevValue || 0) ? 1 : -1;
@@ -91,8 +86,7 @@ const ShadowLayer = styled.div`
   height: 100%;
   position: absolute;
 
-  box-shadow: 0px 1px 1px 0px rgb(0 0 0 / 5%) inset,
-    0px 0px 1px 0px rgb(0 0 0 / 5%) inset,
+  box-shadow: 0px 1px 1px 0px rgb(0 0 0 / 5%) inset, 0px 0px 1px 0px rgb(0 0 0 / 5%) inset,
     0px 4px 6px -4px rgb(0 0 0 / 10%) inset;
 
   transition: box-shadow 0.25s ease, border-color 0s;

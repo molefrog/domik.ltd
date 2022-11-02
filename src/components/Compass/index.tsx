@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { useSpring, animated } from "react-spring";
+import { useSpring, animated } from "@react-spring/web";
 
 import body from "~/assets/compass/body.png";
 import arrow from "~/assets/compass/arrow.png";
