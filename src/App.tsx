@@ -1,4 +1,4 @@
-import { Route, Switch, Redirect } from "wouter";
+import { Route, Switch as Switch, Redirect } from "wouter";
 import { lazy } from "react";
 import styled from "@emotion/styled";
 
@@ -17,12 +17,18 @@ function App() {
   return (
     <Body>
       <Switch>
+        kmk
+        <Route path="/">hi!</Route>
+        <Route path="/app" />
+        <Route />
+      </Switch>
+
+      <Switch>
         <Route path="/" component={IndexPage} />
         <Route path="/x/:any*" component={CipherPage} />
         <Route path="/s" component={StoryPage} />
 
-        {/* TODO: fix Switch type definition for wouter */}
-        {import.meta.env.DEV ? <Route component={PlaygroundPage} /> : <></>}
+        {import.meta.env.DEV && <Route component={PlaygroundPage} />}
 
         <Route>
           <Redirect to="/" />
