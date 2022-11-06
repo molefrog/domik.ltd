@@ -20,6 +20,7 @@ const chapterModules = [
   () => import("~/chapters/1-one/story.mdx") as unknown as Promise<{ default: ChapterComponent }>,
   () => import("~/chapters/2-two/story.mdx") as unknown as Promise<{ default: ChapterComponent }>,
   () => import("~/chapters/3-three/story.mdx") as unknown as Promise<{ default: ChapterComponent }>,
+  () => import("~/chapters/4-four/story.mdx") as unknown as Promise<{ default: ChapterComponent }>,
 ];
 
 export const StoryPage = () => {
