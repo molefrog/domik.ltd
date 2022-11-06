@@ -15,8 +15,7 @@ const glows: { [key in string]: React.FunctionComponent } = {
 type Feeling = keyof typeof glows;
 
 export const Emotion = (props: PropsWithChildren<{ feeling: Feeling }>) => {
-  const pulseDuration = 4;
-  const [pulseDelay] = useState(() => Math.random() * pulseDuration);
+  const [pulseDelay] = useState(() => Math.random() * 2);
 
   const GlowComp = glows[props.feeling];
 
@@ -53,8 +52,14 @@ const Tag = styled.span`
 
   animation: 3s ${pulseAnimation} infinite ease-out var(--pulse-delay);
 
+  @media (prefers-reduced-motion) {
+    animation: none;
+    background: var(--pulse-color);
+  }
+
   &:hover {
     animation: none;
+    background: none;
     color: white;
 
     > span {

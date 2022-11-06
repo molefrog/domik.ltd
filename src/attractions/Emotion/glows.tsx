@@ -13,6 +13,10 @@ const Glow = styled.span`
   mask-image: paint(squircle);
 
   z-index: -1;
+
+  @media (prefers-reduced-motion) {
+    animation-duration: 15s;
+  }
 `;
 
 /*
