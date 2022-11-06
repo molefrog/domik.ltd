@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { keyframes } from "@emotion/react";
 
 const Glow = styled.span`
-  display: none;
+  opacity: 0;
   content: "";
   position: absolute;
   inset: 0 0 0 0;
@@ -11,8 +11,8 @@ const Glow = styled.span`
   --squircle-radius: 16px;
   --squircle-smooth: 0.6;
   mask-image: paint(squircle);
-
   z-index: -1;
+  transition: opacity 0.1s ease;
 
   @media (prefers-reduced-motion) {
     animation-duration: 15s;

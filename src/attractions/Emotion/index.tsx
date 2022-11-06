@@ -63,7 +63,7 @@ const Tag = styled.span`
     color: white;
 
     > span {
-      display: inline;
+      opacity: 1;
     }
   }
 
