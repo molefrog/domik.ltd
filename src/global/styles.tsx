@@ -16,7 +16,10 @@ const styles = css`
     --color-bg: #fffff9;
     --color-text: #002129;
     --color-text-gray: #627474;
-    --color-selected: var(--color-banana-dark-yellow);
+
+    --color-selected-rgb: 245 217 123;
+    --color-selected: rgb(var(--color-selected-rgb));
+
     --color-selected-light: var(--color-banana-yellow);
     --color-selected-vivid: #fac753;
     --color-embossed: var(--color-twilight-blue);

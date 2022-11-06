@@ -3,12 +3,15 @@ import { useRef, useState, useCallback } from "react";
 
 import { TV } from "~/attractions/TV";
 import { ConnectTheDots } from "~/attractions/ConnectTheDots";
+import { Emotion } from "~/attractions/Emotion";
 import mapImage from "~/chapters/3-three/map.webp";
 
 export default function PlaygroundPage() {
   return (
     <Container>
-      You can only <TV video="dQw4w9WgXcQ">see this</TV> in dev environment!
+      You can only <TV video="dQw4w9WgXcQ">see this</TV> in dev environment! There are whole variety
+      of emotions a person can experience: <Emotion feeling="happiness">happiness</Emotion> and
+      sadness
       <Block>
         <ConnectTheDots
           baseWidth={670}
