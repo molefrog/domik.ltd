@@ -5,7 +5,7 @@ import React, { useState, PropsWithChildren } from "react";
 import "~/utils/squircle";
 import { Anxiety, Euphoria, Happiness, Sadness } from "./glows";
 
-const glows: { [key in string]: React.FunctionComponent } = {
+const glows = {
   happiness: Happiness,
   anxiety: Anxiety,
   sadness: Sadness,
