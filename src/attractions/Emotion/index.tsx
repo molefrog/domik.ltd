@@ -51,7 +51,7 @@ const Tag = styled.span`
   --pulse-color: rgba(var(--color-selected-rgb) / 0.8);
   --pulse-delay: 0s;
 
-  animation: 4s ${pulseAnimation} infinite ease-out var(--pulse-delay);
+  animation: 3s ${pulseAnimation} infinite ease-out var(--pulse-delay);
 
   &:hover {
     animation: none;
