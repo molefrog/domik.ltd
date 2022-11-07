@@ -6,6 +6,7 @@ import { TV } from "~/attractions/TV";
 import { EyedLink } from "~/attractions/EyedLink";
 import { ConnectTheDots } from "~/attractions/ConnectTheDots";
 import { Emotion } from "~/attractions/Emotion";
+import { Aside } from "~/attractions/Aside";
 
 interface ImageProps {
   width?: string;
@@ -45,6 +46,7 @@ export const MdxProvider = (props: { children: ReactNode }) => {
         a: EyedLink,
         em: Em,
         p: P,
+        Aside,
         Image,
         TV,
         EyedLink,

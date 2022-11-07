@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { useRef, useState, useMemo, useCallback } from "react";
+import { useRef, useState, useMemo, useCallback, PropsWithChildren } from "react";
 
 import { usePopSound, useResetSound, useSuccessSound } from "~/hooks/useSounds";
 import { Dot } from "./Dot";
@@ -23,7 +23,8 @@ export const ConnectTheDots = ({
   image,
   baseWidth = 670,
   successPredicate = matchNone,
-}: Props) => {
+  children,
+}: PropsWithChildren<Props>) => {
   const svgRef = useRef<SVGSVGElement>(null);
 
   // State
@@ -119,6 +120,7 @@ export const ConnectTheDots = ({
   return (
     <Figure drawing={isDrawing}>
       {image && <img src={image} />}
+      {children}
 
       <InteractionBadge />
 
