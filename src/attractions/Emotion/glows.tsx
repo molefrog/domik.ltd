@@ -20,16 +20,16 @@ const Glow = styled.span`
 `;
 
 /*
- * Hapiness
+ * Happiness
  */
-const hapinessAnimation = keyframes`
+const happinessAnimation = keyframes`
   0%   { background-position: 0% 82% }
   50%  { background-position: 100% 19% }
   100% { background-position: 0% 82% }
 `;
 
 export const Happiness = styled(Glow)`
-  animation: ${hapinessAnimation} 1s ease infinite reverse;
+  animation: ${happinessAnimation} 1s ease infinite reverse;
   background: linear-gradient(
     90deg,
     rgba(255, 0, 0, 1) 0%,
@@ -64,7 +64,7 @@ export const Sadness = styled(Glow)`
 `;
 
 /*
- * Sadness
+ * Anxiety
  */
 const anxietyAnimation = keyframes`
   0%, 100%  { background: #8293f5; }
@@ -77,4 +77,9 @@ export const Anxiety = styled(Glow)`
   animation: ${anxietyAnimation} 1s ease infinite;
 `;
 
-export const Euphoria = styled(Glow)``;
+/*
+ * Fear
+ */
+export const Fear = styled(Glow)`
+  background: black;
+`;

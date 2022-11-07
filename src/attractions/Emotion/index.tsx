@@ -3,13 +3,13 @@ import { keyframes } from "@emotion/react";
 import React, { useState, PropsWithChildren } from "react";
 
 import "~/utils/squircle";
-import { Anxiety, Euphoria, Happiness, Sadness } from "./glows";
+import { Anxiety, Fear, Happiness, Sadness } from "./glows";
 
 const glows = {
   happiness: Happiness,
   anxiety: Anxiety,
   sadness: Sadness,
-  euphoria: Euphoria,
+  fear: Fear,
 };
 
 type Feeling = keyof typeof glows;
