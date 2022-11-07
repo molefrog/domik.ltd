@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useMemo, useLayoutEffect } from "react";
 import { useLocation } from "wouter";
 import { useAtom } from "jotai";
 import { RESET } from "jotai/utils";
@@ -9,29 +9,39 @@ import { buildCodeSequence, getLaunchDateForChapter } from "~/chapters";
 import { NextChapterBanner } from "~/components/NextChapterBanner";
 import { BumperCar } from "~/components/BumperCar";
 import { ReadingProgress } from "../ReadingProgress";
-
 import { newChapterUnlocked as newChapterUnlockedAtom, acceptedCipher } from "~/state";
 import { delay } from "~/utils/promises";
+import { useChapterProgress } from "./useChapterProgress";
+import { useDocumentTitle } from "~/hooks/useDocumentTitle";
 
 type ChapterComponent = React.FunctionComponent;
 
+interface ChapterModule {
+  default: React.FunctionComponent;
+  title: string | undefined;
+}
+
 // TODO: make sure chunk names are not exposed in the final bundle
 const chapterModules = [
-  () => import("~/chapters/1-one/story.mdx") as unknown as Promise<{ default: ChapterComponent }>,
-  () => import("~/chapters/2-two/story.mdx") as unknown as Promise<{ default: ChapterComponent }>,
-  () => import("~/chapters/3-three/story.mdx") as unknown as Promise<{ default: ChapterComponent }>,
-  () => import("~/chapters/4-four/story.mdx") as unknown as Promise<{ default: ChapterComponent }>,
+  () => import("~/chapters/1-one/story.mdx") as Promise<ChapterModule>,
+  () => import("~/chapters/2-two/story.mdx") as Promise<ChapterModule>,
+  () => import("~/chapters/3-three/story.mdx") as Promise<ChapterModule>,
+  () => import("~/chapters/4-four/story.mdx") as Promise<ChapterModule>,
 ];
 
 export const StoryPage = () => {
+  const [, navigate] = useLocation();
+
   const [isLoading, setIsLoading] = useState(false);
   const [storedCipher, setStoredCipher] = useAtom(acceptedCipher);
-  const [, navigate] = useLocation();
-  const [chapterComponents, setChapterComponents] = useState<Array<ChapterComponent>>([]);
+  const [chapters, setChapters] = useState<Array<ChapterModule>>([]);
   const [newChapterUnlocked] = useAtom(newChapterUnlockedAtom);
 
-  const firstChapterRef = useRef<HTMLDivElement>(null);
-  const lastChapterRef = useRef<HTMLDivElement>(null);
+  const [chapterRefs, setChapterRefs] = useState<Array<HTMLElement | null>>(() => []);
+  const { progress, current: currentChapterIdx } = useChapterProgress(chapterRefs, [chapterRefs]);
+
+  const chapterTitle = chapters[Number(currentChapterIdx)]?.title || "...";
+  useDocumentTitle(chapterTitle);
 
   useEffect(() => {
     (async () => {
@@ -48,12 +58,10 @@ export const StoryPage = () => {
         // dynamically load chapter modules
         const [, ...modules] = await Promise.all([
           delay(import.meta.env.DEV ? 0 : 2000), // artificial delay
-          ...(await Promise.all(
-            chapterModules.slice(0, codes.length).map((fn) => fn().then((mod) => mod.default))
-          )),
+          ...chapterModules.slice(0, codes.length).map((fn) => fn()),
         ]);
 
-        setChapterComponents(modules);
+        setChapters(modules);
       } catch (err) {
         console.error(err);
 
@@ -69,10 +77,13 @@ export const StoryPage = () => {
 
   // automatically scroll to the last chapter
   useEffect(() => {
-    if (chapterComponents && newChapterUnlocked) {
-      setTimeout(() => lastChapterRef.current?.scrollIntoView({ behavior: "smooth" }), 600);
+    if (chapters && newChapterUnlocked) {
+      setTimeout(() => {
+        const lastEl = chapterRefs[chapterRefs.length - 1];
+        lastEl?.scrollIntoView({ behavior: "smooth" });
+      }, 600);
     }
-  }, [chapterComponents]);
+  }, [chapters]);
 
   if (isLoading) {
     return (
@@ -89,28 +100,36 @@ export const StoryPage = () => {
   }
 
   // i hope there will be more chapters soon
-  const maxProgress = Math.min(chapterComponents.length / 5.0, 1.0);
+  const maxProgress = Math.min(chapters.length / 5.0, 1.0);
 
   return (
     <Story>
-      <ReadingProgress startRef={firstChapterRef} endRef={lastChapterRef} max={maxProgress} />
+      <ReadingProgress progress={progress} max={maxProgress} />
 
       <Chapters>
-        {chapterComponents.map((C, index) => {
-          let ref = null;
-
-          if (index === 0) ref = firstChapterRef;
-          if (index === chapterComponents.length - 1) ref = lastChapterRef;
+        {chapters.map((mod, index) => {
+          const Mdx = mod.default;
 
           return (
-            <ChapterContent key={index} ref={ref}>
-              <C />
+            <ChapterContent
+              key={index}
+              ref={(el) => {
+                if (el && chapterRefs[index] !== el) {
+                  const refs = Array(chapters.length).fill(null);
+                  for (let i of refs.keys()) {
+                    refs[i] = i === index ? el : chapterRefs[i];
+                  }
+                  setChapterRefs(refs);
+                }
+              }}
+            >
+              <Mdx />
             </ChapterContent>
           );
         })}
 
         <Banner>
-          <NextChapterBanner launchDate={getLaunchDateForChapter(chapterComponents.length)} />
+          <NextChapterBanner launchDate={getLaunchDateForChapter(chapters.length)} />
         </Banner>
       </Chapters>
     </Story>
