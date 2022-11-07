@@ -58,7 +58,7 @@ const sadnessAnimation = keyframes`
 `;
 
 export const Sadness = styled(Glow)`
-  background: radial-gradient(circle, #111, #888);
+  background: radial-gradient(circle, #555, #999);
   background-size: 200% 200%;
   animation: ${sadnessAnimation} 2s ease infinite;
 `;
@@ -80,6 +80,11 @@ export const Anxiety = styled(Glow)`
 /*
  * Fear
  */
+const fearAnimation = keyframes`
+  0%  { background: #000; }
+  100%  { background: #999; }
+`;
+
 export const Fear = styled(Glow)`
-  background: black;
+  animation: ${fearAnimation} 0.15s linear infinite;
 `;

@@ -61,6 +61,7 @@ const Tag = styled.span`
     animation: none;
     background: none;
     color: white;
+    text-shadow: 0.5px 0.5px 0px #bbb;
 
     > span {
       opacity: 1;
