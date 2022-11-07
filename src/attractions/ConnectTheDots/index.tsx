@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { useRef, useState, useMemo, useCallback, PropsWithChildren } from "react";
+import { useRef, useState, useMemo, useCallback, useEffect, PropsWithChildren } from "react";
 
 import { usePopSound, useResetSound, useSuccessSound } from "~/hooks/useSounds";
 import { Dot } from "./Dot";
@@ -13,6 +13,7 @@ interface Props {
   baseWidth?: number;
   image?: string;
   successPredicate?: (p: number[]) => boolean;
+  onSuccessChange?: (state: boolean) => void;
 }
 
 const matchNone = () => false;
@@ -23,6 +24,7 @@ export const ConnectTheDots = ({
   image,
   baseWidth = 670,
   successPredicate = matchNone,
+  onSuccessChange,
   children,
 }: PropsWithChildren<Props>) => {
   const svgRef = useRef<SVGSVGElement>(null);
@@ -116,6 +118,11 @@ export const ConnectTheDots = ({
   const handleMouseLeave = useCallback(() => {
     if (isDrawing) reset();
   }, [isDrawing, reset]);
+
+  // fire the callback when solved/unsolved
+  useEffect(() => {
+    onSuccessChange?.(isSuccess);
+  }, [isSuccess, onSuccessChange]);
 
   return (
     <Figure drawing={isDrawing}>
