@@ -3,6 +3,7 @@ import { useState } from "react";
 import meetingFriendsImg from "./meeting-new-friends.webp";
 import panicAttackImg from "./panic-attack.webp";
 import backToNormalImg from "./back-to-normal.webp";
+import starsImg from "./looking-at-the-stars.webp";
 
 export const title = "04. Чувства";
 
@@ -149,10 +150,40 @@ export const PanicAttack = () => {
 было из главного бассейна. Этот зал был отведён специально под расслабляющие активности: бани,
 термальные резервуары, зоны с успокаивающими парами.
 
-> — И всё же, что было в этом волшебном йогурте?
+export const StarsPuzzle = () => {
+  const [solved, setSolved] = useState(false);
+  return (
+    <ConnectTheDots
+      baseWidth={670}
+      dots={[
+        [187, 338],
+        [206, 498],
+        [338, 537],
+        [475, 500],
+        [562, 315],
+        [404, 312],
+      ]}
+      initialPath={[]}
+      successPredicate={(seq) => seq[seq.length - 1] === 2 && seq[0] === 0}
+      image={starsImg}
+      onSuccessChange={(success) => setSolved(success)}
+    >
+      <Aside sticky>
+        <p>
+          <Spoiler reveal={solved}>— И всё же, что было в этом волшебном йогурте?</Spoiler>
+        </p>
+        <p>
+          <Spoiler reveal={solved}>
+            — Ничего особенного: витамины для поддержания тонуса, и несколько тонизирующих
+            компонентов, ведь конференции требуют много сил и энергии. Вот и всё!
+          </Spoiler>
+        </p>
+      </Aside>
+    </ConnectTheDots>
+  );
+};
 
-> — Ничего особенного: витамины для поддержания тонуса, и несколько тонизирующих компонентов, ведь
-> конференции требуют много сил и энергии. Вот и всё!
+<StarsPuzzle />
 
 Время пролетело так незаметно, что уже наступил вечер. Мы лежали в термо-бассейне и смотрели на
 тёмное небо, наблюдая за звёздами. Внезапно, меня накрыло чувство неописуемого тепла и
