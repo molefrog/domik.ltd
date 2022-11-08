@@ -9,7 +9,7 @@ import { shuffle } from "./shuffle";
 interface Props {
   children: string;
   iterationsPerStep?: number;
-  onComplete?: () => void;
+  onComplete?: (state: boolean) => void;
 }
 
 const pick = <T,>(arr: T[]): T | undefined => arr[rand(arr.length)];
@@ -65,7 +65,7 @@ const SlurredSpeech_ = ({ children: text, onComplete, iterationsPerStep = 5 }: P
     for (let i = 0, complete = false; i < iterationsPerStep; ++i) {
       [result, complete] = oneSortPass(result, wordTokens);
       setShuffledWords(result);
-      if (complete) return onComplete?.();
+      if (complete) return onComplete?.(true);
     }
 
     timerRef.current = setTimeout(() => cbRef.current!(), rand(200, 600));
@@ -82,9 +82,21 @@ const SlurredSpeech_ = ({ children: text, onComplete, iterationsPerStep = 5 }: P
     }
   }, [isOrdered, initialShuffle]);
 
+  const handleClick = useCallback(() => {
+    if (isOrdered) {
+      onComplete?.(false);
+      setShuffledWords(initialShuffle);
+    }
+  }, [isOrdered, onComplete]);
+
   return (
-    <Flipper flipKey={tokensToRender.map(tokenToKey).join()}>
-      <Text onMouseDown={handleTouchStart} onMouseUp={handleTouchEnd} onMouseLeave={handleTouchEnd}>
+    <Flipper flipKey={tokensToRender.map(tokenToKey).join()} element="p">
+      <Text
+        onMouseDown={handleTouchStart}
+        onMouseUp={handleTouchEnd}
+        onMouseLeave={handleTouchEnd}
+        onClick={handleClick}
+      >
         <>
           {tokensToRender.map((token, index) => {
             const { token: letters } = token;
@@ -104,7 +116,7 @@ const SlurredSpeech_ = ({ children: text, onComplete, iterationsPerStep = 5 }: P
   );
 };
 
-const Text = styled.div`
+const Text = styled.span`
   user-select: none;
   cursor: pointer;
 `;

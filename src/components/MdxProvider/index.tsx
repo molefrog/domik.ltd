@@ -8,6 +8,7 @@ import { ConnectTheDots } from "~/attractions/ConnectTheDots";
 import { Emotion } from "~/attractions/Emotion";
 import { Aside } from "~/attractions/Aside";
 import { Spoiler } from "~/attractions/Spoiler";
+import { SlurredSpeech } from "~/attractions/SlurredSpeech";
 
 interface ImageProps {
   width?: string;
@@ -54,6 +55,7 @@ export const MdxProvider = (props: { children: ReactNode }) => {
         ConnectTheDots,
         Emotion,
         Spoiler,
+        SlurredSpeech,
       }}
     >
       {props.children}
