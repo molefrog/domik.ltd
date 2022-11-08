@@ -5,6 +5,7 @@ import { Flipper, Flipped } from "react-flip-toolkit";
 import { TokenType, Token, tokenize, tokensEqual, tokenToKey } from "./tokenizer";
 import { rand } from "~/utils/rand";
 import { shuffle } from "./shuffle";
+import { useSuccessSound, useClickSound, useResetSound, usePopSound } from "~/hooks/useSounds";
 
 interface Props {
   children: string;
@@ -41,7 +42,7 @@ const oneSortPass = (array: Token[], ordered: Token[]): [Token[], boolean] => {
   return [result, Object.keys(mapping).length <= 1];
 };
 
-const SlurredSpeech_ = ({ children: text, onComplete, iterationsPerStep = 5 }: Props) => {
+const SlurredSpeech_ = ({ children: text, onComplete, iterationsPerStep = 1 }: Props) => {
   const [tokenized] = useState(() => tokenize(text));
   const [wordTokens] = useState(() => tokenized.filter((t) => t.type !== TokenType.Punctuation));
 
@@ -58,6 +59,14 @@ const SlurredSpeech_ = ({ children: text, onComplete, iterationsPerStep = 5 }: P
    */
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
   const cbRef = useRef<() => void>();
+  const [holdIteration, setHoldIteration] = useState(0);
+
+  const [playPop] = usePopSound({
+    // increase sound pitch with every dot selected
+    playbackRate: Math.min(0.3 + 0.05 * holdIteration, 1.5),
+  });
+  const [playReset] = useResetSound();
+  const [playSuccess] = useSuccessSound();
 
   cbRef.current = () => {
     let result = shuffledWords;
@@ -65,37 +74,51 @@ const SlurredSpeech_ = ({ children: text, onComplete, iterationsPerStep = 5 }: P
     for (let i = 0, complete = false; i < iterationsPerStep; ++i) {
       [result, complete] = oneSortPass(result, wordTokens);
       setShuffledWords(result);
-      if (complete) return onComplete?.(true);
+      if (complete) {
+        playSuccess();
+        return onComplete?.(true);
+      }
     }
 
-    timerRef.current = setTimeout(() => cbRef.current!(), rand(200, 600));
+    playPop();
+    setHoldIteration((x) => x + 1);
+
+    timerRef.current = setTimeout(() => cbRef.current!(), rand(300, 600));
   };
 
-  const handleTouchStart = useCallback(() => {
-    cbRef.current!();
-  }, [shuffledWords, wordTokens]);
-
-  const handleTouchEnd = useCallback(() => {
-    if (!isComplete) {
+  const reset = useCallback(
+    (playSound = true) => {
       clearTimeout(timerRef.current);
-      setShuffledWords(initialShuffle);
-    }
-  }, [isComplete, initialShuffle]);
-
-  const handleClick = useCallback(() => {
-    if (isComplete) {
       onComplete?.(false);
       setShuffledWords(initialShuffle);
+      setHoldIteration(0);
+      playSound && playReset();
+    },
+    [playReset, initialShuffle, onComplete]
+  );
+
+  const handleTouchStart = useCallback(() => {
+    if (!isComplete) {
+      cbRef.current!();
+    } else {
+      reset();
     }
-  }, [isComplete, onComplete]);
+  }, [isComplete, reset]);
+
+  const handleTouchEnd = useCallback(() => {
+    if (!isComplete) reset();
+  }, [isComplete, reset, playReset]);
+
+  const handleMouseLeave = useCallback(() => {
+    if (!isComplete) reset(false);
+  }, [isComplete, reset]);
 
   return (
     <Flipper flipKey={tokensToRender.map(tokenToKey).join()} element="p">
       <Text
         onMouseDown={handleTouchStart}
         onMouseUp={handleTouchEnd}
-        onMouseLeave={handleTouchEnd}
-        onClick={handleClick}
+        onMouseLeave={handleMouseLeave}
         complete={isComplete}
       >
         <>
