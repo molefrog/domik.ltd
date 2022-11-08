@@ -49,9 +49,9 @@ const SlurredSpeech_ = ({ children: text, onComplete, iterationsPerStep = 5 }: P
   const [shuffledWords, setShuffledWords] = useState(() => initialShuffle);
 
   // does current shuffle matches the original order
-  const isOrdered = shuffledWords.every((t, index) => tokensEqual(t, wordTokens[index]));
+  const isComplete = shuffledWords.every((t, index) => tokensEqual(t, wordTokens[index]));
 
-  const tokensToRender = isOrdered ? tokenized : shuffledWords;
+  const tokensToRender = isComplete ? tokenized : shuffledWords;
 
   /*
    * Sorting while holding the mouse down
@@ -76,18 +76,18 @@ const SlurredSpeech_ = ({ children: text, onComplete, iterationsPerStep = 5 }: P
   }, [shuffledWords, wordTokens]);
 
   const handleTouchEnd = useCallback(() => {
-    if (!isOrdered) {
+    if (!isComplete) {
       clearTimeout(timerRef.current);
       setShuffledWords(initialShuffle);
     }
-  }, [isOrdered, initialShuffle]);
+  }, [isComplete, initialShuffle]);
 
   const handleClick = useCallback(() => {
-    if (isOrdered) {
+    if (isComplete) {
       onComplete?.(false);
       setShuffledWords(initialShuffle);
     }
-  }, [isOrdered, onComplete]);
+  }, [isComplete, onComplete]);
 
   return (
     <Flipper flipKey={tokensToRender.map(tokenToKey).join()} element="p">
@@ -96,16 +96,17 @@ const SlurredSpeech_ = ({ children: text, onComplete, iterationsPerStep = 5 }: P
         onMouseUp={handleTouchEnd}
         onMouseLeave={handleTouchEnd}
         onClick={handleClick}
+        complete={isComplete}
       >
         <>
           {tokensToRender.map((token, index) => {
             const { token: letters } = token;
-            const isOnTheRightPlace = isOrdered ? true : tokensEqual(token, wordTokens[index]);
+            const isOnTheRightPlace = isComplete ? true : tokensEqual(token, wordTokens[index]);
 
             return (
               <Flipped key={tokenToKey(token)} flipId={tokenToKey(token)}>
-                <WordTag highlight={!isOrdered} complete={isOnTheRightPlace}>
-                  {isOrdered ? letters : letters.toLowerCase()}
+                <WordTag highlight={!isComplete} complete={isOnTheRightPlace}>
+                  {isComplete ? letters : letters.toLowerCase()}
                 </WordTag>
               </Flipped>
             );
@@ -116,9 +117,16 @@ const SlurredSpeech_ = ({ children: text, onComplete, iterationsPerStep = 5 }: P
   );
 };
 
-const Text = styled.span`
+const Text = styled.div<{ complete: boolean }>`
   user-select: none;
   cursor: pointer;
+
+  opacity: ${(props) => (props.complete ? "1.0" : "0.8")};
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 1;
+  }
 `;
 
 const WordTag = styled.span<{ highlight: boolean; complete: boolean }>`
@@ -128,21 +136,25 @@ const WordTag = styled.span<{ highlight: boolean; complete: boolean }>`
   ${(props) =>
     props.highlight &&
     `
-    background-color: blue;
+    background-color: var(--color-embossed);
     padding: 0 4px;
     padding-bottom: 2px;
     border-radius: 6px;
-    line-height: 1.3;
-    color: white;
+    line-height: 1.2;
+    color: var(--color-text-gray);
     
-    margin-right: 2px;
+    margin-right: 6px;
+    box-shadow: 0.5px 1px 0px 0px rgba(0,0,0,0.15);
+    transition: background-color 0.2s ease;
   `}
 
   ${(props) =>
     props.complete &&
     props.highlight &&
     `
-    background-color: red;
+
+    background-color: var(--color-selected-vivid);
+    color: #444;
   `}
 `;
 

@@ -13,7 +13,7 @@ export type Token = {
 };
 
 export const tokenize = (input: string): Token[] =>
-  Array.from(input.matchAll(/([а-яA-Яё«»\w]+)|([^а-яA-Яё«»\w]+)/gu)).map((match) => {
+  Array.from(input.matchAll(/([а-яA-Яё\w]+)|([^а-яA-Яё\w]+)/gu)).map((match) => {
     return {
       token: match[0],
       type: match[1] !== undefined ? TokenType.Word : TokenType.Punctuation,
