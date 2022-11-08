@@ -20,3 +20,7 @@ export const tokenize = (input: string): Token[] =>
       pos: Number(match.index),
     };
   });
+
+// indexing and comparison
+export const tokenToKey = (token: Token) => `${token.token}${token.pos}`;
+export const tokensEqual = (lhs: Token, rhs: Token) => tokenToKey(lhs) === tokenToKey(rhs);

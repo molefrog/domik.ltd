@@ -2,68 +2,119 @@ import styled from "@emotion/styled";
 import { useRef, useState, useCallback } from "react";
 import { Flipper, Flipped } from "react-flip-toolkit";
 
-import { TokenType, Token, tokenize } from "./tokenizer";
+import { TokenType, Token, tokenize, tokensEqual, tokenToKey } from "./tokenizer";
+import { rand } from "~/utils/rand";
+import { shuffle } from "./shuffle";
 
 interface Props {
   children: string;
+  iterationsPerStep?: number;
   onComplete?: () => void;
 }
 
-function shuffleArray<T>(array: T[]) {
-  array = array.slice();
+const pick = <T,>(arr: T[]): T | undefined => arr[rand(arr.length)];
 
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    const temp = array[i];
-    array[i] = array[j];
-    array[j] = temp;
+const oneSortPass = (array: Token[], ordered: Token[]): [Token[], boolean] => {
+  let result = array.slice();
+  let mapping: Record<number, number> = {};
+
+  for (const [i, t] of array.entries()) {
+    const isOnTheRightPlace = tokensEqual(t, ordered[i]);
+
+    if (!isOnTheRightPlace) {
+      const correctPlace = ordered.findIndex((tok) => tokensEqual(t, tok));
+      mapping[i] = correctPlace;
+    }
   }
 
-  return array;
-}
+  const candidate = pick(Object.keys(mapping));
 
-// indexing and comparison
-const tokenKey = (token: Token) => `${token.token}${token.pos}`;
-const areTokensEqual = (lhs: Token, rhs: Token) => tokenKey(lhs) === tokenKey(rhs);
+  if (candidate !== undefined) {
+    const from = Number(candidate);
+    const to = mapping[from];
 
-const SlurredSpeech_ = ({ children: text, onComplete }: Props) => {
+    const tmp = result[from];
+    result[from] = result[to];
+    result[to] = tmp;
+  }
+
+  return [result, Object.keys(mapping).length <= 1];
+};
+
+const SlurredSpeech_ = ({ children: text, onComplete, iterationsPerStep = 5 }: Props) => {
   const [tokenized] = useState(() => tokenize(text));
   const [wordTokens] = useState(() => tokenized.filter((t) => t.type !== TokenType.Punctuation));
 
-  const [shuffledWords, setShuffledWords] = useState(() => shuffleArray(wordTokens));
+  const [initialShuffle] = useState(() => shuffle(wordTokens));
+  const [shuffledWords, setShuffledWords] = useState(() => initialShuffle);
 
   // does current shuffle matches the original order
-  const isOrdered = shuffledWords.every((t, index) => areTokensEqual(t, wordTokens[index]));
+  const isOrdered = shuffledWords.every((t, index) => tokensEqual(t, wordTokens[index]));
 
   const tokensToRender = isOrdered ? tokenized : shuffledWords;
 
+  /*
+   * Sorting while holding the mouse down
+   */
+  const timerRef = useRef<ReturnType<typeof setTimeout>>();
+  const cbRef = useRef<() => void>();
+
+  cbRef.current = () => {
+    let result = shuffledWords;
+
+    for (let i = 0, complete = false; i < iterationsPerStep; ++i) {
+      [result, complete] = oneSortPass(result, wordTokens);
+      setShuffledWords(result);
+      if (complete) return onComplete?.();
+    }
+
+    timerRef.current = setTimeout(() => cbRef.current!(), rand(200, 600));
+  };
+
+  const handleTouchStart = useCallback(() => {
+    cbRef.current!();
+  }, [shuffledWords, wordTokens]);
+
+  const handleTouchEnd = useCallback(() => {
+    if (!isOrdered) {
+      clearTimeout(timerRef.current);
+      setShuffledWords(initialShuffle);
+    }
+  }, [isOrdered, initialShuffle]);
+
   return (
-    <Flipper flipKey={tokensToRender.map(tokenKey).join()}>
-      <div onClick={() => setShuffledWords([])}>
+    <Flipper flipKey={tokensToRender.map(tokenToKey).join()}>
+      <Text onMouseDown={handleTouchStart} onMouseUp={handleTouchEnd} onMouseLeave={handleTouchEnd}>
         <>
-          {tokensToRender.map((token) => {
+          {tokensToRender.map((token, index) => {
             const { token: letters } = token;
+            const isOnTheRightPlace = isOrdered ? true : tokensEqual(token, wordTokens[index]);
 
             return (
-              <Flipped key={tokenKey(token)} flipId={tokenKey(token)}>
-                <WordTag finalized={isOrdered}>
+              <Flipped key={tokenToKey(token)} flipId={tokenToKey(token)}>
+                <WordTag highlight={!isOrdered} complete={isOnTheRightPlace}>
                   {isOrdered ? letters : letters.toLowerCase()}
                 </WordTag>
               </Flipped>
             );
           })}
         </>
-      </div>
+      </Text>
     </Flipper>
   );
 };
 
-const WordTag = styled.span<{ finalized: boolean }>`
+const Text = styled.div`
+  user-select: none;
+  cursor: pointer;
+`;
+
+const WordTag = styled.span<{ highlight: boolean; complete: boolean }>`
   display: inline-block;
   white-space: pre-wrap;
 
   ${(props) =>
-    !props.finalized &&
+    props.highlight &&
     `
     background-color: blue;
     padding: 0 4px;
@@ -73,6 +124,13 @@ const WordTag = styled.span<{ finalized: boolean }>`
     color: white;
     
     margin-right: 2px;
+  `}
+
+  ${(props) =>
+    props.complete &&
+    props.highlight &&
+    `
+    background-color: red;
   `}
 `;
 
