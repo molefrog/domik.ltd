@@ -37,14 +37,14 @@ const RealContent = styled.span<{ reveal: boolean }>`
     !props.reveal &&
     css`
       filter: blur(3px);
-      color: rgba(0, 0, 0, 0.2);
+      color: rgba(0, 0, 0, 0.3);
     `}
 `;
 
 export const Secret = styled.span<{ reveal: boolean }>`
   will-change: transform;
-  --time: 0;
   transition: background 0.4s ease;
+  --time: 0;
 
   ${(props) =>
     !props.reveal &&
