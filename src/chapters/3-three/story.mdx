@@ -1,4 +1,7 @@
+import { useState } from "react";
 import map from "./map.webp";
+
+export const title = "03. Истории";
 
 # 03. Истории
 
@@ -70,20 +73,44 @@ import map from "./map.webp";
 {<TV video="zbo6jUGrwdk">шарики воска</TV>}. Мы залипли на их движение еще на какое-то время, а
 затем снова отправились в путь.
 
-<ConnectTheDots
-  baseWidth={670}
-  dots={[
-    [187, 338],
-    [206, 498],
-    [338, 537],
-    [475, 500],
-    [562, 315],
-    [404, 312],
-  ]}
-  initialPath={[]}
-  successPredicate={(seq) => seq[seq.length - 1] === 2 && seq[0] === 0}
-  image={map}
-/>
+export const MapPuzzle = () => {
+  const [solved, setSolved] = useState(false);
+  return (
+    <ConnectTheDots
+      baseWidth={670}
+      dots={[
+        [187, 338],
+        [206, 498],
+        [338, 537],
+        [475, 500],
+        [562, 315],
+        [404, 312],
+      ]}
+      initialPath={[]}
+      successPredicate={(seq) => seq[seq.length - 1] === 2 && seq[0] === 0}
+      image={map}
+      onSuccessChange={(success) => setSolved(success)}
+    >
+      <Aside sticky>
+        <p>
+          <Spoiler reveal={solved}>
+            — В каждый из дорожных памятников, если верить книге, был заложена идея. Клубок, лампа,
+            и даже унитаз имели основательную причину, чтобы быть построенными.
+          </Spoiler>
+        </p>
+        <p>
+          <Spoiler reveal={solved}>
+            — Но должен ли быть смысл во всём, что мы делаем? Ведь порой мы совершаем спонтанные
+            поступки — нам кажется, что так правильно. Из этой случайности и бессмысленности порой и
+            рождается смысл.
+          </Spoiler>
+        </p>
+      </Aside>
+    </ConnectTheDots>
+  );
+};
+
+<MapPuzzle />
 
 Вообще, карта имела нелинейную структуру, поэтому мы посещали памятники «культурного значения» в
 совершенно произвольном порядке.
