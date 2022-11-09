@@ -97,7 +97,7 @@ export function CipherPage() {
         ms += rand(100, 500);
 
         setTimeout(() => {
-          setCipher(rand(0o777777));
+          setCipher(rand(0o77777777));
         }, ms);
       }
     }
