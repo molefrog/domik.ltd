@@ -17,13 +17,6 @@ function App() {
   return (
     <Body>
       <Switch>
-        kmk
-        <Route path="/">hi!</Route>
-        <Route path="/app" />
-        <Route />
-      </Switch>
-
-      <Switch>
         <Route path="/" component={IndexPage} />
         <Route path="/x/:any*" component={CipherPage} />
         <Route path="/s" component={StoryPage} />
