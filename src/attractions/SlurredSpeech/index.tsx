@@ -1,11 +1,13 @@
 import styled from "@emotion/styled";
-import { useRef, useState, useCallback } from "react";
+import { useRef, useState, useCallback, useEffect } from "react";
 import { Flipper, Flipped } from "react-flip-toolkit";
 
 import { TokenType, Token, tokenize, tokensEqual, tokenToKey } from "./tokenizer";
 import { rand } from "~/utils/rand";
 import { shuffle } from "./shuffle";
-import { useSuccessSound, useClickSound, useResetSound, usePopSound } from "~/hooks/useSounds";
+import { useSuccessSound, useResetSound, usePopSound } from "~/hooks/useSounds";
+import { usePressAndHold } from "./usePressAndHold";
+import { usePrevious } from "~/hooks/usePrevious";
 
 interface Props {
   children: string;
@@ -59,6 +61,9 @@ const SlurredSpeech_ = ({ children: text, onComplete, iterationsPerStep = 1 }: P
    */
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
   const cbRef = useRef<() => void>();
+
+  const [isHolding, touchRef] = usePressAndHold();
+  const prevIsHolding = usePrevious(isHolding);
   const [holdIteration, setHoldIteration] = useState(0);
 
   const [playPop] = usePopSound({
@@ -97,30 +102,23 @@ const SlurredSpeech_ = ({ children: text, onComplete, iterationsPerStep = 1 }: P
     [playReset, initialShuffle, onComplete]
   );
 
-  const handleTouchStart = useCallback(() => {
-    if (!isComplete) {
-      cbRef.current!();
-    } else {
-      reset();
+  useEffect(() => {
+    if (prevIsHolding !== undefined && prevIsHolding !== isHolding) {
+      if (isHolding) {
+        if (isComplete) {
+          reset();
+        } else {
+          cbRef.current!();
+        }
+      } else {
+        if (!isComplete) reset();
+      }
     }
-  }, [isComplete, reset]);
-
-  const handleTouchEnd = useCallback(() => {
-    if (!isComplete) reset();
-  }, [isComplete, reset, playReset]);
-
-  const handleMouseLeave = useCallback(() => {
-    if (!isComplete) reset(false);
-  }, [isComplete, reset]);
+  }, [isHolding, prevIsHolding, reset, isComplete]);
 
   return (
     <Flipper flipKey={tokensToRender.map(tokenToKey).join()} element="p">
-      <Text
-        onMouseDown={handleTouchStart}
-        onMouseUp={handleTouchEnd}
-        onMouseLeave={handleMouseLeave}
-        complete={isComplete}
-      >
+      <Text ref={touchRef} complete={isComplete}>
         <>
           {tokensToRender.map((token, index) => {
             const { token: letters } = token;
