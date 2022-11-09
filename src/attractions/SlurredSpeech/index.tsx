@@ -140,15 +140,20 @@ const SlurredSpeech_ = ({ children: text, onComplete, iterationsPerStep = 1 }: P
   );
 };
 
-const Text = styled.div<{ complete: boolean }>`
+const Text = styled.span<{ complete: boolean }>`
   user-select: none;
   cursor: pointer;
+  display: block;
 
   opacity: ${(props) => (props.complete ? "1.0" : "0.8")};
   transition: opacity 0.2s ease;
 
   &:hover {
     opacity: 1;
+  }
+
+  &:active {
+    cursor: grabbing;
   }
 `;
 
