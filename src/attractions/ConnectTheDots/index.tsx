@@ -4,7 +4,6 @@ import { useRef, useState, useMemo, useCallback, useEffect, PropsWithChildren } 
 import { usePopSound, useResetSound, useSuccessSound } from "~/hooks/useSounds";
 import { Dot } from "./Dot";
 import { type Coords } from "./types";
-import { WonderingEyes } from "~/attractions/EyedLink";
 import { InteractionBadge } from "./InteractionBadge";
 
 interface Props {
@@ -12,6 +11,8 @@ interface Props {
   initialPath: number[];
   baseWidth?: number;
   image?: string;
+  background?: "light" | "dark";
+  overlayImage?: string;
   successPredicate?: (p: number[]) => boolean;
   onSuccessChange?: (state: boolean) => void;
 }
@@ -22,6 +23,8 @@ export const ConnectTheDots = ({
   dots: providedDots,
   initialPath,
   image,
+  overlayImage,
+  background = "light",
   baseWidth = 670,
   successPredicate = matchNone,
   onSuccessChange,
@@ -140,7 +143,7 @@ export const ConnectTheDots = ({
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
       >
-        {svgPath && <Path d={svgPath} success={isSuccess} />}
+        {svgPath && <Path d={svgPath} success={isSuccess} background={background} />}
 
         {dots.map((pos, index) => (
           <Dot
@@ -152,6 +155,8 @@ export const ConnectTheDots = ({
           />
         ))}
       </SVG>
+
+      {overlayImage && <OverlayImage src={overlayImage} />}
     </Figure>
   );
 };
@@ -222,7 +227,13 @@ const SVG = styled.svg`
   inset: 0 0 0 0;
 `;
 
-const Path = styled.path<{ success: boolean }>`
+const OverlayImage = styled.img`
+  position: absolute;
+  inset: 0 0 0 0;
+  pointer-events: none;
+`;
+
+const Path = styled.path<{ success: boolean; background: "light" | "dark" }>`
   fill: none;
   stroke-width: 6;
 
@@ -231,5 +242,6 @@ const Path = styled.path<{ success: boolean }>`
 
   stroke-dasharray: 2 10;
 
-  ${(props) => (props.success ? `stroke: var(--color-selected-vivid);` : `stroke: #777;`)}
+  ${(props) => (props.background === "light" ? `stroke: #777;` : "stroke: #eee;")}
+  ${(props) => props.success && `stroke: var(--color-selected-vivid);`}
 `;
