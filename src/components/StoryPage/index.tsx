@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 
-import { useState, useEffect, useMemo, useLayoutEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useLocation } from "wouter";
 import { useAtom } from "jotai";
 import { RESET } from "jotai/utils";
@@ -17,7 +17,7 @@ import { useDocumentTitle } from "~/hooks/useDocumentTitle";
 type ChapterComponent = React.FunctionComponent;
 
 interface ChapterModule {
-  default: React.FunctionComponent;
+  default: ChapterComponent;
   title: string | undefined;
 }
 
@@ -76,14 +76,17 @@ export const StoryPage = () => {
   }, [storedCipher]);
 
   // automatically scroll to the last chapter
+  const scrolledRef = useRef(false);
+
   useEffect(() => {
-    if (chapters && newChapterUnlocked) {
+    if (chapterRefs?.length > 0 && newChapterUnlocked && !scrolledRef.current) {
       setTimeout(() => {
         const lastEl = chapterRefs[chapterRefs.length - 1];
+        scrolledRef.current = true; // do that only once per page
         lastEl?.scrollIntoView({ behavior: "smooth" });
       }, 600);
     }
-  }, [chapters]);
+  }, [chapterRefs, newChapterUnlocked]);
 
   if (isLoading) {
     return (
@@ -99,8 +102,7 @@ export const StoryPage = () => {
     );
   }
 
-  // i hope there will be more chapters soon
-  const maxProgress = Math.min(chapters.length / 5.0, 1.0);
+  const maxProgress = Math.min(chapters.length / 6.0, 1.0);
 
   return (
     <Story>
