@@ -169,8 +169,7 @@ export const StarsPuzzle = () => {
         let idx = 0;
         for (let el of seq) {
           if (el === correctOrder[idx]) {
-            ++idx;
-            if (idx >= correctOrder.length - 1) return true;
+            if (++idx >= correctOrder.length) return true;
           }
         }
         return false;
