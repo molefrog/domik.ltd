@@ -1,32 +1,85 @@
-import { useState, Fragment } from "react";
+import { useState, Fragment, useCallback } from "react";
 import styled from "@emotion/styled";
 import { keyframes } from "@emotion/react";
 import { Flipper, Flipped } from "react-flip-toolkit";
 
+import { Schema, HouseBlock, BlockType, getBlockDef, getBlockSprite, buildBlock } from "./house";
+import { rand } from "~/utils/rand";
+
+import gridTile from "./images/grid-tile.svg";
+
+const buildInitialHouse = (): Array<HouseBlock> => [
+  buildBlock(BlockType.Roof),
+  buildBlock(BlockType.Floor),
+  buildBlock(BlockType.GroundFloor),
+  buildBlock(BlockType.Base),
+];
+
 export const HouseBuilder = () => {
-  const [items, setItems] = useState([9, 8, 7]);
+  const [house, updateHouse] = useState(() => buildInitialHouse());
+
+  /**
+   * Methods for changing the house layout
+   */
+  const buildNewFloor = useCallback(
+    (after: number, variant?: number) => {
+      const def = Schema[BlockType.Floor];
+      variant = variant || rand(def.variants.length);
+
+      const floor = buildBlock(BlockType.Floor, {
+        variant,
+      });
+
+      updateHouse([...house.slice(0, after + 1), floor, ...house.slice(after + 1)]);
+    },
+    [house]
+  );
+
+  const demolishFloor = useCallback(
+    (after: number) => {
+      updateHouse([...house.slice(0, after + 1), ...house.slice(after + 2)]);
+    },
+    [house]
+  );
+
+  const changeFloorVariant = useCallback(
+    (at: number) => {
+      const block = house[at];
+      const def = getBlockDef(block);
+
+      house[at] = Object.assign(block, {
+        variant: (block.variant + 1) % def.variants.length,
+      });
+
+      updateHouse(house.slice());
+    },
+    [house]
+  );
 
   // opens in a new window by default
   return (
     <Container>
-      <button
-        onClick={() => setItems((it) => [it[0], Math.floor(Math.random() * 1000), ...it.slice(1)])}
-      >
-        +
-      </button>
-      <button onClick={() => setItems((it) => it.slice(1))}>-</button>
-
-      <Flipper flipKey={items.length}>
+      <Flipper flipKey={house.length}>
         <Grid>
-          {items.map((item, index) => {
-            const isLast = index === items.length - 1;
+          {house.map((block, index) => {
+            const isLast = index === house.length - 1;
 
             return (
-              <Fragment key={item}>
-                <Flipped flipId={item}>
-                  <Item />
+              <Fragment key={block.id}>
+                <Flipped flipId={block.id}>
+                  <Block
+                    style={{ gridRowEnd: `span ${getBlockDef(block).height}` }}
+                    onClick={() => changeFloorVariant(index)}
+                  >
+                    <BlockImg src={getBlockSprite(block)} />
+                  </Block>
                 </Flipped>
-                {!isLast && <Separator />}
+                {!isLast && (
+                  <Separator>
+                    <button onClick={() => buildNewFloor(index)}>+</button>
+                    <button onClick={() => demolishFloor(index)}>-</button>
+                  </Separator>
+                )}
               </Fragment>
             );
           })}
@@ -36,7 +89,7 @@ export const HouseBuilder = () => {
   );
 };
 
-24
+24;
 
 /**
  * Styles
@@ -45,11 +98,13 @@ export const HouseBuilder = () => {
 const Container = styled.div``;
 
 const Grid = styled.div`
-  --grid-step: 28px;
+  --grid-step: 32px;
   aspect-ratio: 1 / 1;
   overflow-y: auto;
 
-  background: var(--color-embossed);
+  background-image: url("${gridTile + "#svgView(viewBox(0,0,32,32))"}");
+  background-size: 32px 32px;
+
   padding: calc(var(--grid-step));
   border-radius: 6px;
 
@@ -66,16 +121,22 @@ const Grid = styled.div`
   justify-content: center;
 `;
 
-const Item = styled.div`
-  grid-column: wall-start / wall-end;
+const Block = styled.div`
+  grid-column: start / end;
   grid-row-end: span 3;
-  background: rebeccapurple;
+`;
+
+const BlockImg = styled.img`
+  object-fit: contain;
+  object-position: center bottom;
+  width: 100%;
+  height: 100%;
 `;
 
 const Separator = styled.div`
   grid-column: start / end;
-  grid-row-end: span 2;
+  grid-row-end: span 1;
 
   background: gray;
-  opacity: 0.2;
+  opacity: 0.5;
 `;
