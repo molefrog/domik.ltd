@@ -6,7 +6,7 @@ import { ConnectTheDots } from "~/attractions/ConnectTheDots";
 import { Emotion } from "~/attractions/Emotion";
 import { Spoiler } from "~/attractions/Spoiler";
 import { SlurredSpeech } from "~/attractions/SlurredSpeech";
-
+import { HouseBuilder } from "~/attractions/HouseBuilder";
 import mapImage from "~/chapters/3-three/map.webp";
 
 export default function PlaygroundPage() {
@@ -14,15 +14,16 @@ export default function PlaygroundPage() {
 
   return (
     <Container>
+      <HouseBuilder />
       <SlurredSpeech>
         Смотри, какая нелепая схема, — мне бросилась в глаза книжечка на стенде, в котором обычно
         продавались путеводители и карты. Только эта книга отличалась от других. В отличие от
         нормальных карт, она была нарисована руки и вместо городов на ней были изображены какие-то
         странные предметы: унитаз, кегли от боулинга, точилка для карандашей.
       </SlurredSpeech>
+      of emotions a person can experience: <Emotion feeling="happiness">happiness</Emotion> and
       <br />
       You can only <TV video="dQw4w9WgXcQ">see this</TV> in dev environment! There are whole variety
-      of emotions a person can experience: <Emotion feeling="happiness">happiness</Emotion> and
       sadness
       <p>
         Что ж, всё оказалось не так плохо, как я думал.{" "}
