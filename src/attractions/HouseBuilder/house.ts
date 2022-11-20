@@ -56,6 +56,11 @@ export interface HouseBlock {
   variant: number;
 }
 
+/*
+ * House consists of blocks
+ */
+export type House = Array<HouseBlock>;
+
 export const getBlockDef = (block: HouseBlock) => Schema[block.type];
 
 export const getBlockSprite = (block: HouseBlock) => getBlockDef(block).variants[block.variant]!;
