@@ -24,7 +24,7 @@ export const HouseBuilder = () => {
   const [simulationRunning, setSimulationRunning] = useState(false);
 
   const randomizeHouse = useCallback(() => {
-    setHouse(buildRandomHouse(rand(3)));
+    setHouse(buildRandomHouse(rand(2)));
   }, []);
 
   return (

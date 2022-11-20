@@ -57,6 +57,10 @@ export const Builder = (props: Props) => {
     <Grid flipKey={house.length} spring="gentle">
       {house.map((block, index) => {
         const isLast = index === house.length - 1;
+        const nextBlock = house[index + 1];
+        const hasSeparator = !isLast;
+        const hasControls =
+          hasSeparator && [BlockType.Floor, BlockType.GroundFloor].includes(nextBlock?.type);
 
         return (
           <Fragment key={block.id}>
@@ -68,12 +72,15 @@ export const Builder = (props: Props) => {
                 <BlockImg src={getBlockSprite(block)} />
               </Block>
             </Flipped>
-            {!isLast && (
-              <Separator>
-                <button onClick={() => buildNewFloor(index)}>+</button>
-                <button onClick={() => demolishFloor(index)}>-</button>
-              </Separator>
-            )}
+            {hasSeparator &&
+              (hasControls ? (
+                <SeparatorWithControls>
+                  <button onClick={() => buildNewFloor(index)}>+</button>
+                  <button onClick={() => demolishFloor(index)}>-</button>
+                </SeparatorWithControls>
+              ) : (
+                <Separator />
+              ))}
           </Fragment>
         );
       })}
@@ -123,9 +130,14 @@ const BlockImg = styled.img`
 `;
 
 const Separator = styled.div`
-  grid-column: sprite-start / sprite-end;
-  grid-row-end: span 2;
+  grid-column: grid-start / grid-end;
+  grid-row-end: span 1;
+`;
 
-  background: gray;
+const SeparatorWithControls = styled(Separator)`
+  grid-row-end: span 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   opacity: 0.5;
 `;
