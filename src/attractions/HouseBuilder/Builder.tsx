@@ -1,8 +1,9 @@
-import { useState, Fragment, useCallback, Dispatch, SetStateAction } from "react";
+import { Fragment, useCallback, Dispatch, SetStateAction } from "react";
 import styled from "@emotion/styled";
 import { Flipper, Flipped } from "react-flip-toolkit";
 
 import { Schema, House, BlockType, getBlockDef, getBlockSprite, buildBlock } from "./house";
+import { Button } from "./Controls";
 import { rand } from "~/utils/rand";
 
 import gridTile from "./images/grid-tile.svg";
@@ -10,6 +11,8 @@ import gridTile from "./images/grid-tile.svg";
 interface Props {
   houseState: [House, Dispatch<SetStateAction<House>>];
 }
+
+const gridStep = 32;
 
 export const Builder = (props: Props) => {
   const [house, updateHouse] = props.houseState;
@@ -54,19 +57,22 @@ export const Builder = (props: Props) => {
 
   // opens in a new window by default
   return (
-    <Grid flipKey={house.length} spring="gentle">
+    <Grid flipKey={house.length} spring="gentle" gridStep={gridStep}>
       {house.map((block, index) => {
         const isLast = index === house.length - 1;
         const nextBlock = house[index + 1];
         const hasSeparator = !isLast;
         const hasControls =
           hasSeparator && [BlockType.Floor, BlockType.GroundFloor].includes(nextBlock?.type);
+        const canRemoveBlock = hasControls && nextBlock?.type === BlockType.Floor;
+
+        const blockHeight = getBlockDef(block).height;
 
         return (
           <Fragment key={block.id}>
             <Flipped flipId={block.id} stagger>
               <Block
-                style={{ gridRowEnd: `span ${getBlockDef(block).height}` }}
+                style={{ gridRowEnd: `span ${blockHeight}` }}
                 onClick={() => changeFloorVariant(index)}
               >
                 <BlockImg src={getBlockSprite(block)} />
@@ -74,10 +80,26 @@ export const Builder = (props: Props) => {
             </Flipped>
             {hasSeparator &&
               (hasControls ? (
-                <SeparatorWithControls>
-                  <button onClick={() => buildNewFloor(index)}>+</button>
-                  <button onClick={() => demolishFloor(index)}>-</button>
-                </SeparatorWithControls>
+                <Flipped flipId={"separator-" + block.id}>
+                  <SeparatorWithControls>
+                    <Button
+                      size={gridStep * 1.5}
+                      aspect="2 / 1"
+                      onClick={() => buildNewFloor(index)}
+                    >
+                      +
+                    </Button>
+                    {canRemoveBlock && (
+                      <Button
+                        size={gridStep * 1.5}
+                        aspect="2 / 1"
+                        onClick={() => demolishFloor(index)}
+                      >
+                        -
+                      </Button>
+                    )}
+                  </SeparatorWithControls>
+                </Flipped>
               ) : (
                 <Separator />
               ))}
@@ -88,19 +110,26 @@ export const Builder = (props: Props) => {
   );
 };
 
+// Returns SVG fragment identifier with changed viewport
+const svgWithViewport = (path: string, size: number) => {
+  return `${path}#svgView(viewBox(0,0,${size},${size}))`;
+};
+
 /**
  * Styles
  */
-const Grid = styled(Flipper)`
-  --grid-step: 32px;
+const Grid = styled(Flipper)<{ gridStep: number }>`
+  --grid-step: ${(props) => props.gridStep}px;
   width: 100%;
   height: 100%;
   overflow-y: auto;
 
-  background-image: url("${gridTile + "#svgView(viewBox(0,0,32,32))"}");
-  background-size: 32px 32px;
+  background: -1px -1px repeat local url("${({ gridStep }) => svgWithViewport(gridTile, gridStep)}");
 
+  background-size: ${(props) => `${props.gridStep}px ${props.gridStep}px`};
   padding: calc(var(--grid-step));
+  box-shadow: inset 0px 0px 0px calc(var(--grid-step) / 2) var(--color-embossed);
+  border-radius: 8px;
 
   display: grid;
   grid-template-columns:
@@ -114,12 +143,14 @@ const Grid = styled(Flipper)`
     [grid-end];
 
   grid-auto-rows: var(--grid-step);
-  justify-content: center;
+  justify-content: flex-start;
 `;
 
 const Block = styled.div`
   grid-column: sprite-start / sprite-end;
   grid-row-end: span 3;
+
+  cursor: e-resize;
 `;
 
 const BlockImg = styled.img`
@@ -136,8 +167,14 @@ const Separator = styled.div`
 
 const SeparatorWithControls = styled(Separator)`
   grid-row-end: span 2;
-  display: flex;
-  align-items: center;
+  display: grid;
+  column-gap: 16px;
+  grid-auto-flow: column;
   justify-content: center;
-  opacity: 0.5;
+  align-content: center;
+  opacity: 0.7;
+
+  &:hover {
+    opacity: 1;
+  }
 `;

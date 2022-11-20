@@ -5,20 +5,20 @@ import styled from "@emotion/styled";
  */
 
 export const Controls = styled.div`
-  --button-size: 64px;
-
   position: absolute;
-  top: 24px;
-  right: 24px;
+  top: 32px;
+  right: 29px;
 
   display: grid;
-  column-gap: calc(var(--button-size) / 4);
+  column-gap: 16px;
   grid-auto-flow: column;
 `;
 
-export const Button = styled.button`
+export const Button = styled.button<{ size?: number; aspect?: string }>`
+  --button-size: ${({ size }) => size || 64}px;
+
   width: var(--button-size);
-  aspect-ratio: 1;
+  aspect-ratio: ${({ aspect }) => aspect || 1};
   border-radius: 6px;
   border: none;
   cursor: pointer;
@@ -30,7 +30,7 @@ export const Button = styled.button`
 
   &:focus-visible {
     outline: var(--color-selected-vivid) dashed 4px;
-    outline-offset: 4px;
+    outline-offset: 6px;
   }
 
   &:hover {
