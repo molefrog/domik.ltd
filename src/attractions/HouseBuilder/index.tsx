@@ -1,10 +1,13 @@
-import { useState, useCallback } from "react";
+import { useState, useRef, useCallback } from "react";
 import styled from "@emotion/styled";
 
 import { House, BlockType, buildBlock } from "./house";
 import { Controls, Button } from "./Controls";
-import { Builder } from "./Builder";
 import { rand } from "~/utils/rand";
+
+// display modes
+import { Builder } from "./Builder";
+import { Simulator, SimulatorHandle } from "./Simulator";
 
 /*
  * Generates a random house structure with a given number of main floors
@@ -22,6 +25,7 @@ export const HouseBuilder = () => {
   const houseState = useState(() => buildRandomHouse());
   const [, setHouse] = houseState;
   const [simulationRunning, setSimulationRunning] = useState(false);
+  const simulatorRef = useRef<SimulatorHandle>(null);
 
   const randomizeHouse = useCallback(() => {
     setHouse(buildRandomHouse(rand(2)));
@@ -30,9 +34,14 @@ export const HouseBuilder = () => {
   return (
     <Container>
       {!simulationRunning && <Builder houseState={houseState} />}
+      {simulationRunning && <Simulator houseState={houseState} ref={simulatorRef} />}
 
       <Controls>
         {!simulationRunning && <Button onClick={randomizeHouse}>@</Button>}
+        {simulationRunning && (
+          <Button onClick={() => simulatorRef.current?.takePicture()}>o</Button>
+        )}
+
         <Button onClick={() => setSimulationRunning((s) => !s)}>
           {simulationRunning ? "=" : ">"}
         </Button>
