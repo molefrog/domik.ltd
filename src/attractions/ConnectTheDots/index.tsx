@@ -4,7 +4,7 @@ import { useRef, useState, useMemo, useCallback, useEffect, PropsWithChildren } 
 import { usePopSound, useResetSound, useSuccessSound } from "~/hooks/useSounds";
 import { Dot } from "./Dot";
 import { type Coords } from "./types";
-import { InteractionBadge } from "./InteractionBadge";
+import { InteractionBadge } from "~/components/InteractionBadge";
 
 interface Props {
   dots: Coords[];
@@ -128,36 +128,36 @@ export const ConnectTheDots = ({
   }, [isSuccess, onSuccessChange]);
 
   return (
-    <Figure drawing={isDrawing}>
-      {image && <img src={image} />}
-      {children}
+    <InteractionBadge>
+      <Figure drawing={isDrawing}>
+        {image && <img src={image} />}
+        {children}
 
-      <InteractionBadge />
+        <SVG
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox={`0 0 ${baseWidth} ${baseWidth}`}
+          ref={svgRef}
+          onMouseDown={handleClick}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+        >
+          {svgPath && <Path d={svgPath} success={isSuccess} background={background} />}
 
-      <SVG
-        version="1.1"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox={`0 0 ${baseWidth} ${baseWidth}`}
-        ref={svgRef}
-        onMouseDown={handleClick}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-      >
-        {svgPath && <Path d={svgPath} success={isSuccess} background={background} />}
+          {dots.map((pos, index) => (
+            <Dot
+              key={pos.toString()}
+              position={pos}
+              onMouseDown={handleDotClick.bind(this, index)}
+              selected={path.includes(index)}
+              isDrawing={isDrawing}
+            />
+          ))}
+        </SVG>
 
-        {dots.map((pos, index) => (
-          <Dot
-            key={pos.toString()}
-            position={pos}
-            onMouseDown={handleDotClick.bind(this, index)}
-            selected={path.includes(index)}
-            isDrawing={isDrawing}
-          />
-        ))}
-      </SVG>
-
-      {overlayImage && <OverlayImage src={overlayImage} />}
-    </Figure>
+        {overlayImage && <OverlayImage src={overlayImage} />}
+      </Figure>
+    </InteractionBadge>
   );
 };
 
