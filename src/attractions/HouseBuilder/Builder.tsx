@@ -68,6 +68,10 @@ export const Builder = (props: Props) => {
 
         const blockHeight = getBlockDef(block).height;
 
+        // button dimensions
+        const buttonWidth = `${gridStep * 2}px`;
+        const buttonHeight = `${gridStep * 1}px`;
+
         return (
           <Fragment key={block.id}>
             <Flipped flipId={block.id} stagger>
@@ -84,17 +88,18 @@ export const Builder = (props: Props) => {
                   <SeparatorWithControls>
                     <Button
                       icon="plus"
-                      iconSize={`${gridStep * 0.65}px`}
-                      size={gridStep * 1.8}
-                      aspect="2 / 1"
+                      iconSize={`${gridStep * 0.7}px`}
+                      width={buttonWidth}
+                      height={buttonHeight}
                       onClick={() => buildNewFloor(index)}
                     />
+
                     {canRemoveBlock && (
                       <Button
                         icon="minus"
-                        iconSize={`${gridStep * 0.65}px`}
-                        size={gridStep * 1.8}
-                        aspect="2 / 1"
+                        iconSize={`${gridStep * 0.7}px`}
+                        width={buttonWidth}
+                        height={buttonHeight}
                         onClick={() => demolishFloor(index)}
                       />
                     )}
@@ -161,7 +166,7 @@ const BlockImg = styled.img`
 `;
 
 const Separator = styled.div`
-  grid-column: sprite-start / sprite-end;
+  grid-column: wall-start / wall-end;
   grid-row-end: span 1;
 `;
 

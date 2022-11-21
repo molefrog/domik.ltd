@@ -17,6 +17,14 @@ const ICONS = {
   minus: iconMinus,
 };
 
+interface ButtonProps {
+  width?: string;
+  height?: string;
+  aspect?: string;
+  icon?: keyof typeof ICONS;
+  iconSize?: string;
+}
+
 /**
  * Styles
  */
@@ -31,26 +39,18 @@ export const Controls = styled.div`
   grid-auto-flow: column;
 `;
 
-interface ButtonProps {
-  size?: number;
-  aspect?: string;
-  icon?: keyof typeof ICONS;
-  iconSize?: string;
-}
-
 export const Button = styled.button<ButtonProps>`
-  --button-size: ${({ size }) => size || 64}px;
+  width: ${({ width = "64px " }) => width};
+  height: ${({ height = "64px " }) => height};
 
-  width: var(--button-size);
-  aspect-ratio: ${({ aspect }) => aspect || 1};
   border-radius: 6px;
   border: none;
-  cursor: pointer;
   padding: 0;
+  cursor: pointer;
 
   background: var(--color-bg);
   box-shadow: 0px 1px 0px 1.5px #ddd, 0px 2px 0px 2px #bbb, 0px -1px 0px 1px #ddd;
-  font-size: calc(var(--button-size) / 2);
+  font-size: calc(${({ height = "64px" }) => height} / 2);
 
   display: flex;
   align-items: center;
