@@ -21,33 +21,32 @@ export interface RenderObject {
 
 export class Renderer {
   canvas!: HTMLCanvasElement;
-
   objects: Array<RenderObject> = [];
 
   #sprites: Record<string, HTMLImageElement> = {};
 
-  async loadImages() {
-    const toLoad = [groundSprite];
-
-    for (const src of toLoad) {
-      try {
-        const img = await loadImage(src);
-        this.#sprites[src] = img;
-      } catch {}
-    }
+  /**
+   * Transformation between canvas coordinates and world coordinates
+   * (represented by grid cells). Scale factor is calculated to fit the
+   * current house into the viewport perfectly
+   */
+  get canvasCtx() {
+    return this.canvas.getContext("2d")!;
   }
 
-  drawImage(ctx: CanvasRenderingContext2D, imgSrc: string, ...rest: any[]) {
-    const sprite = this.#sprites[imgSrc];
-
-    if (sprite) {
-      (ctx.drawImage as Function).call(ctx, sprite, ...rest);
-    }
+  get canvasDimensions() {
+    return [this.canvas.width, this.canvas.height];
   }
 
-  takePicture() {}
+  get worldDimensions() {
+    const [w, h] = this.canvasDimensions;
+    const scale = this.scale;
 
-  scale() {
+    return [w / scale, h / scale];
+  }
+
+  get scale() {
+    // calculate approximate height of the tower
     const verticalCells = this.objects
       .map(({ block }) => {
         return getBlockDef(block).height;
@@ -60,59 +59,126 @@ export class Renderer {
     return this.canvas.height / (verticalCells * 2);
   }
 
+  async loadSprites() {
+    const toLoad = [groundSprite];
+
+    for (const src of toLoad) {
+      try {
+        const img = await loadImage(src);
+        this.#sprites[src] = img;
+      } catch {}
+    }
+  }
+
+  drawSprite(
+    ctx: CanvasRenderingContext2D,
+    imgSrc: string,
+    cx: number,
+    cy: number,
+    dw: number,
+    dh: number,
+    offsetX: number, // 0.0..1.0 of sprite width
+    offsetY: number // 0.0..1.0 of sprite height
+  ) {
+    const sprite = this.#sprites[imgSrc];
+
+    if (sprite) {
+      ctx.drawImage(sprite, cx, cy, dw, dh);
+    }
+  }
+
+  takePicture() {}
+
+  drawGround() {
+    const sprite = this.#sprites[groundSprite];
+    if (!sprite) return;
+
+    const ctx = this.canvasCtx;
+    const [w, h] = this.canvasDimensions;
+    const [gw, gh] = this.worldDimensions;
+
+    ctx.save();
+
+    const [spriteW, spriteH] = [sprite.width, sprite.height];
+    const houseArea = 400; // fixed! defines how much space in the sprite a house consumes
+
+    // ??? Figure out this one
+    const x = 5; // (houseArea * gw) / w / (spriteW / spriteH);
+
+    // ground height in world coordinates
+    const groundHeight = x;
+
+    const hGround = Math.min(6, Math.max(4, groundHeight));
+    const groundHeightCanvas = h * (hGround / gh);
+
+    // aspect ration of the ground in the viewport
+    const arGround = w / groundHeightCanvas;
+
+    // dimensions of the sub-image of the sprite
+    const subImageW = sprite.height * arGround;
+    const subImageH = sprite.height;
+
+    ctx.drawImage(
+      sprite,
+      // center the sprite horizontally
+      0.5 * (sprite.width - subImageW),
+      0,
+      subImageW,
+      subImageH,
+      0,
+      h - groundHeightCanvas,
+      w,
+      groundHeightCanvas
+    );
+
+    ctx.restore();
+  }
+
   render() {
-    const ctx = this.canvas.getContext("2d")!;
-    const w = this.canvas.width;
-    const h = this.canvas.height;
+    const ctx = this.canvasCtx;
+    const [w, h] = this.canvasDimensions;
+    const [dw, dh] = this.worldDimensions;
 
     // Clear the canvas
     ctx.clearRect(0, 0, w, h);
 
-    const scale = this.scale();
+    this.drawGround();
 
-    // Note that we need to flip the y axis since Canvas pixel coordinates
-    // goes from top to bottom, while physics does the opposite.
     ctx.save();
-    ctx.translate(0.5 * w, 0.5 * h); // Translate to the center
-    ctx.scale(scale, -scale); // Zoom in and flip y axis
+    ctx.scale(this.scale, this.scale);
 
-    this.drawImage(ctx, groundSprite, 0, 0, 4, 4);
+    const groundY = dh * 0.9;
 
     for (const { block, body } of this.objects) {
       ctx.save();
 
       ctx.strokeStyle = "red";
       ctx.lineWidth = 0.1;
-      // ctx.translate(§)
-      // ctx.strokeStyle = "black";
+
       ctx.beginPath();
       const [x, y] = body.interpolatedPosition;
-      const [w, h] = [getBlockDef(block).width, getBlockDef(block).height];
+      const [bw, bh] = [getBlockDef(block).width, getBlockDef(block).height];
 
-      ctx.translate(-x - 0.5 * w, y + 0.5 * h);
+      ctx.translate(dw * 0.5 + x, groundY - y);
       ctx.rotate(body.angle);
+      ctx.translate(-0.5 * bw, -0.5 * bh);
 
-      ctx.translate(x + 0.5 * w, -y - 0.5 * h);
-
-      // ctx.translate(-x - 0.5 * w, y + 0.5 * h);
-
-      // ctx.rect(-0.5 * w, -0.5 * h, w, h);
-      ctx.rect(x - 0.5 * w, y - 0.5 * h, w, h);
+      ctx.rect(0, 0, bw, bh);
 
       ctx.stroke();
       ctx.closePath();
+
       ctx.restore();
     }
 
-    // Restore global transform
-    ctx.restore();
+    ctx.restore(); // Restore global transform
   }
 }
 
 export const useRenderer = () => {
   const [renderer] = useState(() => {
     const r = new Renderer();
-    r.loadImages();
+    r.loadSprites();
 
     return r;
   });
