@@ -8,6 +8,7 @@ import {
 } from "react";
 import styled from "@emotion/styled";
 import * as p2 from "p2-es";
+import useSize from "@react-hook/size";
 
 import { useRenderer, RenderObject } from "./renderer";
 import {
@@ -121,8 +122,9 @@ export type SimulatorHandle = {
 
 export const Simulator = forwardRef<SimulatorHandle, Props>((props, ref) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [house] = props.houseState;
+  const containerRef = useRef<HTMLDivElement>(null);
 
+  const [house] = props.houseState;
   const renderer = useRenderer();
 
   useImperativeHandle(ref, () => ({
@@ -135,9 +137,12 @@ export const Simulator = forwardRef<SimulatorHandle, Props>((props, ref) => {
     return simulate(house, renderer);
   }, [house]);
 
+  const [width, height] = useSize(containerRef);
+  const pixelRatio = Math.min(devicePixelRatio || 1.0, 1.5);
+
   return (
-    <Container>
-      <canvas ref={canvasRef} width={670} height={670} style={{ width: 320, height: 320 }} />
+    <Container ref={containerRef}>
+      <Canvas ref={canvasRef} width={width * pixelRatio} height={height * pixelRatio} />
     </Container>
   );
 });
@@ -145,6 +150,11 @@ export const Simulator = forwardRef<SimulatorHandle, Props>((props, ref) => {
 /**
  * Styles
  */
+const Canvas = styled.canvas`
+  width: 100%;
+  height: 100%;
+`;
+
 const Container = styled.div`
   width: 100%;
   height: 100%;
