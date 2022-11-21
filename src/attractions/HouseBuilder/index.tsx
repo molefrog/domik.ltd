@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 
 import { House, BlockType, buildBlock } from "./house";
 import { Controls, Button } from "./Controls";
+import { InteractionBadge } from "~/components/InteractionBadge";
 import { rand } from "~/utils/rand";
 
 // display modes
@@ -32,21 +33,30 @@ export const HouseBuilder = () => {
   }, []);
 
   return (
-    <Container>
-      {!simulationRunning && <Builder houseState={houseState} />}
-      {simulationRunning && <Simulator houseState={houseState} ref={simulatorRef} />}
+    <InteractionBadge>
+      <Container>
+        {/*
+          The editor can be in one of two states: building mode and 
+          simulator mode
+        */}
+        {!simulationRunning && <Builder houseState={houseState} />}
+        {simulationRunning && <Simulator houseState={houseState} ref={simulatorRef} />}
 
-      <Controls>
-        {!simulationRunning && <Button onClick={randomizeHouse}>@</Button>}
-        {simulationRunning && (
-          <Button onClick={() => simulatorRef.current?.takePicture()}>o</Button>
-        )}
+        <Controls>
+          {!simulationRunning && <Button icon="shuffle" onClick={randomizeHouse} />}
 
-        <Button onClick={() => setSimulationRunning((s) => !s)}>
-          {simulationRunning ? "=" : ">"}
-        </Button>
-      </Controls>
-    </Container>
+          {simulationRunning && (
+            <Button icon="camera" onClick={() => simulatorRef.current?.takePicture()} />
+          )}
+
+          {/* Play/stop to switch between the states */}
+          <Button
+            icon={simulationRunning ? "stop" : "play"}
+            onClick={() => setSimulationRunning((s) => !s)}
+          />
+        </Controls>
+      </Container>
+    </InteractionBadge>
   );
 };
 

@@ -83,20 +83,20 @@ export const Builder = (props: Props) => {
                 <Flipped flipId={"separator-" + block.id}>
                   <SeparatorWithControls>
                     <Button
-                      size={gridStep * 1.5}
+                      icon="plus"
+                      iconSize={`${gridStep * 0.65}px`}
+                      size={gridStep * 1.8}
                       aspect="2 / 1"
                       onClick={() => buildNewFloor(index)}
-                    >
-                      +
-                    </Button>
+                    />
                     {canRemoveBlock && (
                       <Button
-                        size={gridStep * 1.5}
+                        icon="minus"
+                        iconSize={`${gridStep * 0.65}px`}
+                        size={gridStep * 1.8}
                         aspect="2 / 1"
                         onClick={() => demolishFloor(index)}
-                      >
-                        -
-                      </Button>
+                      />
                     )}
                   </SeparatorWithControls>
                 </Flipped>
@@ -144,12 +144,12 @@ const Grid = styled(Flipper)<{ gridStep: number }>`
 
   grid-auto-rows: var(--grid-step);
   justify-content: flex-start;
+  user-select: none;
 `;
 
 const Block = styled.div`
   grid-column: sprite-start / sprite-end;
   grid-row-end: span 3;
-
   cursor: e-resize;
 `;
 
@@ -161,7 +161,7 @@ const BlockImg = styled.img`
 `;
 
 const Separator = styled.div`
-  grid-column: grid-start / grid-end;
+  grid-column: sprite-start / sprite-end;
   grid-row-end: span 1;
 `;
 
@@ -172,9 +172,4 @@ const SeparatorWithControls = styled(Separator)`
   grid-auto-flow: column;
   justify-content: center;
   align-content: center;
-  opacity: 0.7;
-
-  &:hover {
-    opacity: 1;
-  }
 `;
