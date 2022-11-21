@@ -59,7 +59,7 @@ function simulate(house: House, renderer: ReturnType<typeof useRenderer>) {
       lastY += def.height + 2;
 
       const shape = new p2.Box({
-        height: def.height,
+        height: def.height - def.overflowY,
         width: def.width,
       });
 

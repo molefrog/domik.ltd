@@ -25,27 +25,32 @@ export enum BlockType {
 export interface BlockDeclaration {
   height: number;
   width: number;
+  overflowY: number;
   variants: string[];
 }
 export const Schema: Record<BlockType, BlockDeclaration> = {
   [BlockType.Roof]: {
     height: 2,
     width: 10,
+    overflowY: 0,
     variants: [roof_1, roof_2],
   },
   [BlockType.Floor]: {
     height: 3,
     width: 10,
+    overflowY: 0,
     variants: [floor_1, floor_2, floor_3, floor_4],
   },
   [BlockType.GroundFloor]: {
     height: 3,
     width: 10,
+    overflowY: 0,
     variants: [groundFloor_1, groundFloor_2],
   },
   [BlockType.Base]: {
     height: 2,
     width: 10,
+    overflowY: 1,
     variants: [base_1, base_2],
   },
 };
