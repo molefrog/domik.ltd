@@ -1,10 +1,12 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import styled from "@emotion/styled";
 
 import { House, BlockType, buildBlock } from "./house";
 import { Controls, Button } from "./Controls";
 import { InteractionBadge } from "~/components/InteractionBadge";
 import { rand } from "~/utils/rand";
+import { useShutterSound, useClickSound, usePopSound, useRecorderSound } from "~/hooks/useSounds";
+import { usePrevious } from "~/hooks/usePrevious";
 
 // display modes
 import { Builder } from "./Builder";
@@ -24,13 +26,37 @@ const buildRandomHouse = (numberOfMainFloors = 0): House => [
 
 export const HouseBuilder = () => {
   const houseState = useState(() => buildRandomHouse());
-  const [, setHouse] = houseState;
+  const [house, setHouse] = houseState;
   const [simulationRunning, setSimulationRunning] = useState(false);
   const simulatorRef = useRef<SimulatorHandle>(null);
 
+  const [playShutter] = useShutterSound();
+  const [playClick] = useClickSound();
+  const [playRecorder] = useRecorderSound();
+
+  const houseBeforeUpdate = usePrevious(house);
+
+  useEffect(() => {
+    if (houseBeforeUpdate) playClick();
+  }, [houseBeforeUpdate, house]);
+
+  // save current simulator image
+  const takePicture = useCallback(() => {
+    simulatorRef.current?.takePicture();
+    playShutter();
+  }, [playShutter]);
+
+  // replace the house with a random one
   const randomizeHouse = useCallback(() => {
     setHouse(buildRandomHouse(rand(2)));
-  }, []);
+    playClick();
+  }, [playClick]);
+
+  // switch between simulator and builder
+  const switchMode = useCallback(() => {
+    setSimulationRunning((s) => !s);
+    playRecorder();
+  }, [playRecorder]);
 
   return (
     <InteractionBadge>
@@ -45,15 +71,10 @@ export const HouseBuilder = () => {
         <Controls>
           {!simulationRunning && <Button icon="shuffle" onClick={randomizeHouse} />}
 
-          {simulationRunning && (
-            <Button icon="camera" onClick={() => simulatorRef.current?.takePicture()} />
-          )}
+          {simulationRunning && <Button icon="camera" onClick={takePicture} />}
 
           {/* Play/stop to switch between the states */}
-          <Button
-            icon={simulationRunning ? "stop" : "play"}
-            onClick={() => setSimulationRunning((s) => !s)}
-          />
+          <Button icon={simulationRunning ? "stop" : "play"} onClick={switchMode} />
         </Controls>
       </Container>
     </InteractionBadge>
