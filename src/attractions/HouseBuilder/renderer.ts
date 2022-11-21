@@ -1,4 +1,4 @@
-import { HouseBlock, getBlockDef } from "./house";
+import { HouseBlock, getBlockDef, Schema as SchemaBlocks, getBlockSprite } from "./house";
 import { Body } from "p2-es";
 import { useState } from "react";
 
@@ -59,8 +59,15 @@ export class Renderer {
     return this.canvas.height / (verticalCells * 2);
   }
 
+  /**
+   * Drawing and loading image sprites to ensure that they are
+   * fully loaded when they are drawn on a canvas
+   *
+   * TODO: load sprites in parallel!
+   */
   async loadSprites() {
-    const toLoad = [groundSprite];
+    const blockSprites = Object.values(SchemaBlocks).flatMap(({ variants }) => variants);
+    const toLoad = [groundSprite, ...blockSprites];
 
     for (const src of toLoad) {
       try {
@@ -70,20 +77,11 @@ export class Renderer {
     }
   }
 
-  drawSprite(
-    ctx: CanvasRenderingContext2D,
-    imgSrc: string,
-    cx: number,
-    cy: number,
-    dw: number,
-    dh: number,
-    offsetX: number, // 0.0..1.0 of sprite width
-    offsetY: number // 0.0..1.0 of sprite height
-  ) {
+  drawSprite(imgSrc: string, ...args: number[]) {
     const sprite = this.#sprites[imgSrc];
 
     if (sprite) {
-      ctx.drawImage(sprite, cx, cy, dw, dh);
+      (this.canvasCtx.drawImage as Function)(sprite, ...args);
     }
   }
 
@@ -91,7 +89,6 @@ export class Renderer {
 
   drawGround() {
     const sprite = this.#sprites[groundSprite];
-    if (!sprite) return;
 
     const ctx = this.canvasCtx;
     const [w, h] = this.canvasDimensions;
@@ -118,8 +115,8 @@ export class Renderer {
     const subImageW = sprite.height * arGround;
     const subImageH = sprite.height;
 
-    ctx.drawImage(
-      sprite,
+    this.drawSprite(
+      groundSprite,
       // center the sprite horizontally
       0.5 * (sprite.width - subImageW),
       0,
@@ -156,14 +153,17 @@ export class Renderer {
       ctx.lineWidth = 0.1;
 
       ctx.beginPath();
+      const blockDef = getBlockDef(block);
       const [x, y] = body.interpolatedPosition;
-      const [bw, bh] = [getBlockDef(block).width, getBlockDef(block).height];
+      const [bw, bh] = [blockDef.width, blockDef.height];
 
       ctx.translate(dw * 0.5 + x, groundY - y);
       ctx.rotate(body.angle);
       ctx.translate(-0.5 * bw, -0.5 * bh);
 
       ctx.rect(0, 0, bw, bh);
+
+      this.drawSprite(getBlockSprite(block), 0, 0, bw, bh);
 
       ctx.stroke();
       ctx.closePath();
