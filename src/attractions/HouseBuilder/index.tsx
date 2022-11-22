@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import useChange from "@react-hook/change";
+import { useMediaQueries } from "@react-hook/media-query";
 import styled from "@emotion/styled";
 
 import { House, BlockType, buildBlock } from "./house";
@@ -33,6 +34,13 @@ export const HouseBuilder = () => {
   const [playShutter] = useShutterSound();
   const [playClick] = useClickSound();
   const [playRecorder] = useRecorderSound();
+
+  const { matches } = useMediaQueries({
+    tablet: "(max-width: 720px)",
+    phone: "(max-width: 540px)",
+  });
+
+  const gridStep = matches.phone ? 20 : matches.tablet ? 24 : 32;
 
   // play sound whenever the house changes
   useChange(house, () => playClick());
@@ -87,6 +95,11 @@ export const HouseBuilder = () => {
     playRecorder();
   }, [playRecorder]);
 
+  const controlButtonSizes = {
+    width: `${gridStep * 2}px`,
+    height: `${gridStep * 2}px`,
+  };
+
   return (
     <InteractionBadge>
       <Container>
@@ -94,7 +107,7 @@ export const HouseBuilder = () => {
           The editor can be in one of two states: building mode and 
           simulator mode
         */}
-        {!simulationRunning && <Builder houseState={houseState} />}
+        {!simulationRunning && <Builder gridStep={gridStep} houseState={houseState} />}
         {simulationRunning && <Simulator houseState={houseState} ref={simulatorRef} />}
 
         <Shapshot
@@ -105,13 +118,21 @@ export const HouseBuilder = () => {
           {pictureTaken && <img src={pictureTaken} />}
         </Shapshot>
 
-        <Controls>
-          {!simulationRunning && <Button icon="shuffle" onClick={randomizeHouse} />}
+        <Controls gap={gridStep * 0.5}>
+          {!simulationRunning && (
+            <Button {...controlButtonSizes} icon="shuffle" onClick={randomizeHouse} />
+          )}
 
-          {simulationRunning && <Button icon="camera" onClick={takePicture} />}
+          {simulationRunning && (
+            <Button {...controlButtonSizes} icon="camera" onClick={takePicture} />
+          )}
 
           {/* Play/stop to switch between the states */}
-          <Button icon={simulationRunning ? "stop" : "play"} onClick={switchMode} />
+          <Button
+            {...controlButtonSizes}
+            icon={simulationRunning ? "stop" : "play"}
+            onClick={switchMode}
+          />
         </Controls>
       </Container>
     </InteractionBadge>

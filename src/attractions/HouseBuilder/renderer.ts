@@ -122,6 +122,8 @@ export class Renderer {
   drawGround() {
     const sprite = this.#sprites[groundSprite];
 
+    if (!sprite) return; // has not been loaded yet
+
     const ctx = this.canvasCtx;
     const [w, h] = this.canvasDimensions;
     const [gw, gh] = this.worldDimensions;

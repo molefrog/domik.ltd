@@ -11,13 +11,11 @@ import gridTile from "./images/grid-tile.svg";
 
 interface Props {
   houseState: [House, Dispatch<SetStateAction<House>>];
+  gridStep: number;
 }
 
-export const Builder = (props: Props) => {
-  const [house, updateHouse] = props.houseState;
-
-  const smallScreen = useMediaQuery("(max-width: 580px)");
-  const gridStep = smallScreen ? 22 : 32;
+export const Builder = ({ houseState, gridStep }: Props) => {
+  const [house, updateHouse] = houseState;
 
   /**
    * Methods for changing the house layout
@@ -157,6 +155,8 @@ const Grid = styled(Flipper)<{ gridStep: number }>`
    */
   scrollbar-color: var(--color-selected);
   overflow-y: scroll;
+  // don't scroll the parent element once reaches the end of scroll
+  overscroll-behavior: contain;
 
   &::-webkit-scrollbar {
     width: 22px;

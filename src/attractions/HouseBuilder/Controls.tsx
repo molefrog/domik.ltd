@@ -29,13 +29,13 @@ interface ButtonProps {
  * Styles
  */
 
-export const Controls = styled.div`
+export const Controls = styled.div<{ gap: number }>`
   position: absolute;
   top: 32px;
   right: 29px;
 
   display: grid;
-  column-gap: 16px;
+  column-gap: ${(props) => (props.gap || 16) + "px"};
   grid-auto-flow: column;
 `;
 
