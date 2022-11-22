@@ -3,16 +3,7 @@ import { Body, Box } from "p2-es";
 import { useState } from "react";
 
 import groundSprite from "./sprites/ground.png";
-
-const loadImage = (src: string) =>
-  new Promise<HTMLImageElement>((resolve, reject) => {
-    const img = new Image();
-    img.onload = () => resolve(img);
-    img.onerror = reject;
-    img.onabort = reject;
-
-    img.src = src;
-  });
+import { loadImage } from "./spriteStore";
 
 export interface RenderObject {
   block: HouseBlock;
