@@ -1,5 +1,6 @@
 import { Fragment, useCallback, Dispatch, SetStateAction } from "react";
 import styled from "@emotion/styled";
+import { useMediaQuery } from "@react-hook/media-query";
 import { Flipper, Flipped } from "react-flip-toolkit";
 
 import { Schema, House, BlockType, getBlockDef, getBlockSprite, buildBlock } from "./house";
@@ -12,10 +13,11 @@ interface Props {
   houseState: [House, Dispatch<SetStateAction<House>>];
 }
 
-const gridStep = 32;
-
 export const Builder = (props: Props) => {
   const [house, updateHouse] = props.houseState;
+
+  const smallScreen = useMediaQuery("(max-width: 580px)");
+  const gridStep = smallScreen ? 22 : 32;
 
   /**
    * Methods for changing the house layout
