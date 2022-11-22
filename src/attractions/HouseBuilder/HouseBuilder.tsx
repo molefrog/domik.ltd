@@ -86,8 +86,7 @@ export const HouseBuilder = () => {
    */
   const randomizeHouse = useCallback(() => {
     setHouse(buildRandomHouse(rand(2)));
-    playClick();
-  }, [playClick]);
+  }, []);
 
   // switch between simulator and builder
   const switchMode = useCallback(() => {
