@@ -81,3 +81,5 @@ export const buildBlock = (
   block.variant = block.variant || rand(getBlockDef(block).variants.length);
   return block;
 };
+
+export const allSprites = Object.values(Schema).flatMap(({ variants }) => variants);
