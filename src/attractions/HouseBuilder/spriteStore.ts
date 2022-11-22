@@ -15,6 +15,5 @@ export const loadImage = (src: string) =>
 
 export const spriteStore = createFetchStore(async (src: string) => {
   const result = [await loadImage(src), src];
-  console.log("load");
   return result;
 });

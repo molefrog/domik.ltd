@@ -1,5 +1,6 @@
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useRef, useState, useEffect } from "react";
 import styled from "@emotion/styled";
+import useIntersectionObserver from "@react-hook/intersection-observer";
 
 import { InteractionBadge } from "~/components/InteractionBadge";
 import { Loading } from "./Loading";
@@ -7,20 +8,32 @@ import { Loading } from "./Loading";
 const LazyHouseBuilder = lazy(() => import("./HouseBuilder"));
 
 export const HouseBuilder = () => {
+  const ref = useRef<HTMLDivElement>(null);
+
+  /*
+   * Start loading everything just before a user sees that component
+   */
+  const [shouldRender, setShouldRender] = useState(false);
+  const { isIntersecting } = useIntersectionObserver(ref, {
+    rootMargin: "1024px 0px 1024px 0px",
+  });
+
+  useEffect(() => {
+    if (isIntersecting) setShouldRender(true);
+  }, [isIntersecting]);
+
   return (
-    <Suspense
-      fallback={
-        <Container>
+    <InteractionBadge>
+      <Container ref={ref}>
+        {shouldRender ? (
+          <Suspense fallback={<Loading />}>
+            <LazyHouseBuilder />
+          </Suspense>
+        ) : (
           <Loading />
-        </Container>
-      }
-    >
-      <InteractionBadge>
-        <Container>
-          <LazyHouseBuilder />
-        </Container>
-      </InteractionBadge>
-    </Suspense>
+        )}
+      </Container>
+    </InteractionBadge>
   );
 };
 
