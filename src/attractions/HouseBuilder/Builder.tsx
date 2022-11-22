@@ -127,7 +127,6 @@ const Grid = styled(Flipper)<{ gridStep: number }>`
   --grid-step: ${(props) => props.gridStep}px;
   width: 100%;
   height: 100%;
-  overflow-y: auto;
 
   background: -1px -1px repeat local url("${({ gridStep }) => svgWithViewport(gridTile, gridStep)}");
 
@@ -150,6 +149,23 @@ const Grid = styled(Flipper)<{ gridStep: number }>`
   grid-auto-rows: var(--grid-step);
   justify-content: flex-start;
   user-select: none;
+
+  /*
+   * Custom scrollbars
+   */
+  scrollbar-color: var(--color-selected);
+  overflow-y: scroll;
+
+  &::-webkit-scrollbar {
+    width: 22px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border: 8px solid rgba(0, 0, 0, 0);
+    background-clip: padding-box;
+    background-color: var(--color-selected);
+    border-radius: 12px;
+  }
 `;
 
 const Block = styled.div`
