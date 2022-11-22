@@ -1,12 +1,12 @@
 import { useState, useRef, useCallback, useEffect } from "react";
+import useChange from "@react-hook/change";
 import styled from "@emotion/styled";
 
 import { House, BlockType, buildBlock } from "./house";
 import { Controls, Button } from "./Controls";
 import { InteractionBadge } from "~/components/InteractionBadge";
 import { rand } from "~/utils/rand";
-import { useShutterSound, useClickSound, usePopSound, useRecorderSound } from "~/hooks/useSounds";
-import { usePrevious } from "~/hooks/usePrevious";
+import { useShutterSound, useClickSound, useRecorderSound } from "~/hooks/useSounds";
 
 // display modes
 import { Builder } from "./Builder";
@@ -30,22 +30,21 @@ export const HouseBuilder = () => {
   const [simulationRunning, setSimulationRunning] = useState(false);
   const simulatorRef = useRef<SimulatorHandle>(null);
 
-  const [pictureTaken, setPictureTaken] = useState<string>();
-  const [flash, setFlash] = useState<boolean>(false);
-
   const [playShutter] = useShutterSound();
   const [playClick] = useClickSound();
   const [playRecorder] = useRecorderSound();
 
-  const houseBeforeUpdate = usePrevious(house);
+  // play sound whenever the house changes
+  useChange(house, () => playClick());
 
-  useEffect(() => {
-    if (houseBeforeUpdate) playClick();
-  }, [houseBeforeUpdate, house]);
+  /**
+   * Taking pictures of the house
+   */
+  const [pictureTaken, setPictureTaken] = useState<string>();
+  const [flash, setFlash] = useState<boolean>(false);
 
-  useEffect(() => {
-    setPictureTaken(undefined);
-  }, [simulationRunning]);
+  // exit the picture mode when simulation has been stopped
+  useChange(simulationRunning, () => setPictureTaken(undefined));
 
   // save current simulator image
   const takePicture = useCallback(() => {
@@ -57,7 +56,7 @@ export const HouseBuilder = () => {
       // wait and then open file dialog
       setTimeout(() => {
         const time = new Date();
-        // saveFile(`house-${time.getHours()}-${time.getMinutes()}.png`);
+        saveFile(`house-${time.getHours()}-${time.getMinutes()}.png`);
       }, 1000);
 
       setFlash(false);
@@ -67,14 +66,16 @@ export const HouseBuilder = () => {
 
         setTimeout(() => {
           setFlash(false);
-        }, 2200);
+        }, 2500);
       }, 100);
     }
 
     playShutter();
   }, [playShutter]);
 
-  // replace the house with a random one
+  /**
+   * Button handlers
+   */
   const randomizeHouse = useCallback(() => {
     setHouse(buildRandomHouse(rand(2)));
     playClick();

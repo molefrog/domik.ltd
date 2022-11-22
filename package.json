@@ -13,6 +13,7 @@
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
     "@mdx-js/react": "^2.1.4",
+    "@react-hook/change": "^1.0.0",
     "@react-hook/size": "^2.1.2",
     "@react-spring/web": "^9.5.5",
     "colord": "^2.9.3",
