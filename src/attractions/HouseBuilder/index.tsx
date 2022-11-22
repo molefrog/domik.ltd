@@ -30,6 +30,9 @@ export const HouseBuilder = () => {
   const [simulationRunning, setSimulationRunning] = useState(false);
   const simulatorRef = useRef<SimulatorHandle>(null);
 
+  const [pictureTaken, setPictureTaken] = useState<string>();
+  const [flash, setFlash] = useState<boolean>(false);
+
   const [playShutter] = useShutterSound();
   const [playClick] = useClickSound();
   const [playRecorder] = useRecorderSound();
@@ -40,14 +43,32 @@ export const HouseBuilder = () => {
     if (houseBeforeUpdate) playClick();
   }, [houseBeforeUpdate, house]);
 
+  useEffect(() => {
+    setPictureTaken(undefined);
+  }, [simulationRunning]);
+
   // save current simulator image
   const takePicture = useCallback(() => {
     const camera = simulatorRef.current?.takePicture("png");
 
     if (camera) {
-      const [, saveFile] = camera;
-      const time = new Date();
-      saveFile(`house-${time.getHours()}-${time.getMinutes()}.png`);
+      const [picture, saveFile] = camera;
+
+      // wait and then open file dialog
+      setTimeout(() => {
+        const time = new Date();
+        // saveFile(`house-${time.getHours()}-${time.getMinutes()}.png`);
+      }, 1000);
+
+      setFlash(false);
+      setTimeout(() => {
+        setPictureTaken(picture);
+        setFlash(true);
+
+        setTimeout(() => {
+          setFlash(false);
+        }, 2200);
+      }, 100);
     }
 
     playShutter();
@@ -75,6 +96,14 @@ export const HouseBuilder = () => {
         {!simulationRunning && <Builder houseState={houseState} />}
         {simulationRunning && <Simulator houseState={houseState} ref={simulatorRef} />}
 
+        <Shapshot
+          visible={pictureTaken !== undefined}
+          flash={flash}
+          onClick={() => setPictureTaken(undefined)}
+        >
+          {pictureTaken && <img src={pictureTaken} />}
+        </Shapshot>
+
         <Controls>
           {!simulationRunning && <Button icon="shuffle" onClick={randomizeHouse} />}
 
@@ -98,4 +127,49 @@ const Container = styled.div`
   aspect-ratio: 1 / 1;
   border-radius: 8px;
   overflow: hidden;
+`;
+
+const Shapshot = styled.div<{ visible: boolean; flash?: boolean }>`
+  position: absolute;
+  inset: 0 0 0 0;
+  background: rgba(255, 255, 255, 0.5);
+  pointer-events: none;
+  visibility: hidden;
+  cursor: pointer;
+
+  > img {
+    width: 100%;
+    height: 100%;
+    object-position: center;
+    object-fit: contain;
+  }
+
+  &:after {
+    content: "";
+    display: inline-block;
+    position: absolute;
+    inset: 0 0 0 0;
+    background: white;
+    pointer-events: none;
+    opacity: 1;
+    visibility: hidden;
+  }
+
+  ${({ visible = false }) =>
+    visible &&
+    `
+    pointer-events: auto;
+    visibility: visible;
+    transition: none;
+  `}
+
+  ${({ flash = false }) =>
+    flash &&
+    `
+    &:after {
+      visibility: visible;
+      opacity: 0;
+      transition: opacity 1s 0.2s linear;
+    }
+  `}
 `;

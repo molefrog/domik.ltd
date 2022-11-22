@@ -162,8 +162,12 @@ export class Renderer {
 
     if (!w || !h) return;
 
-    // Clear the canvas
-    ctx.clearRect(0, 0, w, h);
+    // Draw the background
+    ctx.beginPath();
+    ctx.rect(0, 0, w, h);
+    ctx.closePath();
+    ctx.fillStyle = "#fafafa";
+    ctx.fill();
 
     this.drawGround();
 
