@@ -44,7 +44,11 @@ export const HouseBuilder = () => {
 const Container = styled.div`
   position: relative;
   background: var(--color-embossed);
-  aspect-ratio: 1 / 1;
   border-radius: 8px;
   overflow: hidden;
+  aspect-ratio: 1 / 1;
+
+  @supports not (aspect-ratio: 1 / 1) {
+    height: 420px;
+  }
 `;
