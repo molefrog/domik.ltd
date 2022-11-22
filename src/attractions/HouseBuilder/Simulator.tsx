@@ -10,7 +10,7 @@ import styled from "@emotion/styled";
 import * as p2 from "p2-es";
 import useSize from "@react-hook/size";
 
-import { useRenderer, RenderObject } from "./renderer";
+import { useRenderer, RenderObject, Renderer } from "./renderer";
 import {
   Schema,
   House,
@@ -117,7 +117,7 @@ interface Props {
 }
 
 export type SimulatorHandle = {
-  takePicture: () => void;
+  takePicture: InstanceType<typeof Renderer>["takePicture"];
 };
 
 export const Simulator = forwardRef<SimulatorHandle, Props>((props, ref) => {
@@ -128,7 +128,7 @@ export const Simulator = forwardRef<SimulatorHandle, Props>((props, ref) => {
   const renderer = useRenderer();
 
   useImperativeHandle(ref, () => ({
-    takePicture: () => renderer.takePicture(),
+    takePicture: (format?: string) => renderer.takePicture(format),
   }));
 
   // reruns the simulation whenever the house layout changes

@@ -42,7 +42,14 @@ export const HouseBuilder = () => {
 
   // save current simulator image
   const takePicture = useCallback(() => {
-    simulatorRef.current?.takePicture();
+    const camera = simulatorRef.current?.takePicture("png");
+
+    if (camera) {
+      const [, saveFile] = camera;
+      const time = new Date();
+      saveFile(`house-${time.getHours()}-${time.getMinutes()}.png`);
+    }
+
     playShutter();
   }, [playShutter]);
 

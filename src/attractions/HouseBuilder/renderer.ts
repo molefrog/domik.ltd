@@ -91,7 +91,33 @@ export class Renderer {
     }
   }
 
-  takePicture() {}
+  /**
+   * Allows to take the shapshot of the current canvas
+   * and returns a method for saving the image to the disk
+
+   */
+  takePicture(format = "png"): [string, (filename: string) => void] {
+    const uri = this.canvas.toDataURL(format);
+
+    // gets the mimetype for this format
+    const type = format.toLowerCase().replace(/jpg/i, "jpeg");
+    const r = type.match(/png|jpeg|bmp|gif/)?.[0] || "png";
+    const mimeType = "image/" + r;
+
+    const saveFile = (filename = "") => {
+      let saveLink = document.createElement("a");
+
+      saveLink.download = filename;
+
+      // replace the mimetype so the browser knows it needs to download the image
+      const downloadURI = uri.replace(mimeType, "image/octet-stream");
+
+      saveLink.href = downloadURI;
+      saveLink.click();
+    };
+
+    return [uri, saveFile];
+  }
 
   drawGround() {
     const sprite = this.#sprites[groundSprite];
