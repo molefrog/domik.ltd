@@ -6,7 +6,7 @@ import { Dot } from "./Dot";
 import { type Coords } from "./types";
 import { InteractionBadge } from "~/components/InteractionBadge";
 
-interface Props {
+interface ConnectTheDotsProps {
   dots: Coords[];
   initialPath: number[];
   baseWidth?: number;
@@ -29,11 +29,12 @@ export const ConnectTheDots = ({
   successPredicate = matchNone,
   onSuccessChange,
   children,
-}: PropsWithChildren<Props>) => {
+}: PropsWithChildren<ConnectTheDotsProps>) => {
   const svgRef = useRef<SVGSVGElement>(null);
 
-  // State
-  const dots = useMemo(() => providedDots, []);
+  // currently it's not possible to change the dot layout dynamically via props,
+  // so we simply memoize the first provided value
+  const [dots] = useState(() => providedDots);
 
   const [pointer, setPointer] = useState<Coords>();
   const [isDrawing, setIsDrawing] = useState(false);
