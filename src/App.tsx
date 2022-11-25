@@ -19,7 +19,7 @@ function App() {
       <Switch>
         <Route path="/" component={IndexPage} />
         <Route path="/x/:any*" component={CipherPage} />
-        <Route path="/s" component={StoryPage} />
+        <Route path="/story/:any*" component={StoryPage} />
 
         {import.meta.env.DEV && <Route component={PlaygroundPage} />}
 
