@@ -26,9 +26,13 @@ export const Story = ({ chapters }: StoryProps) => {
   const [chapterRefs] = useState(() => Array(chapters.length).fill(undefined));
 
   const { progress, current: currentChapterIdx, scrollTo } = useChapterProgress(chapterRefs);
-  const routeState = useChapterNumberFromRoute();
 
-  useSyncState(routeState, [currentChapterIdx, scrollTo]);
+  const routeState = useChapterNumberFromRoute(chapters.length);
+  const scrollState: typeof routeState = [currentChapterIdx, scrollTo];
+
+  // syncs the two states together: whenever one is changed the other one
+  // gets updated automatically
+  useSyncState(routeState, scrollState);
 
   const chapterTitle = chapters[Number(currentChapterIdx)]?.title || "...";
   useDocumentTitle(chapterTitle);
@@ -67,12 +71,22 @@ export const Story = ({ chapters }: StoryProps) => {
   );
 };
 
-const useChapterNumberFromRoute = (): [CurrentChapter, (v: CurrentChapter) => void] => {
+/**
+ * A custom location hook to provide the mapping between the current route
+ * and the chapter being read
+ * @returns {state} current chapter index (starting with 1)
+ */
+const useChapterNumberFromRoute = (max: number): [CurrentChapter, (v: CurrentChapter) => void] => {
   const [match, params] = useRoute("/story/chapter-:num");
   const [, navigate] = useLocation();
 
-  // extract number from the route
-  const number: CurrentChapter = match && params?.num ? parseInt(params.num) - 1 : undefined;
+  // extracts number from the route, returns undefined if parsing has failed,
+  // or the number is out of bounds
+  let number;
+  if (match && params?.num) {
+    const parsed = parseInt(params.num) - 1;
+    number = parsed <= max ? parsed : undefined;
+  }
 
   const setNumber = useCallback(
     (v: CurrentChapter) => {
@@ -88,6 +102,9 @@ const useChapterNumberFromRoute = (): [CurrentChapter, (v: CurrentChapter) => vo
   return [number, setNumber];
 };
 
+/**
+ * Styles
+ */
 const Chapters = styled.div`
   max-width: 700px;
   margin: 0 auto;
