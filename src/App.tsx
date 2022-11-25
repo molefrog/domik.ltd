@@ -21,7 +21,7 @@ function App() {
         <Route path="/x/:any*" component={CipherPage} />
         <Route path="/story/:any*" component={StoryPage} />
 
-        {import.meta.env.DEV && <Route component={PlaygroundPage} />}
+        {import.meta.env.DEV && <Route path="/playground" component={PlaygroundPage} />}
 
         <Route>
           <Redirect to="/" />
