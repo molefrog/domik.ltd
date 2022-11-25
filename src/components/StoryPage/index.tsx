@@ -19,7 +19,7 @@ const chapterModules = [
 ];
 
 export const StoryPage = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [storedCipher] = useAtom(acceptedCipher);
   const [, navigate] = useLocation();
   const [chapters, setChapters] = useState<Array<ChapterModule>>([]);
@@ -67,9 +67,13 @@ export const StoryPage = () => {
         </LoaderText>
       </Loader>
     );
-  } else {
-    return <Story chapters={chapters} />;
   }
+
+  if (chapters.length) {
+    return <Story key={chapters.length} chapters={chapters} />;
+  }
+
+  return null;
 };
 
 /**
