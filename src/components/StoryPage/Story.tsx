@@ -1,14 +1,13 @@
-import { useState, useEffect, useRef, FunctionComponent } from "react";
+import { useState, useEffect, FunctionComponent, useCallback } from "react";
 import styled from "@emotion/styled";
-
-import { useLocation } from "wouter";
-import { useAtom } from "jotai";
+import { useLocation, useRoute } from "wouter";
 
 import { getLaunchDateForChapter } from "~/chapters";
 import { NextChapterBanner } from "~/components/NextChapterBanner";
 import { ReadingProgress } from "../ReadingProgress";
-import { newChapterUnlocked as newChapterUnlockedAtom } from "~/state";
-import { useChapterProgress } from "./useChapterProgress";
+
+// hooks
+import { useChapterProgress, useSyncState } from "./useChapterProgress";
 import { useDocumentTitle } from "~/hooks/useDocumentTitle";
 
 export interface ChapterModule {
@@ -20,30 +19,19 @@ export interface StoryProps {
   chapters: ChapterModule[];
 }
 
-export const Story = ({ chapters }: StoryProps) => {
-  const [, navigate] = useLocation();
-  const [newChapterUnlocked] = useAtom(newChapterUnlockedAtom);
+type CurrentChapter = number | undefined;
 
-  const [chapterRefs, setChapterRefs] = useState<Array<HTMLElement | null>>(() => []);
-  const { progress, current: currentChapterIdx } = useChapterProgress(chapterRefs, [chapterRefs]);
+export const Story = ({ chapters }: StoryProps) => {
+  const [chapterElements, setChapterElements] = useState<Array<HTMLElement>>(() => []);
+  const [chapterRefs] = useState(() => Array(chapters.length).fill(undefined));
+
+  const { progress, current: currentChapterIdx, scrollTo } = useChapterProgress(chapterRefs);
+  const routeState = useChapterNumberFromRoute();
+
+  useSyncState(routeState, [currentChapterIdx, scrollTo]);
 
   const chapterTitle = chapters[Number(currentChapterIdx)]?.title || "...";
   useDocumentTitle(chapterTitle);
-
-  // useSyncState(useA(), useB());
-
-  // automatically scroll to the last chapter
-  const scrolledRef = useRef(false);
-
-  useEffect(() => {
-    if (chapterRefs?.length > 0 && newChapterUnlocked && !scrolledRef.current) {
-      setTimeout(() => {
-        const lastEl = chapterRefs[chapterRefs.length - 1];
-        scrolledRef.current = true; // do that only once per page
-        lastEl?.scrollIntoView({ behavior: "smooth" });
-      }, 600);
-    }
-  }, [chapterRefs, newChapterUnlocked]);
 
   const maxProgress = Math.min(chapters.length / 6.0, 1.0);
 
@@ -59,12 +47,10 @@ export const Story = ({ chapters }: StoryProps) => {
             <ChapterContent
               key={index}
               ref={(el) => {
-                if (el && chapterRefs[index] !== el) {
-                  const refs = Array(chapters.length).fill(null);
-                  for (let i of refs.keys()) {
-                    refs[i] = i === index ? el : chapterRefs[i];
-                  }
-                  setChapterRefs(refs);
+                chapterRefs[index] = el;
+
+                if (chapterRefs.every((x) => x) && chapterElements.length <= 0) {
+                  setChapterElements(chapterRefs);
                 }
               }}
             >
@@ -79,6 +65,27 @@ export const Story = ({ chapters }: StoryProps) => {
       </Chapters>
     </Article>
   );
+};
+
+const useChapterNumberFromRoute = (): [CurrentChapter, (v: CurrentChapter) => void] => {
+  const [match, params] = useRoute("/story/chapter-:num");
+  const [, navigate] = useLocation();
+
+  // extract number from the route
+  const number: CurrentChapter = match && params?.num ? parseInt(params.num) - 1 : undefined;
+
+  const setNumber = useCallback(
+    (v: CurrentChapter) => {
+      if (v !== undefined) {
+        navigate(`/story/chapter-${v + 1}`);
+      } else {
+        navigate("/story");
+      }
+    },
+    [navigate]
+  );
+
+  return [number, setNumber];
 };
 
 const Chapters = styled.div`
