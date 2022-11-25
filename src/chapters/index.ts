@@ -46,9 +46,9 @@ export async function buildCodeSequence(code?: Code | number, tries = 16) {
 /*
  * Checks if the code matches any chapter from the book
  */
-export async function isValidCode(code?: Code | number) {
+export async function checkCipherValidity(code?: Code | number) {
   const codes = await buildCodeSequence(code);
-  return codes.length > 0;
+  return { valid: codes.length > 0, chaptersUnlocked: codes.length };
 }
 
 export function getLaunchDateForChapter(num: number): Date {

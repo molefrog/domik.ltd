@@ -5,7 +5,7 @@ import { useAtom } from "jotai";
 import styled from "@emotion/styled";
 
 import { NextChapterBanner } from "~/components/NextChapterBanner";
-import { getLaunchDateForChapter, isValidCode } from "~/chapters";
+import { getLaunchDateForChapter, checkCipherValidity } from "~/chapters";
 import { acceptedCipher } from "~/state";
 
 export const IndexPage = () => {
@@ -13,7 +13,7 @@ export const IndexPage = () => {
   const [, navigate] = useLocation();
 
   useEffect(() => {
-    isValidCode(storedCipher).then((valid) => {
+    checkCipherValidity(storedCipher).then(({ valid }) => {
       if (valid) navigate("/story");
     });
   });

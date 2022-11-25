@@ -11,7 +11,7 @@ import { rand } from "~/utils/rand";
 import { useDocumentTitle } from "~/hooks/useDocumentTitle";
 import { useClickSound, useSuccessSound } from "~/hooks/useSounds";
 import { delay } from "~/utils/promises";
-import { isValidCode } from "~/chapters";
+import { checkCipherValidity } from "~/chapters";
 import { newChapterUnlocked, acceptedCipher } from "~/state";
 
 const DEFAULT_VALUE = 0o0;
@@ -62,7 +62,7 @@ export function CipherPage() {
   const [playSuccess] = useSuccessSound();
 
   // when the sequence entered matches the secret
-  const acceptCipher = async (cipher: Cipher) => {
+  const acceptCipher = async (cipher: Cipher, chaptersUnlocked: number) => {
     setCipher(cipher);
     setInputDisabled(true);
 
@@ -81,7 +81,7 @@ export function CipherPage() {
 
     // save the matched cipher
     setStoredCipher(cipher);
-    navigate("/s");
+    navigate(`/story/chapter-${chaptersUnlocked}`);
   };
 
   // customize page title
@@ -89,7 +89,6 @@ export function CipherPage() {
 
   // randomize on the start
   useEffect(() => {
-    // TODO: figure out why `useEffect` triggers twice
     if (firstRender.current && cipher === DEFAULT_VALUE) {
       firstRender.current = false;
 
@@ -117,9 +116,11 @@ export function CipherPage() {
 
   // check the cipher validity
   useEffect(() => {
-    isValidCode(debouncedCipher).then((valid) => {
-      if (valid) acceptCipher(debouncedCipher);
-    });
+    (async () => {
+      const { valid, chaptersUnlocked } = await checkCipherValidity(debouncedCipher);
+
+      if (valid) acceptCipher(debouncedCipher, chaptersUnlocked);
+    })();
   }, [debouncedCipher]);
 
   return (
