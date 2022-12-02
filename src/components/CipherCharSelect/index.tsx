@@ -113,8 +113,14 @@ const SymbolContainer = styled.div`
 
 const Box = styled.div`
   z-index: 2;
-  width: 100px;
-  height: 140px;
+  min-width: 80px;
+  max-width: 100px;
+  aspect-ratio: 1 / 1.4;
+
+  @supports not (aspect-ratio: 1) {
+    height: 140px;
+  }
+
   border-radius: 16px;
   cursor: pointer;
   position: relative;

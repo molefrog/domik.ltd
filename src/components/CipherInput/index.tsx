@@ -98,4 +98,12 @@ const Cipher = styled.div`
   grid-template-columns: repeat(auto-fit, minmax(0, 100px));
   justify-content: center;
   grid-gap: 10px;
+
+  @container (max-width: 920px) {
+    grid-template-columns: repeat(4, 100px);
+  }
+
+  @container (max-width: 480px) {
+    grid-template-columns: repeat(auto-fit, 80px);
+  }
 `;

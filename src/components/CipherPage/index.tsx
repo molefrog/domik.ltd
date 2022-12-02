@@ -157,16 +157,16 @@ const Bottom = styled.div`
   justify-content: center;
   padding: 32px 0;
   opacity: 0.2;
+  pointer-events: none;
 `;
 
 const Container = styled.div<{ fadeOut?: boolean }>`
   min-height: 100vh;
+  min-height: 100svh; // mobile Safari
   display: flex;
   flex-direction: column;
   align-items: stretch;
   justify-content: center;
-  padding: 16px;
-
   transition: opacity 0.3s ease, transform 1s ease;
 
   ${(props) =>
@@ -180,12 +180,21 @@ const Container = styled.div<{ fadeOut?: boolean }>`
 const EnterCipher = styled.div`
   text-align: center;
   flex: 1 1;
-  padding-top: 32px;
+  padding: 64px 16px 32px 16px;
+  container-type: size;
+
+  @media (max-width: 768px) {
+    padding: 32px 16px;
+  }
 `;
 
 const EnterCipherHeader = styled.h1`
   font-size: 32px;
   line-height: 1.2;
+
+  @media (max-width: 768px) {
+    font-size: 28px;
+  }
 `;
 
 const EnterCipherTitle = styled.h2`
@@ -195,4 +204,8 @@ const EnterCipherTitle = styled.h2`
   font-size: 22px;
   max-width: 680px;
   line-height: 1.4;
+
+  @media (max-width: 768px) {
+    font-size: 18px;
+  }
 `;
