@@ -25,7 +25,7 @@ export const useChapterProgress = (elements: Array<HTMLElement | null>, precisio
 
       if (to && elements[to]) {
         scrollIntoView(elements[to]!, {
-          time: 1000,
+          time: import.meta.env.DEV ? 0 : 1000, // do not animate in dev
         });
       }
     },

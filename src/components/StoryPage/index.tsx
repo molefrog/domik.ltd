@@ -16,6 +16,7 @@ const chapterModules = [
   () => import("~/chapters/3-three/story.mdx") as Promise<ChapterModule>,
   () => import("~/chapters/4-four/story.mdx") as Promise<ChapterModule>,
   () => import("~/chapters/5-five/story.mdx") as Promise<ChapterModule>,
+  () => import("~/chapters/6-six/story.mdx") as Promise<ChapterModule>,
 ];
 
 export const StoryPage = () => {
