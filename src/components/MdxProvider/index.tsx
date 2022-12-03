@@ -10,6 +10,7 @@ import { Aside } from "~/attractions/Aside";
 import { Spoiler } from "~/attractions/Spoiler";
 import { SlurredSpeech } from "~/attractions/SlurredSpeech";
 import { HouseBuilder } from "~/attractions/HouseBuilder";
+import { FullWidth } from "~/attractions/FullWidth";
 
 interface ImageProps {
   width?: string;
@@ -58,6 +59,7 @@ export const MdxProvider = (props: { children: ReactNode }) => {
         Spoiler,
         SlurredSpeech,
         HouseBuilder,
+        FullWidth,
       }}
     >
       {props.children}
