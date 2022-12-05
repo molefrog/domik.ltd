@@ -25,6 +25,7 @@ export const Compass = ({ size = 50, angle, angleRad = 0 }: CompassProps) => {
 
   return (
     <Body size={size}>
+      {/* zero angle starts at the east, unit circle goes counter-clockwise */}
       <Arrow style={{ rotate: alpha.to((a) => `${-a}deg`) }} />
     </Body>
   );
