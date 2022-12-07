@@ -7,13 +7,25 @@ import { Emotion } from "~/attractions/Emotion";
 import { Spoiler } from "~/attractions/Spoiler";
 import { SlurredSpeech } from "~/attractions/SlurredSpeech";
 import { HouseBuilder } from "~/attractions/HouseBuilder";
+import { CompassFinder } from "~/attractions/CompassFinder";
+import { FullWidth } from "~/attractions/FullWidth";
 import mapImage from "~/chapters/3-three/map.webp";
+
+import finderMock from "./finder-mock.png";
 
 export default function PlaygroundPage() {
   const [revealSpoiler, setRevealSpoiler] = useState(false);
 
   return (
     <Container>
+      <br /> <br />
+      <FullWidth style={{ maxWidth: "1000px" }}>
+        <CompassFinder image={finderMock}>{/* TBD */}</CompassFinder>
+      </FullWidth>
+      <br />
+      <br />
+      <br />
+      <br /> <br /> <br /> <br />
       <HouseBuilder />
       <SlurredSpeech>
         Смотри, какая нелепая схема, — мне бросилась в глаза книжечка на стенде, в котором обычно
