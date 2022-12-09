@@ -7,10 +7,10 @@ import { Emotion } from "~/attractions/Emotion";
 import { Spoiler } from "~/attractions/Spoiler";
 import { SlurredSpeech } from "~/attractions/SlurredSpeech";
 import { HouseBuilder } from "~/attractions/HouseBuilder";
-import { CompassFinder } from "~/attractions/CompassFinder";
 import { FullWidth } from "~/attractions/FullWidth";
 import mapImage from "~/chapters/3-three/map.webp";
 
+import { CompassFinder, HiddenSecret } from "~/attractions/CompassFinder";
 import finderMock from "./finder-mock.png";
 
 export default function PlaygroundPage() {
@@ -19,8 +19,13 @@ export default function PlaygroundPage() {
   return (
     <Container>
       <br /> <br />
+      {/* Finder */}
       <FullWidth style={{ maxWidth: "1000px" }}>
-        <CompassFinder image={finderMock}>{/* TBD */}</CompassFinder>
+        <CompassFinder fieldImg={finderMock} fieldImgDimensions={[1330, 568]}>
+          <HiddenSecret x={0.25} y={0.2} />
+          <HiddenSecret x={0.75} y={0.2} />
+          <HiddenSecret x={0.9} y={0.35} />
+        </CompassFinder>
       </FullWidth>
       <br />
       <br />

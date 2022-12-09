@@ -37,7 +37,7 @@ export const CompassCursor = ({
 
   return (
     <Cursor size={size} style={styles}>
-      <Compass size={size} {...compassProps} />
+      <Compass directed size={size} {...compassProps} />
     </Cursor>
   );
 };
