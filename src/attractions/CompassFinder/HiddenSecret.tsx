@@ -53,6 +53,7 @@ const DebugPoint = styled.div<{ isRevealed: boolean; [key: string]: any }>`
 
 const MagnifyingGlass = styled.div<{ isRevealed: boolean; image: string }>`
   --size: 220px;
+  --border-width: 12px;
 
   position: absolute;
   top: 0%;
@@ -64,11 +65,11 @@ const MagnifyingGlass = styled.div<{ isRevealed: boolean; image: string }>`
   margin-top: calc(-0.65 * var(--size));
   border-radius: 100% 100%;
 
-  box-shadow: 0px 0px 0px 6px white, 0 0px 12px 0px rgba(0, 0, 0, 0.4);
-  background: url("${({ image }) => image}") center / cover no-repeat, rgb(255 255 255 / 0.1);
+  box-shadow: 0px 0px 0px 4px rgba(255, 255, 255, 0.1), 0 0px 12px 0px rgba(0, 0, 0, 0.4);
+  background: rgb(255 255 255 / 0.6);
 
   transition: 0.4s transform cubic-bezier(0.82, 0.09, 0.54, 1.76), 0.3s opacity ease-in;
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(2px);
   pointer-events: none;
 
   ${({ isRevealed }) => {
@@ -80,6 +81,19 @@ const MagnifyingGlass = styled.div<{ isRevealed: boolean; image: string }>`
       `
     );
   }}
+
+  &:after {
+    content: "";
+    position: absolute;
+    display: inline-block;
+    width: calc(var(--size) - 2 * var(--border-width));
+    height: calc(var(--size) - 2 * var(--border-width));
+
+    background: url("${({ image }) => image}") center / cover no-repeat, rgb(255 255 255 / 0.3);
+    border-radius: 100% 100%;
+    top: var(--border-width);
+    left: var(--border-width);
+  }
 
   @media (max-width: 1024px) {
     --size: 162px;
