@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import React from "react";
 
 interface Coordinates {
   x: number;
@@ -68,7 +67,8 @@ const MagnifyingGlass = styled.div<{ isRevealed: boolean; image: string }>`
   box-shadow: 0px 0px 0px 4px rgba(255, 255, 255, 0.1), 0 0px 12px 0px rgba(0, 0, 0, 0.4);
   background: rgb(255 255 255 / 0.6);
 
-  transition: 0.4s transform cubic-bezier(0.82, 0.09, 0.54, 1.76), 0.3s opacity ease-in;
+  transition: 0.3s transform cubic-bezier(0.34, 1.56, 0.64, 1),
+    0.3s opacity cubic-bezier(0.16, 1, 0.3, 1);
   backdrop-filter: blur(2px);
   pointer-events: none;
 
@@ -97,5 +97,6 @@ const MagnifyingGlass = styled.div<{ isRevealed: boolean; image: string }>`
 
   @media (max-width: 1024px) {
     --size: 162px;
+    --border-width: 6px;
   }
 `;
