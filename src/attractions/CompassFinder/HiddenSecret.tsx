@@ -11,16 +11,29 @@ export type HiddenSecretProps = {
   xPct?: number;
   yPct?: number;
   isRevealed?: boolean;
+  debug?: boolean;
+  image: string;
 } & Coordinates;
 
-const debug = true;
-
-export const HiddenSecret = ({ xPct, yPct, isRevealed = false }: HiddenSecretProps) => {
+export const HiddenSecret = ({
+  xPct,
+  yPct,
+  isRevealed = false,
+  debug = false,
+  image,
+}: HiddenSecretProps) => {
   const PointComponent = debug ? DebugPoint : MagnifyingGlass;
-  return <PointComponent style={{ left: `${xPct}%`, top: `${yPct}%` }} isRevealed={isRevealed} />;
+
+  return (
+    <PointComponent
+      style={{ left: `${xPct}%`, top: `${yPct}%` }}
+      isRevealed={isRevealed}
+      image={image}
+    />
+  );
 };
 
-const DebugPoint = styled.div<{ isRevealed: boolean }>`
+const DebugPoint = styled.div<{ isRevealed: boolean; [key: string]: any }>`
   --size: 16px;
 
   position: absolute;
@@ -38,7 +51,7 @@ const DebugPoint = styled.div<{ isRevealed: boolean }>`
   ${(props) => props.isRevealed && "background: red;"};
 `;
 
-const MagnifyingGlass = styled.div`
+const MagnifyingGlass = styled.div<{ isRevealed: boolean; image: string }>`
   --size: 220px;
 
   position: absolute;
@@ -52,13 +65,21 @@ const MagnifyingGlass = styled.div`
   border-radius: 100% 100%;
 
   box-shadow: 0px 0px 0px 6px white, 0 0px 12px 0px rgba(0, 0, 0, 0.4);
-  background: rgb(255 255 255 / 0.6);
+  background: url("${({ image }) => image}") center / cover no-repeat, rgb(255 255 255 / 0.1);
 
   transition: 0.4s transform cubic-bezier(0.82, 0.09, 0.54, 1.76), 0.3s opacity ease-in;
   backdrop-filter: blur(4px);
+  pointer-events: none;
 
-  &:hover {
-    transform: translateY(20%) scale(0.2, 0.2);
-    opacity: 0;
-  }
+
+  ${({ isRevealed }) => {
+    return (
+      !isRevealed &&
+      `
+        transform: translateY(20%) scale(0.2, 0.2);
+        opacity: 0;
+      `
+    );
+  }}
+}
 `;

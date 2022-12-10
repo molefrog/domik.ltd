@@ -22,9 +22,9 @@ export default function PlaygroundPage() {
       {/* Finder */}
       <FullWidth style={{ maxWidth: "1000px" }}>
         <CompassFinder fieldImg={finderMock} fieldImgDimensions={[1330, 568]}>
-          <HiddenSecret x={0.25} y={0.2} />
-          <HiddenSecret x={0.75} y={0.2} />
-          <HiddenSecret x={0.9} y={0.35} />
+          <HiddenSecret x={0.75} y={0.2} image={finderMock} />
+          <HiddenSecret x={0.25} y={0.2} image={finderMock} />
+          <HiddenSecret x={0.9} y={0.35} image={finderMock} />
         </CompassFinder>
       </FullWidth>
       <br />
