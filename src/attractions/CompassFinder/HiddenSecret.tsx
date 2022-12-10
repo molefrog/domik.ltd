@@ -61,7 +61,7 @@ const MagnifyingGlass = styled.div<{ isRevealed: boolean; image: string }>`
   width: var(--size);
   height: var(--size);
   margin-left: calc(-0.5 * var(--size));
-  margin-top: calc(-0.5 * var(--size));
+  margin-top: calc(-0.65 * var(--size));
   border-radius: 100% 100%;
 
   box-shadow: 0px 0px 0px 6px white, 0 0px 12px 0px rgba(0, 0, 0, 0.4);
@@ -70,7 +70,6 @@ const MagnifyingGlass = styled.div<{ isRevealed: boolean; image: string }>`
   transition: 0.4s transform cubic-bezier(0.82, 0.09, 0.54, 1.76), 0.3s opacity ease-in;
   backdrop-filter: blur(4px);
   pointer-events: none;
-
 
   ${({ isRevealed }) => {
     return (
@@ -81,5 +80,8 @@ const MagnifyingGlass = styled.div<{ isRevealed: boolean; image: string }>`
       `
     );
   }}
-}
+
+  @media (max-width: 1024px) {
+    --size: 162px;
+  }
 `;

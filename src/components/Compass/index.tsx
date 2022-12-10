@@ -47,7 +47,7 @@ export const Compass = ({
   return (
     <Body size={size}>
       {/* zero angle starts at the east, unit circle goes counter-clockwise */}
-      <Arrow directed={directed} style={{ rotate: alpha.to((a) => `${-a}deg`) }} />
+      <Arrow isDirected={directed} style={{ rotate: alpha.to((a) => `${-a}deg`) }} />
     </Body>
   );
 };
@@ -61,13 +61,15 @@ const Body = styled.div<{ size: number }>`
   z-index: 100;
 `;
 
-const Arrow = styled(animated.div)<{ directed: boolean }>`
+const Arrow = styled(animated.div, { shouldForwardProp: (prop) => prop != "isDirected" })<{
+  isDirected: boolean;
+}>`
   will-change: transform;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   position: absolute;
-  background: url(${({ directed }) => (directed ? arrowDirected : arrow)}) no-repeat center;
+  background: url(${({ isDirected }) => (isDirected ? arrowDirected : arrow)}) no-repeat center;
   background-size: cover;
 `;

@@ -1,5 +1,12 @@
 import styled from "@emotion/styled";
-import React, { useState, useRef, ComponentProps, ReactElement, cloneElement } from "react";
+import React, {
+  useState,
+  useRef,
+  ComponentProps,
+  ReactElement,
+  cloneElement,
+  useEffect,
+} from "react";
 import useMouse, { MousePosition } from "@react-hook/mouse-position";
 
 import { InteractionBadge } from "~/components/InteractionBadge";
@@ -13,6 +20,7 @@ interface CompassFinderProps {
   fieldImg: string;
   fieldImgDimensions: [number, number];
   children: ReactElement<ComponentProps<typeof HiddenSecret>>[];
+  onSuccessChange?: (value: boolean) => void;
 }
 
 type Point = [number, number];
@@ -41,7 +49,10 @@ export const CompassFinder = ({
   fieldImg,
   fieldImgDimensions: [w, h],
   children,
+  onSuccessChange,
 }: CompassFinderProps) => {
+  const [isSolved, setIsSolved] = useState<boolean>(false);
+
   // width and height transformed
   // from here on we work in normalized coordinates: width = 1, height = (depends on img dimensions)
   const [wNorm, hNorm] = [1, h / w];
@@ -111,7 +122,7 @@ export const CompassFinder = ({
 const Finder = styled.div<{ image: string; aspect: string }>`
   background: url("${(props) => props.image}") top / 100%, var(--color-embossed);
   aspect-ratio: ${(props) => props.aspect};
-  min-height: 320px; // should overflow on smaller viewports
+  min-height: 360px; // should overflow on smaller viewports
   position: relative;
   cursor: none;
 `;

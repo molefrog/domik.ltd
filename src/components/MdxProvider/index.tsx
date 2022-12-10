@@ -11,7 +11,7 @@ import { Spoiler } from "~/attractions/Spoiler";
 import { SlurredSpeech } from "~/attractions/SlurredSpeech";
 import { HouseBuilder } from "~/attractions/HouseBuilder";
 import { FullWidth } from "~/attractions/FullWidth";
-import { CompassFinder } from "~/attractions/CompassFinder";
+import { CompassFinder, HiddenSecret } from "~/attractions/CompassFinder";
 
 interface ImageProps {
   width?: string;
@@ -62,6 +62,7 @@ export const MdxProvider = (props: { children: ReactNode }) => {
         HouseBuilder,
         FullWidth,
         CompassFinder,
+        HiddenSecret,
       }}
     >
       {props.children}

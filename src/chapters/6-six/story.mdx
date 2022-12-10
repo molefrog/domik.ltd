@@ -1,6 +1,12 @@
 import panoramaImg from "./panorama.webp";
+import ashImg from "./ash.webp";
+import philImg from "./phil.webp";
+import ivyRubyImg from "./ivy-ruby.webp";
 
 export const title = "06. Друзья";
+
+export class Mediator extends EventTarget {}
+export const mediator = new Mediator();
 
 # 06. Друзья
 
@@ -10,6 +16,20 @@ export const title = "06. Друзья";
 двигаться навстречу им. Возможно, вы собьётесь с пути, или эти вершины окажутся не такими
 грандиозными, как вам представлялось, и вы снова окажетесь у подножья. А может быть, вы выберете
 верный маршрут. Тропинка будет идти всё круче и круче, каждый шаг будет даваться сложнее.
+
+<FullWidth style={{ maxWidth: "1200px" }}>
+  <CompassFinder
+    fieldImg={panoramaImg}
+    fieldImgDimensions={[2200, 789]}
+    onSuccessChange={(value) => {
+      mediator.dispatchEvent(new CustomEvent("successChange", { value }));
+    }}
+  >
+    <HiddenSecret x={0.93} y={0.2} image={ashImg} />
+    <HiddenSecret x={0.372} y={0.18} image={philImg} />
+    <HiddenSecret x={0.643} y={0.28} image={ivyRubyImg} />
+  </CompassFinder>
+</FullWidth>
 
 У каждой, даже самой небольшой горки есть вершина. Ведь, если подумать, гора не называлась бы горой,
 если бы не имела конца. Наверное, такой очевидной и незамысловатой метафорой можно охарактеризовать
@@ -45,10 +65,6 @@ export const title = "06. Друзья";
 свалки из материалов, разгрузку бетонных блоков, — конечно, я знал, что его не выгонят. Эш порой
 мыслил достаточно сумбурно, но у него был талант объяснять сложные вещи простым языком и находить
 нестандартные решения. — Увидимся, друг!
-
-<FullWidth style={{ maxWidth: "1200px" }}>
-  <CompassFinder image={panoramaImg}>{/* TBD */}</CompassFinder>
-</FullWidth>
 
 Первое время Эш присылал нам письма каждую неделю. Он рассказывал про свои будни в школе, про разные
 мелочи и проблемы, иногда прикреплял схемы и наброски проектов, над которыми трудился. В своём стиле
