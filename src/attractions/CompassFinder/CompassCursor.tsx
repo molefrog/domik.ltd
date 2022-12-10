@@ -1,8 +1,9 @@
 import styled from "@emotion/styled";
 import { useRef, ComponentProps } from "react";
 import { MousePosition } from "@react-hook/mouse-position";
-import { Compass } from "~/components/Compass";
 import { useSpring, animated, config as springConfig } from "@react-spring/web";
+import { useMediaQuery } from "@react-hook/media-query";
+import { Compass } from "~/components/Compass";
 
 export type CompassCursorProps = ComponentProps<typeof Compass> & {
   mousePosition: MousePosition;
@@ -34,6 +35,11 @@ export const CompassCursor = ({
     rotate: isOver ? "2turn" : "0turn",
     config: springConfig.stiff,
   });
+
+  const isSmallViewport = useMediaQuery("(max-width: 768px)");
+  if (isSmallViewport) {
+    size *= 0.85;
+  }
 
   return (
     <Cursor size={size} style={styles}>

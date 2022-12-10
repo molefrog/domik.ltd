@@ -51,7 +51,7 @@ const DebugPoint = styled.div<{ isRevealed: boolean; [key: string]: any }>`
 `;
 
 const MagnifyingGlass = styled.div<{ isRevealed: boolean; image: string }>`
-  --size: 220px;
+  --size: 200px;
   --border-width: 12px;
 
   position: absolute;
@@ -69,7 +69,7 @@ const MagnifyingGlass = styled.div<{ isRevealed: boolean; image: string }>`
 
   transition: 0.3s transform cubic-bezier(0.34, 1.56, 0.64, 1),
     0.3s opacity cubic-bezier(0.16, 1, 0.3, 1);
-  backdrop-filter: blur(2px);
+  backdrop-filter: blur(3px);
   pointer-events: none;
 
   ${({ isRevealed }) => {

@@ -126,31 +126,57 @@ export const CompassFinder = ({
         accuracy = {acc.toFixed(1)}
       </center>
 
-      <Finder ref={finderRef} image={fieldImg} aspect={String(wNorm / hNorm)}>
-        {/* render the secret points by transforming their normal coordinates to offsets in percentage */}
-        {React.Children.map(children, (child, index) => {
-          const { x, y } = child.props;
-          const isRevealed = revealedIds.includes(index);
+      <ContainerWithScroll>
+        <Finder ref={finderRef} image={fieldImg} aspect={String(wNorm / hNorm)}>
+          {/* render the secret points by transforming their normal coordinates to offsets in percentage */}
+          {React.Children.map(children, (child, index) => {
+            const { x, y } = child.props;
+            const isRevealed = revealedIds.includes(index);
 
-          return cloneElement(child, {
-            xPct: (100.0 * x) / wNorm,
-            yPct: (100.0 * y) / hNorm,
-            isRevealed,
-          });
-        })}
+            return cloneElement(child, {
+              xPct: (100.0 * x) / wNorm,
+              yPct: (100.0 * y) / hNorm,
+              isRevealed,
+            });
+          })}
 
-        <CompassCursor size={64} accuracy={acc} mousePosition={mousePosition} angleRad={alpha} />
-      </Finder>
+          <CompassCursor size={64} accuracy={acc} mousePosition={mousePosition} angleRad={alpha} />
+        </Finder>
+      </ContainerWithScroll>
     </InteractionBadge>
   );
-
-  return <div>dsf</div>;
 };
+
+const ContainerWithScroll = styled.div`
+  user-select: none;
+
+  &::-webkit-scrollbar {
+    width: 22px;
+  }
+
+  // don't scroll the parent element once reaches the end of scroll
+  overscroll-behavior: contain;
+
+  &::-webkit-scrollbar-thumb {
+    border: 4px solid rgba(0, 0, 0, 0);
+    background-clip: padding-box;
+    background-color: var(--color-selected);
+    border-radius: 12px;
+  }
+
+  @media (max-width: 960px) {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-color: var(--color-selected);
+    padding-bottom: 16px;
+  }
+`;
 
 const Finder = styled.div<{ image: string; aspect: string }>`
   background: url("${(props) => props.image}") top / 100%, var(--color-embossed);
   aspect-ratio: ${(props) => props.aspect};
-  min-height: 360px; // should overflow on smaller viewports
   position: relative;
   cursor: none;
+  min-width: 960px; // should overflow on smaller viewports
+  touch-action: none;
 `;

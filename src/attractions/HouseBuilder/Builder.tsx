@@ -1,6 +1,5 @@
 import { Fragment, useCallback, Dispatch, SetStateAction } from "react";
 import styled from "@emotion/styled";
-import { useMediaQuery } from "@react-hook/media-query";
 import { Flipper, Flipped } from "react-flip-toolkit";
 
 import { Schema, House, BlockType, getBlockDef, getBlockSprite, buildBlock } from "./house";
