@@ -95,8 +95,7 @@ export const CompassFinder = ({
   useChange(isSolved, (value) => onSuccessChange?.(value));
 
   // angles and distances from cursor to a target point
-  const anglesAndDistances = targets.map((point, index) => angleAndDistanceBetween(cursor, point));
-
+  const anglesAndDistances = targets.map((point) => angleAndDistanceBetween(cursor, point));
   const ids = targets.map((_p, idx) => idx);
 
   const closestTargetId = sortBy(ids, (idx) => {
@@ -104,28 +103,36 @@ export const CompassFinder = ({
     return dist;
   })[0];
 
-  const closestTarget = targets[closestTargetId];
   const [alpha, distance] = anglesAndDistances[closestTargetId];
 
-  useChange(distance, (d) => {
-    if (d < 0.02) revealSecret(closestTargetId);
-  });
+  // Reveal the secret when the cursor stays within a circle for N seconds
+  const revealRadius = 0.02;
+
+  const toBeRevealedId = distance < revealRadius ? closestTargetId : undefined;
+  useEffect(() => {
+    if (toBeRevealedId === undefined) return;
+
+    const tm = setTimeout(() => {
+      revealSecret(toBeRevealedId);
+    }, 3000);
+
+    return () => {
+      clearTimeout(tm);
+    };
+  }, [toBeRevealedId, revealSecret]);
 
   const [acc, setAcc] = useState(0.5);
 
   return (
     <InteractionBadge>
-      <center>
-        <input
-          type="range"
-          value={acc * 10.0}
-          min="0"
-          max="10"
-          onChange={(e) => setAcc(parseInt(e.target.value) / 10.0)}
-        />{" "}
-        accuracy = {acc.toFixed(1)}
-      </center>
-
+      <input
+        type="range"
+        value={acc * 10.0}
+        min="0"
+        max="10"
+        onChange={(e) => setAcc(parseInt(e.target.value) / 10.0)}
+      />{" "}
+      accuracy = {acc.toFixed(1)}
       <ContainerWithScroll>
         <Finder ref={finderRef} image={fieldImg} aspect={String(wNorm / hNorm)}>
           {/* render the secret points by transforming their normal coordinates to offsets in percentage */}
