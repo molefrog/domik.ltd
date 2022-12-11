@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import panoramaImg from "./panorama.webp";
 import ashImg from "./ash.webp";
 import philImg from "./phil.webp";
@@ -95,7 +96,7 @@ export const mediator = new Mediator();
     fieldImg={panoramaImg}
     fieldImgDimensions={[2200, 789]}
     onSuccessChange={(value) => {
-      mediator.dispatchEvent(new CustomEvent("successChange", { value }));
+      mediator.dispatchEvent(new CustomEvent("successChange", { detail: value }));
     }}
   >
     <HiddenSecret x={0.91} y={0.2} image={ashImg} />
@@ -113,3 +114,49 @@ export const mediator = new Mediator();
 несколько дней в неделю, остальное время тратил на улучшение и проработку новых изобретений.
 
 В одном из писем Эш написал, что планирует приехать на летние каникулы.
+
+export const CreditsSection = () => {
+  const [revealTitles, setRevealTitles] = useState(false);
+  useEffect(() => {
+    const handler = (e) => setRevealTitles(e.detail);
+    mediator.addEventListener("successChange", handler);
+    return () => {
+      mediator.removeEventListener("successChange", handler);
+    };
+  }, []);
+  return (
+    <Credits.Credits>
+      <Spoiler reveal={revealTitles}>Моему другу Тихону.</Spoiler>
+      <Credits.Columns>
+        <Credits.Credit title={<Spoiler reveal={revealTitles}>текст, идея и кодинг</Spoiler>}>
+          <Spoiler reveal={revealTitles}>
+            <EyedLink href="https://molefrog.com">Лёша Тактаров</EyedLink>
+          </Spoiler>
+        </Credits.Credit>
+        <Credits.Credit title={<Spoiler reveal={revealTitles}>иллюстрации и персонажи</Spoiler>}>
+          <Spoiler reveal={revealTitles}>
+            <EyedLink href="https://www.instagram.com/yulia_mrachnenko/">Юля Мрачненько</EyedLink>
+          </Spoiler>
+        </Credits.Credit>
+        <Credits.Credit title={<Spoiler reveal={revealTitles}>звуки</Spoiler>}>
+          <Spoiler reveal={revealTitles}>
+            <EyedLink href="https://design.facebook.com/toolsandresources/sound-kit-for-prototypes/">
+              Facebook Sound Kit
+            </EyedLink>
+          </Spoiler>
+          <br />
+          <Spoiler reveal={revealTitles}>
+            <EyedLink href="https://freesound.org/">freesound.org</EyedLink>
+          </Spoiler>
+        </Credits.Credit>
+        <Credits.Credit title={<Spoiler reveal={revealTitles}>шрифт</Spoiler>}>
+          <Spoiler reveal={revealTitles}>
+            <EyedLink href="https://type.today/en/grato_marker">Grato Marker</EyedLink>
+          </Spoiler>
+        </Credits.Credit>
+      </Credits.Columns>
+    </Credits.Credits>
+  );
+};
+
+<CreditsSection />

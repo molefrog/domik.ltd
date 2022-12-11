@@ -8,17 +8,47 @@ import { Spoiler } from "~/attractions/Spoiler";
 import { SlurredSpeech } from "~/attractions/SlurredSpeech";
 import { HouseBuilder } from "~/attractions/HouseBuilder";
 import { FullWidth } from "~/attractions/FullWidth";
+import * as Credits from "~/attractions/Credits";
 import mapImage from "~/chapters/3-three/map.webp";
 
 import { CompassFinder, HiddenSecret } from "~/attractions/CompassFinder";
 import finderMock from "./finder-mock.png";
+
+const revealTitles = true;
 
 export default function PlaygroundPage() {
   const [revealSpoiler, setRevealSpoiler] = useState(false);
 
   return (
     <Container>
-      <br /> <br />
+      <p>
+        Смотри, какая нелепая схема, — мне бросилась в глаза книжечка на стенде, в котором обычно
+        продавались путеводители и карты. Только эта книга отличалась от других. В отличие от
+        нормальных карт, она была нарисована руки и вместо городов на ней были изображены какие-то
+        странные предметы: унитаз, кегли от боулинга, точилка для карандашей.
+      </p>
+      <Credits.Credits>
+        Моему другу Тихону.
+        <Credits.Columns>
+          <Credits.Credit title={<Spoiler reveal={revealTitles}>текст, идея и кодинг</Spoiler>}>
+            <Spoiler reveal={revealTitles}>Лёша Тактаров</Spoiler>
+          </Credits.Credit>
+
+          <Credits.Credit title={<Spoiler reveal={revealTitles}>иллюстрации и персонажи</Spoiler>}>
+            <Spoiler reveal={revealTitles}>Юля Мрачненько</Spoiler>
+          </Credits.Credit>
+
+          <Credits.Credit title={<Spoiler reveal={revealTitles}>звуки</Spoiler>}>
+            <Spoiler reveal={revealTitles}>Facebook Sound Kit</Spoiler>
+            <br />
+            <Spoiler reveal={revealTitles}>freesound.org</Spoiler>
+          </Credits.Credit>
+
+          <Credits.Credit title={<Spoiler reveal={revealTitles}>шрифт</Spoiler>}>
+            <Spoiler reveal={revealTitles}>Grato Marker</Spoiler>
+          </Credits.Credit>
+        </Credits.Columns>
+      </Credits.Credits>
       {/* Finder */}
       <FullWidth style={{ maxWidth: "1000px" }}>
         <CompassFinder fieldImg={finderMock} fieldImgDimensions={[1330, 568]}>
@@ -29,8 +59,6 @@ export default function PlaygroundPage() {
       </FullWidth>
       <br />
       <br />
-      <br />
-      <br /> <br /> <br /> <br />
       <HouseBuilder />
       <SlurredSpeech>
         Смотри, какая нелепая схема, — мне бросилась в глаза книжечка на стенде, в котором обычно

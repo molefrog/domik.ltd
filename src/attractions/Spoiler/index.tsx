@@ -54,5 +54,6 @@ export const Secret = styled.span<{ reveal: boolean }>`
       background-size: 4em 100%;
       border-radius: 0.3em;
       color: transparent;
+      pointer-events: none;
     `}
 `;
