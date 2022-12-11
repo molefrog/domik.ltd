@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import { animated, useTransition, easings } from "@react-spring/web";
+import useLatest from "@react-hook/latest";
 
 interface PulseObj {
   radius: number;
@@ -27,23 +28,26 @@ export const Pulse = ({ frequency }: PulseProps) => {
     },
   });
 
+  const freshFreq = useLatest(frequency);
+
   useEffect(() => {
-    if (!frequency) return;
+    if (!freshFreq.current) return;
+    let tm = 0;
 
     function throwPlume() {
-      tm = setTimeout(throwPlume, 1000 / frequency);
+      tm = setTimeout(throwPlume, 1000 / freshFreq.current);
 
       setPulses((pulses) => {
-        const t = (Math.min(Math.max(frequency, 0.25), 2.0) - 0.25) / 1.75;
+        const t = (Math.min(Math.max(freshFreq.current, 0.25), 2.0) - 0.25) / 1.75;
         const r = 1.5 + 3 * t;
         const pulse = { radius: r, duration: r * 1500 };
         return [pulse, ...pulses];
       });
     }
 
-    let tm = setTimeout(throwPlume, 1 / frequency);
+    throwPlume();
     return () => clearTimeout(tm);
-  }, [frequency]);
+  }, [!frequency]); // turn on and off
 
   return transitions((styles, _item) => <Plume style={styles} />);
 };

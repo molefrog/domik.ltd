@@ -21,7 +21,7 @@ export type CompassCursorProps = ComponentProps<typeof Compass> & {
 
 export const CompassCursor = ({
   mousePosition,
-  pulseFrequency = 1.25, // 0.25..1.25
+  pulseFrequency = 0.0,
   size = 52,
   ...compassProps
 }: CompassCursorProps) => {
@@ -50,6 +50,9 @@ export const CompassCursor = ({
   if (isSmallViewport) {
     size *= 0.85;
   }
+
+  // don't animate pulse when not visible
+  if (!isOver) pulseFrequency = 0;
 
   return (
     <Cursor size={size} style={styles}>

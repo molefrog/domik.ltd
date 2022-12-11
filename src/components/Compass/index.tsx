@@ -1,6 +1,8 @@
 import styled from "@emotion/styled";
 import { useSpring, animated } from "@react-spring/web";
 
+import { radToDeg, lerp } from "~/attractions/CompassFinder/math";
+
 import body from "~/assets/compass/body.png";
 import arrow from "~/assets/compass/arrow.png";
 import arrowDirected from "~/assets/compass/arrow-directed.png";
@@ -13,12 +15,6 @@ type CompassProps = {
   | { angle: number; angleRad?: never } // either `angle` or `angleRad` must be present
   | { angle?: never; angleRad: number }
 );
-
-// [0, 2π] => [0, 360]
-const radToDeg = (rad: number) => (360.0 * rad) / (2 * Math.PI);
-
-// linear interpolation
-const lerp = (t: number, a: number, b: number) => a + (b - a) * t;
 
 export const Compass = ({
   size = 50,
@@ -34,14 +30,13 @@ export const Compass = ({
   const threshold = 0.75;
   if (accuracy < threshold) {
     const error = accuracy / threshold;
-    angle -= (angle % Math.floor(lerp(error, 30, 15))) + lerp(error, 45, 0);
+    angle -= angle % Math.floor(lerp(error, 90, 10));
   }
 
-  const t = 0.0;
   const { alpha } = useSpring({
     from: { alpha: 0 },
     to: { alpha: angle },
-    config: { mass: 1, tension: lerp(accuracy, 40, 200), friction: lerp(accuracy, 0.5, 20) },
+    config: { mass: 1, tension: lerp(accuracy, 40, 100), friction: lerp(accuracy, 0.1, 20) },
   });
 
   return (

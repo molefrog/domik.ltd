@@ -16,8 +16,10 @@ import { CompassCursor } from "./CompassCursor";
 import { HiddenSecret } from "./HiddenSecret";
 export { HiddenSecret };
 
+import { lerp, Point, angleAndDistanceBetween } from "./math";
 import { sortBy } from "lodash";
 import { usePopSound, useSuccessSound } from "~/hooks/useSounds";
+import { distance } from "math/vec2";
 
 interface CompassFinderProps {
   fieldImg: string;
@@ -25,8 +27,6 @@ interface CompassFinderProps {
   children: ReactElement<ComponentProps<typeof HiddenSecret>>[];
   onSuccessChange?: (value: boolean) => void;
 }
-
-type Point = [number, number];
 
 const cursorCoordinates = ({ elementHeight, elementWidth, x, y }: MousePosition): Point => {
   if (x === null || y === null || !elementHeight || !elementHeight) {
@@ -39,13 +39,6 @@ const cursorCoordinates = ({ elementHeight, elementWidth, x, y }: MousePosition)
   const _y = y * scale;
 
   return [_x, _y];
-};
-
-const angleAndDistanceBetween = ([ax, ay]: Point, [bx, by]: Point): [number, number] => {
-  const Δ = Math.sqrt((bx - ax) * (bx - ax) + (by - ay) * (by - ay));
-  const α = -Math.atan2(by - ay, bx - ax);
-
-  return [α, Δ];
 };
 
 export const CompassFinder = ({
@@ -110,30 +103,21 @@ export const CompassFinder = ({
   const revealRadius = 0.02;
 
   const toBeRevealedId = distance < revealRadius ? closestTargetId : undefined;
+
   useEffect(() => {
     if (toBeRevealedId === undefined) return;
 
     const tm = setTimeout(() => {
       revealSecret(toBeRevealedId);
-    }, 3000);
+    }, 5000);
 
     return () => {
       clearTimeout(tm);
     };
   }, [toBeRevealedId, revealSecret]);
 
-  const [acc, setAcc] = useState(0.5);
-
   return (
     <InteractionBadge>
-      <input
-        type="range"
-        value={acc * 10.0}
-        min="0"
-        max="10"
-        onChange={(e) => setAcc(parseInt(e.target.value) / 10.0)}
-      />{" "}
-      accuracy = {acc.toFixed(1)}
       <ContainerWithScroll>
         <Finder ref={finderRef} image={fieldImg} aspect={String(wNorm / hNorm)}>
           {/* render the secret points by transforming their normal coordinates to offsets in percentage */}
@@ -148,11 +132,41 @@ export const CompassFinder = ({
             });
           })}
 
-          <CompassCursor size={64} accuracy={acc} mousePosition={mousePosition} angleRad={alpha} />
+          <CompassCursor
+            accuracy={compassAccuracyFromDistance(distance)}
+            pulseFrequency={pulseFrequencyFromDistance(distance)}
+            size={64}
+            mousePosition={mousePosition}
+            angleRad={alpha}
+          />
         </Finder>
       </ContainerWithScroll>
     </InteractionBadge>
   );
+};
+
+const compassAccuracyFromDistance = (distance: number) => {
+  const maxAccuracyDistance = 0.2;
+
+  if (distance > maxAccuracyDistance) {
+    return 0.0;
+  } else {
+    const t = 0.5 * (1.0 - distance / maxAccuracyDistance);
+    return t;
+  }
+};
+
+const pulseFrequencyFromDistance = (distance: number) => {
+  const maxPulseRadius = 0.05;
+
+  if (distance > maxPulseRadius) {
+    return 0.0;
+  } else {
+    const t = Math.min(1.0, distance / maxPulseRadius);
+    const pulseFrequency = lerp(t, 1.0, 0.25);
+
+    return pulseFrequency;
+  }
 };
 
 const ContainerWithScroll = styled.div`
