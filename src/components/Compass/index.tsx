@@ -27,16 +27,13 @@ export const Compass = ({
     angle = radToDeg(angleRad);
   }
 
-  const threshold = 0.75;
-  if (accuracy < threshold) {
-    const error = accuracy / threshold;
-    angle -= angle % Math.floor(lerp(error, 90, 10));
-  }
+  const t = Math.abs(angle % 30) / 30; // [0..1]
+  angle += (1.0 - accuracy) * 60 * Math.sin(2 * Math.PI * t);
 
   const { alpha } = useSpring({
     from: { alpha: 0 },
     to: { alpha: angle },
-    config: { mass: 1, tension: lerp(accuracy, 40, 100), friction: lerp(accuracy, 0.1, 20) },
+    config: { mass: 1, tension: 240, friction: lerp(accuracy, 1, 15) },
   });
 
   return (

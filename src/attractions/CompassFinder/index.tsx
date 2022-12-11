@@ -90,20 +90,18 @@ export const CompassFinder = ({
 
   // angles and distances from cursor to a target point
   const anglesAndDistances = targets.map((point) => angleAndDistanceBetween(cursor, point));
-  const ids = targets.map((_p, idx) => idx);
+  const ids = targets.map((_p, idx) => idx).filter((id) => !revealedIds.includes(id));
 
   const closestTargetId = sortBy(ids, (idx) => {
     const [, dist] = anglesAndDistances[idx];
     return dist;
   })[0];
 
-  const closestTarget = targets[closestTargetId];
-  const [alpha, distance] = anglesAndDistances[closestTargetId];
+  const [alpha, distance] = anglesAndDistances[closestTargetId] || [-0.5 * Math.PI, 0.0];
 
   // Reveal the secret when the cursor stays within a circle for N seconds
   const revealRadius = 0.02;
-
-  const toBeRevealedId = distance < revealRadius ? closestTargetId : undefined;
+  const toBeRevealedId = !isSolved && distance < revealRadius ? closestTargetId : undefined;
 
   useEffect(() => {
     if (toBeRevealedId === undefined) return;
@@ -158,18 +156,16 @@ export const CompassFinder = ({
 };
 
 const compassAccuracyFromDistance = (distance: number) => {
-  const maxAccuracyDistance = 0.2;
-
-  if (distance > maxAccuracyDistance) {
+  const A = 0.2;
+  if (distance > A) {
     return 0.0;
   } else {
-    const t = 0.5 * (1.0 - distance / maxAccuracyDistance);
-    return t;
+    return 1.0 - distance / A;
   }
 };
 
 const pulseFrequencyFromDistance = (distance: number) => {
-  const maxPulseRadius = 0.05;
+  const maxPulseRadius = 0.1;
 
   if (distance > maxPulseRadius) {
     return 0.0;
