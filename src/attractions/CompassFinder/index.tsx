@@ -103,6 +103,7 @@ export const CompassFinder = ({
     return dist;
   })[0];
 
+  const closestTarget = targets[closestTargetId];
   const [alpha, distance] = anglesAndDistances[closestTargetId];
 
   // Reveal the secret when the cursor stays within a circle for N seconds

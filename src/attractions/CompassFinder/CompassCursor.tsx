@@ -1,17 +1,27 @@
 import styled from "@emotion/styled";
-import { useRef, ComponentProps } from "react";
+import { useRef, ComponentProps, useEffect, useState } from "react";
 import { MousePosition } from "@react-hook/mouse-position";
-import { useSpring, animated, config as springConfig } from "@react-spring/web";
+import {
+  useSpring,
+  animated,
+  config as springConfig,
+  useTransition,
+  easings,
+} from "@react-spring/web";
 import { useMediaQuery } from "@react-hook/media-query";
+
 import { Compass } from "~/components/Compass";
+import { Pulse } from "./Pulse";
 
 export type CompassCursorProps = ComponentProps<typeof Compass> & {
   mousePosition: MousePosition;
+  pulseFrequency: number;
   size?: number;
 };
 
 export const CompassCursor = ({
   mousePosition,
+  pulseFrequency = 0,
   size = 52,
   ...compassProps
 }: CompassCursorProps) => {
@@ -43,6 +53,7 @@ export const CompassCursor = ({
 
   return (
     <Cursor size={size} style={styles}>
+      <Pulse frequency={pulseFrequency} />
       <Compass directed size={size} {...compassProps} />
     </Cursor>
   );
