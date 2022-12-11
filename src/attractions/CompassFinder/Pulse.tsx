@@ -34,7 +34,9 @@ export const Pulse = ({ frequency }: PulseProps) => {
       tm = setTimeout(throwPlume, 1000 / frequency);
 
       setPulses((pulses) => {
-        const pulse = { radius: 3.0, duration: 4000 };
+        const t = (Math.min(Math.max(frequency, 0.25), 2.0) - 0.25) / 1.75;
+        const r = 1.5 + 3 * t;
+        const pulse = { radius: r, duration: r * 1500 };
         return [pulse, ...pulses];
       });
     }

@@ -21,7 +21,7 @@ export type CompassCursorProps = ComponentProps<typeof Compass> & {
 
 export const CompassCursor = ({
   mousePosition,
-  pulseFrequency = 0,
+  pulseFrequency = 1.25, // 0.25..1.25
   size = 52,
   ...compassProps
 }: CompassCursorProps) => {
