@@ -15,7 +15,6 @@ export const Slider = (props: ComponentProps<typeof RadixSlider.Root>) => {
 
 const SliderBox = styled.div`
   height: 42px;
-  width: 168px;
   border-radius: 10px;
   background: white;
   box-shadow: 0px 0px 5px 0px rgb(0 0 0 / 5%), 0px 1px 6px 0px rgb(0 0 0 / 10%);

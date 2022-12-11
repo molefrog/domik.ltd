@@ -19,7 +19,8 @@ export { HiddenSecret };
 import { lerp, Point, angleAndDistanceBetween } from "./math";
 import { sortBy } from "lodash";
 import { usePopSound, useSuccessSound } from "~/hooks/useSounds";
-import { distance } from "math/vec2";
+import { useHorizontalScrollProgress } from "./useHorizontalScrollProgress";
+import { Slider } from "~/components/Slider";
 
 interface CompassFinderProps {
   fieldImg: string;
@@ -116,9 +117,13 @@ export const CompassFinder = ({
     };
   }, [toBeRevealedId, revealSecret]);
 
+  // scrolling support on mobiles
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [scrollProgress, setScrollProgress] = useHorizontalScrollProgress(scrollContainerRef);
+
   return (
     <InteractionBadge>
-      <ContainerWithScroll>
+      <ContainerWithScroll ref={scrollContainerRef}>
         <Finder ref={finderRef} image={fieldImg} aspect={String(wNorm / hNorm)}>
           {/* render the secret points by transforming their normal coordinates to offsets in percentage */}
           {React.Children.map(children, (child, index) => {
@@ -141,6 +146,13 @@ export const CompassFinder = ({
           />
         </Finder>
       </ContainerWithScroll>
+
+      <ScrollSlider>
+        <Slider
+          value={[scrollProgress * 100.0]}
+          onValueChange={([val]) => setScrollProgress(val / 100.0)}
+        />
+      </ScrollSlider>
     </InteractionBadge>
   );
 };
@@ -169,28 +181,27 @@ const pulseFrequencyFromDistance = (distance: number) => {
   }
 };
 
+const ScrollSlider = styled.div`
+  position: absolute;
+  right: 16px;
+  bottom: -12px;
+  visibility: hidden;
+
+  width: 140px;
+
+  @media (max-width: 960px) {
+    visibility: visible;
+  }
+`;
+
 const ContainerWithScroll = styled.div`
   user-select: none;
-
-  &::-webkit-scrollbar {
-    width: 22px;
-  }
 
   // don't scroll the parent element once reaches the end of scroll
   overscroll-behavior: contain;
 
-  &::-webkit-scrollbar-thumb {
-    border: 4px solid rgba(0, 0, 0, 0);
-    background-clip: padding-box;
-    background-color: var(--color-selected);
-    border-radius: 12px;
-  }
-
   @media (max-width: 960px) {
-    overflow-x: auto;
-    overflow-y: hidden;
-    scrollbar-color: var(--color-selected);
-    padding-bottom: 16px;
+    overflow: hidden;
   }
 `;
 
