@@ -55,20 +55,36 @@ export const CompassCursor = ({
   if (!isOver) pulseFrequency = 0;
 
   return (
-    <Cursor size={size} style={styles}>
+    <Cursor size={size} style={styles} hOffset={0} vOffset={isTouchDevice() ? -40 : 0}>
       <Pulse frequency={pulseFrequency} />
       <Compass directed size={size} {...compassProps} />
     </Cursor>
   );
 };
 
-const Cursor = styled(animated.div)<{ size: number }>`
+const isTouchDevice = () => {
+  return (
+    "ontouchstart" in window ||
+    navigator.maxTouchPoints > 0 ||
+    Number(navigator?.["maxTouchPoints"]) > 0
+  );
+};
+
+const Cursor = styled(animated.div, {
+  shouldForwardProp: (prop) => !["size", "hOffset", "vOffset"].includes(prop),
+})<{
+  size: number;
+  vOffset: number;
+  hOffset: number;
+}>`
+  --v-offset: ${(props) => props.vOffset || 0}px;
+  --h-offset: ${(props) => props.hOffset || 0}px;
   --size: ${(props) => props.size + "px"};
 
   position: absolute;
   width: var(--size);
   height: var(--size);
-  margin: calc(-0.5 * var(--size)) 0 0 calc(-0.5 * var(--size));
+  margin: calc(-0.5 * var(--size) + var(--v-offset)) 0 0 calc(-0.5 * var(--size) + var(--h-offset));
   top: 0;
   left: 0;
 
