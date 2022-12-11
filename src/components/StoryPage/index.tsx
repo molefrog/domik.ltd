@@ -4,20 +4,10 @@ import { useAtom } from "jotai";
 import { useLocation } from "wouter";
 
 import { BumperCar } from "~/components/BumperCar";
-import { Story, ChapterModule } from "./Story";
-import { buildCodeSequence } from "~/chapters";
+import { Story } from "./Story";
+import { buildCodeSequence, ChapterModule, chapterModules } from "~/chapters";
 import { acceptedCipher } from "~/state";
 import { delay } from "~/utils/promises";
-
-// TODO: make sure chunk names are not exposed in the final bundle
-const chapterModules = [
-  () => import("~/chapters/1-one/story.mdx") as Promise<ChapterModule>,
-  () => import("~/chapters/2-two/story.mdx") as Promise<ChapterModule>,
-  () => import("~/chapters/3-three/story.mdx") as Promise<ChapterModule>,
-  () => import("~/chapters/4-four/story.mdx") as Promise<ChapterModule>,
-  () => import("~/chapters/5-five/story.mdx") as Promise<ChapterModule>,
-  () => import("~/chapters/6-six/story.mdx") as Promise<ChapterModule>,
-];
 
 export const StoryPage = () => {
   const [isLoading, setIsLoading] = useState(true);

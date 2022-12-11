@@ -1,3 +1,5 @@
+import { FunctionComponent } from "react";
+
 type Code = string;
 
 export const IV: Code = "15726312"; // the code of the 0 chapter (publicly available)
@@ -51,8 +53,27 @@ export async function checkCipherValidity(code?: Code | number) {
   return { valid: codes.length > 0, chaptersUnlocked: codes.length };
 }
 
+/*
+ * Chapters available
+ */
 export function getLaunchDateForChapter(num: number): Date {
   const startDate = new Date("2022-10-30");
 
   return new Date(startDate.getTime() + num * 7 * 24 * 60 * 60 * 1000);
 }
+
+export interface ChapterModule {
+  default: FunctionComponent;
+  title: string | undefined;
+}
+
+export const chapterModules = [
+  () => import("~/chapters/1-one/story.mdx") as Promise<ChapterModule>,
+  () => import("~/chapters/2-two/story.mdx") as Promise<ChapterModule>,
+  () => import("~/chapters/3-three/story.mdx") as Promise<ChapterModule>,
+  () => import("~/chapters/4-four/story.mdx") as Promise<ChapterModule>,
+  () => import("~/chapters/5-five/story.mdx") as Promise<ChapterModule>,
+  () => import("~/chapters/6-six/story.mdx") as Promise<ChapterModule>,
+];
+
+export const totalNumberOfChapters = chapterModules.length;

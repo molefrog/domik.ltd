@@ -2,18 +2,13 @@ import { useState, useEffect, FunctionComponent, useCallback } from "react";
 import styled from "@emotion/styled";
 import { useLocation, useRoute } from "wouter";
 
-import { getLaunchDateForChapter } from "~/chapters";
+import { getLaunchDateForChapter, ChapterModule, totalNumberOfChapters } from "~/chapters";
 import { NextChapterBanner } from "~/components/NextChapterBanner";
 import { ReadingProgress } from "../ReadingProgress";
 
 // hooks
 import { useChapterProgress, useSyncState } from "./useChapterProgress";
 import { useDocumentTitle } from "~/hooks/useDocumentTitle";
-
-export interface ChapterModule {
-  default: FunctionComponent;
-  title: string | undefined;
-}
 
 export interface StoryProps {
   chapters: ChapterModule[];
@@ -37,7 +32,8 @@ export const Story = ({ chapters }: StoryProps) => {
   const chapterTitle = chapters[Number(currentChapterIdx)]?.title || "...";
   useDocumentTitle(chapterTitle);
 
-  const maxProgress = Math.min(chapters.length / 6.0, 1.0);
+  const maxProgress = Math.min(chapters.length / totalNumberOfChapters, 1.0);
+  const moreChaptersAvailable = chapters.length < totalNumberOfChapters;
 
   return (
     <Article>
@@ -63,9 +59,11 @@ export const Story = ({ chapters }: StoryProps) => {
           );
         })}
 
-        <Banner>
-          <NextChapterBanner launchDate={getLaunchDateForChapter(chapters.length)} />
-        </Banner>
+        {moreChaptersAvailable && (
+          <Banner>
+            <NextChapterBanner launchDate={getLaunchDateForChapter(chapters.length)} />
+          </Banner>
+        )}
       </Chapters>
     </Article>
   );
