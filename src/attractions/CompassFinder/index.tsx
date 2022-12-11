@@ -189,7 +189,7 @@ const ScrollSlider = styled.div`
 
   width: 140px;
 
-  @media (max-width: 960px) {
+  @media (max-width: 1024px) {
     visibility: visible;
   }
 `;
@@ -200,7 +200,7 @@ const ContainerWithScroll = styled.div`
   // don't scroll the parent element once reaches the end of scroll
   overscroll-behavior: contain;
 
-  @media (max-width: 960px) {
+  @media (max-width: 1024px) {
     overflow: hidden;
   }
 `;
@@ -210,6 +210,6 @@ const Finder = styled.div<{ image: string; aspect: string }>`
   aspect-ratio: ${(props) => props.aspect};
   position: relative;
   cursor: none;
-  min-width: 960px; // should overflow on smaller viewports
+  min-width: 1024px; // should overflow on smaller viewports
   touch-action: none;
 `;
