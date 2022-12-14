@@ -20,10 +20,10 @@ export const EyedLink = (props: React.ComponentProps<"a">) => {
 
 const Link = styled.a`
   color: inherit;
-  text-decoration: var(--color-text) underline;
-  text-decoration-thickness: 2px;
-  text-decoration-style: solid;
   cursor: pointer;
+  text-decoration-thickness: 2px;
+  text-decoration: underline;
+  text-decoration-color: var(--color-text);
 
   :visited {
     color: inherit;
