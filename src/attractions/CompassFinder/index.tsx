@@ -120,7 +120,7 @@ export const CompassFinder = ({
   const [scrollProgress, setScrollProgress] = useHorizontalScrollProgress(scrollContainerRef);
 
   return (
-    <InteractionBadge>
+    <Badge>
       <ContainerWithScroll ref={scrollContainerRef}>
         <Finder ref={finderRef} image={fieldImg} aspect={String(wNorm / hNorm)}>
           {/* render the secret points by transforming their normal coordinates to offsets in percentage */}
@@ -151,7 +151,7 @@ export const CompassFinder = ({
           onValueChange={([val]) => setScrollProgress(val / 100.0)}
         />
       </ScrollSlider>
-    </InteractionBadge>
+    </Badge>
   );
 };
 
@@ -176,6 +176,8 @@ const pulseFrequencyFromDistance = (distance: number) => {
     return pulseFrequency;
   }
 };
+
+const Badge = styled(InteractionBadge)``;
 
 const ScrollSlider = styled.div`
   position: absolute;
@@ -211,6 +213,7 @@ const Finder = styled.div<{ image: string; aspect: string }>`
   // fallback
   height: calc(1024px / ${(props) => props.aspect});
   width: 1024px;
+  margin: 0 auto;
 
   @supports (aspect-ratio: 1 / 1) {
     width: auto;
