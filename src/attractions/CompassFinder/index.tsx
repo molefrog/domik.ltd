@@ -206,6 +206,16 @@ const Finder = styled.div<{ image: string; aspect: string }>`
   aspect-ratio: ${(props) => props.aspect};
   position: relative;
   cursor: none;
-  min-width: 1024px; // should overflow on smaller viewports
   touch-action: none;
+
+  // fallback
+  height: calc(1024px / ${(props) => props.aspect});
+  width: 1024px;
+
+  @supports (aspect-ratio: 1 / 1) {
+    width: auto;
+    height: auto;
+    aspect-ratio: ${(props) => props.aspect};
+    min-width: 1024px; // should overflow on smaller viewports
+  }
 `;
