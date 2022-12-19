@@ -1,61 +1,39 @@
-import { useState } from "react";
 import { Link } from "wouter";
+import { Countdown } from "~/components/Countdown";
+
 import styled from "@emotion/styled";
 
-import { useTick } from "~/hooks/useTick";
-
-interface Props {
+interface NextChapterBannerProps {
   launchDate: Date;
-  title?: string;
 }
 
-export function NextChapterBanner({ launchDate, title }: Props) {
-  const [countdown, setCountdown] = useState<Array<number>>([0, 0, 0, 0]);
-
-  useTick(
-    () => {
-      const diff = launchDate.getTime() - Date.now();
-
-      setCountdown([
-        Math.max(0, Math.floor(diff / 1000 / 60 / 60 / 24)), // days
-        Math.max(0, Math.floor((diff / 1000 / 60 / 60) % 24)), // hours
-        Math.max(0, Math.floor((diff / 1000 / 60) % 60)), // mins
-        Math.max(0, Math.floor((diff / 1000) % 60)), // seconds
-      ]);
-    },
-    { ms: 1000 }
-  );
-
-  const isPastLaunchDate = countdown.every((c) => c === 0);
+export function NextChapterBanner({ launchDate }: NextChapterBannerProps) {
+  launchDate = new Date(2023, 1, 1);
+  const isPastLaunchDate = launchDate.getTime() - Date.now() < 0;
 
   return (
-    <Link to="/x">
-      <Container className="next-chapter-banner">
-        <AvailableIn>
-          {title === undefined && (
-            <AvailableLabel>
-              {!isPastLaunchDate
-                ? "Интересно, что будет же дальше?"
-                : "Новая глава уже доступна!"}
-            </AvailableLabel>
-          )}
+    <Container>
+      <AvailableIn>
+        <AvailableLabel>
+          {!isPastLaunchDate ? "Интересно, что же будет дальше?" : "Новая глава уже доступна!"}
+        </AvailableLabel>
 
-          {title && <AvailableLabel>{title}</AvailableLabel>}
+        <CountdownLabel to={launchDate} />
+      </AvailableIn>
 
-          <Countdown>
-            {countdown.map((t) => String(t).padStart(2, "0")).join(" : ")}
-          </Countdown>
-        </AvailableIn>
-        <Button>
-          {!isPastLaunchDate ? "Не могу больше ждать!" : "Ввести код"}
+      <Buttons>
+        <Button primary to="/x">
+          {"Ввести код"}
         </Button>
-      </Container>
-    </Link>
+        <SubscribeButton target="_blank" rel="noreferrer noopener" href="https://t.me/domik_ltd">
+          Узнать о выходе
+        </SubscribeButton>
+      </Buttons>
+    </Container>
   );
 }
 
 const AvailableIn = styled.div`
-  flex: 1 1 auto;
   margin-right: 24px;
 `;
 
@@ -66,41 +44,51 @@ const AvailableLabel = styled.div`
   color: var(--color-text-gray);
 `;
 
-const Countdown = styled.div`
+const CountdownLabel = styled(Countdown)`
   font-size: 32px;
   font-weight: bold;
   white-space: nowrap;
 `;
 
-const Button = styled.a`
-  background: var(--color-selected-light);
-  padding: 10px 14px;
+const Buttons = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 32px;
+`;
+
+const Button = styled(Link)<{ primary: boolean }>`
+  padding: 7px 14px;
   border-radius: 10px;
   font-size: 18px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-align: center;
+  color: inherit;
+  border: 3px solid transparent;
 
-  .next-chapter-banner:hover & {
-    background: var(--color-selected);
-  }
+  ${({ primary }) =>
+    primary
+      ? "background: var(--color-selected);"
+      : "background: none; border: 3px solid var(--color-selected);"}
 
   @media (max-width: 640px) {
-    width: 100%;
-    margin-top: 32px;
-    text-align: center;
+    flex: 1 1 100%;
+  }
+
+  :hover {
+    background: var(--color-selected-vivid);
+    border-color: var(--color-selected-vivid);
   }
 `;
+
+const SubscribeButton = Button.withComponent("a");
 
 const Container = styled.div`
   background: var(--color-embossed);
   padding: 32px;
   border-radius: 16px;
   font-size: 17px;
-  cursor: pointer;
-  user-select: none;
-
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
 `;
