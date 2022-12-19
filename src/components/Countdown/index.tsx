@@ -1,5 +1,5 @@
 import { useState, ComponentPropsWithoutRef } from "react";
-import { useTick } from "~/hooks/useTick";
+import { useInterval } from "~/hooks/useInterval";
 
 interface CountdownProps extends ComponentPropsWithoutRef<"div"> {
   to: Date;
@@ -8,7 +8,7 @@ interface CountdownProps extends ComponentPropsWithoutRef<"div"> {
 export function Countdown({ to, ...props }: CountdownProps) {
   const [countdown, setCountdown] = useState<Array<number>>([0, 0, 0, 0]);
 
-  useTick(
+  useInterval(
     () => {
       const diff = (to || new Date()).getTime() - Date.now();
 
