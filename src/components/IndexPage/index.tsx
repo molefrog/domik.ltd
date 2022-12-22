@@ -4,9 +4,11 @@ import { Global, css } from "@emotion/react";
 import { NextChapterBanner } from "~/components/NextChapterBanner";
 import { getLaunchDateForChapter } from "~/chapters";
 
+import { Billboard as BillboardImg } from "./Billboard";
+
 import charactersLayerImg from "~/assets/main/characters.png";
-import billboardLayerImg from "~/assets/main/billboard.png";
 import hillsBackLayerImg from "~/assets/main/hills-back.png";
+import hillsFrontLayerImg from "~/assets/main/hills-front.png";
 
 export const IndexPage = () => {
   return (
@@ -14,10 +16,12 @@ export const IndexPage = () => {
       <Global styles={styles} />
 
       <Centered>
-        <NextChapterBanner launchDate={getLaunchDateForChapter(0)} />
-
         <HillsBack />
-        <Billboard />
+        <Billboard>
+          <BillboardImg />
+        </Billboard>
+
+        <HillsFront />
         <Characters />
       </Centered>
     </>
@@ -37,99 +41,87 @@ const Layer = styled.div`
 `;
 
 const Billboard = styled(Layer)`
-  --scale: 0.8;
+  left: calc(16px + 7vw);
+  bottom: calc(280px + 10vh);
+  right: 0;
+  height: 320px;
+  display: flex;
+  justify-content: flex-start;
+  aling-items: center;
 
-  background: url("${billboardLayerImg}") no-repeat top left / contain;
-  min-width: 160px;
-  width: calc(544px * var(--scale));
-  height: calc(372px * var(--scale));
+  > svg {
+    height: 100%;
+  }
 
-  left: calc(128px * var(--scale) + 5vw);
-  bottom: calc(180px * var(--scale) + 20vh);
+  @media (max-width: 640px), (max-height: 520px) {
+    height: 220px;
+    left: 24px;
+    right: 24px;
+    bottom: auto;
+  }
 
   // center and resize based on screen width
-  @media (max-width: 768px) {
-    width: auto;
-    left: calc(72px * var(--scale));
-    right: calc(72px * var(--scale));
-    bottom: calc(220px * var(--scale) + 20vh);
-    background-position-x: center;
-  }
-
-  @media (max-height: 640px) {
-    --scale: 0.6;
-    top: calc(32px * var(--scale));
-    bottom: auto;
-  }
-
-  @media (max-height: 468px) {
-    --scale: 0.5;
-    bottom: auto;
+  @media (max-width: 640px) {
+    top: 50px;
+    justify-content: center;
   }
 `;
 
 const Characters = styled(Layer)`
-  --scale: 0.8;
+  background: url("${charactersLayerImg}") no-repeat left top / contain;
+  left: calc(-32px + 10vw);
+  right: 0;
+  bottom: 0;
+  height: 320px;
 
-  background: url("${charactersLayerImg}") no-repeat left bottom / contain;
-
-  width: calc(560px * var(--scale));
-  height: calc(356px * var(--scale));
-
-  bottom: -6px;
-  left: calc(12px * var(--scale) + 10vw);
-
-  // center and resize based on screen width
-  @media (max-width: 768px) {
-    width: auto;
-    left: calc(40px * var(--scale));
-    right: calc(40px * var(--scale));
-    background-position-x: center;
+  @media (max-width: 640px), (max-height: 520px) {
+    left: 32px;
+    right: 32px;
+    bottom: -6px;
+    height: 216px;
   }
 
-  @media (max-height: 640px) {
-    --scale: 0.6;
-  }
-
-  @media (max-height: 468px) {
-    --scale: 0.5;
+  @media (max-width: 640px), {
+    background-position: center bottom;
   }
 `;
 
 const HillsBack = styled(Layer)`
-  --scale: 0.8;
-  background: url("${hillsBackLayerImg}") no-repeat left bottom / contain;
+  background: url("${hillsBackLayerImg}") no-repeat left top / auto 320px;
+  right: 0;
+  left: calc(-64px + 8vw);
+  bottom: calc(180px + 10vh);
+  height: 320px;
 
-  width: calc(1144px * var(--scale));
-  height: calc(200px * var(--scale));
-
-  left: calc(-12px + 3vw);
-  bottom: calc(380px * var(--scale) + 15vh);
-
-  // center and resize based on screen width
-  @media (max-width: 768px) {
-    bottom: calc(480px * var(--scale) + 15vh);
-    // width: auto;
-    // left: calc(-100px * var(--scale));
-    // right: calc(-100px * var(--scale));
-    // background-position-x: center;
-  }
-
-  @media (max-height: 640px) {
-    --scale: 0.6;
-    top: calc(64px * var(--scale));
-  }
-
-  @media (max-height: 468px) {
-    --scale: 0.5;
+  @media (max-width: 640px), (max-height: 520px) {
+    bottom: auto;
+    top: 64px;
+    left: 0;
+    right: 0;
+    background-size: auto 212px;
+    height: 212px;
+    background-position: center;
   }
 `;
 
-const Centered = styled.div`
-  // display: grid;
-  // grid-template-columns: minmax(0px, 640px);
-  // padding: 16px;
-  // min-height: 100vh;
-  // align-items: center;
-  // justify-content: center;
+const HillsFront = styled(Layer)`
+  background: url("${hillsFrontLayerImg}") no-repeat left top / auto 208px;
+  left: calc(464px + 8vw);
+  right: 0;
+  bottom: 64px;
+  height: 208px;
+
+  @media (max-width: 640px), (max-height: 520px) {
+    height: 148px;
+    background-size: auto 148px;
+
+    left: 364px;
+    bottom: 24px;
+  }
+
+  @media (max-width: 640px) {
+    display: none;
+  }
 `;
+
+const Centered = styled.div``;

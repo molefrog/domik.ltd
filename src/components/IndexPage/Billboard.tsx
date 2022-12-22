@@ -5,10 +5,10 @@ import { ComponentProps } from "react";
 
 export const Billboard = (props: ComponentProps<"svg">) => {
   return (
-    <svg viewBox="0 0 540 380" style={{ width: 400, height: 400 }} {...props}>
+    <svg viewBox="0 0 540 380" {...props}>
       <image xlinkHref={billboardImg} x="0" y="0" width="519" height="372" />
 
-      <g transform="rotate(-6) translate(216 190) skewX(-6) scale(0.85)">
+      <g transform="rotate(-6) translate(212 190) skewX(-6) scale(0.85)">
         <Subtitle transform="translate(70, 42)" stroke="white" strokeWidth="8">
           лимитед
         </Subtitle>
@@ -30,7 +30,7 @@ const Title = styled(SVGTextWithOuterStroke)`
 
 const Subtitle = styled(SVGTextWithOuterStroke)`
   font-size: 34px;
-  font-weight: 600;
+  font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: 5px;
+  letter-spacing: 2px;
 `;
