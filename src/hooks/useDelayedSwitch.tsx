@@ -1,33 +1,38 @@
-import { useRef, useEffect, useState, useCallback } from "react";
+import { useRef, useEffect, useState } from "react";
+import { usePrevious } from "./usePrevious";
+
+interface Options {
+  switchOnDelay?: number;
+  switchOffDelay?: number;
+}
+
+type Timeout = ReturnType<typeof setTimeout>;
 
 /**
- * Like `useEffect<boolean>` but with delayed setter
+ * Boolean with delayed on/off
  * @param initial Initial value
  * @param ms Timeout in ms
  * @returns
  */
-export const useDelayedSwitch = (
-  initial: boolean,
-  ms: number,
-  delayOn: boolean = false
-): [boolean, (b: boolean) => void] => {
-  type Timeout = ReturnType<typeof setTimeout>;
+export const useDelayedSwitch = (input: boolean, options: Options = {}): boolean => {
+  const { switchOnDelay = 0, switchOffDelay = 0 } = options;
 
-  const [val, setVal] = useState(initial);
+  const [val, setVal] = useState(() => input);
+  const prevInput = usePrevious(input);
+
   const timer = useRef<Timeout>();
 
-  const update = useCallback((to: boolean) => {
-    if (delayOn === to) {
-      timer.current = setTimeout(() => setVal(to), ms);
-    } else {
-      clearTimeout(timer.current);
-      setVal(to);
-    }
-  }, []);
-
   useEffect(() => {
-    return () => clearTimeout(timer.current);
-  }, []);
+    if (prevInput === undefined || prevInput === input) return; // nothing to change yet
 
-  return [val, update];
+    clearTimeout(timer.current);
+    const wait = input ? switchOnDelay : switchOffDelay;
+
+    if (!wait) return setVal(input);
+    timer.current = setTimeout(() => {
+      setVal(input);
+    }, wait);
+  }, [input]);
+
+  return val;
 };

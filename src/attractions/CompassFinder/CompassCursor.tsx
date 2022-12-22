@@ -1,17 +1,12 @@
 import styled from "@emotion/styled";
-import { useRef, ComponentProps, useEffect, useState } from "react";
+import { useRef, ComponentProps } from "react";
 import { MousePosition } from "@react-hook/mouse-position";
-import {
-  useSpring,
-  animated,
-  config as springConfig,
-  useTransition,
-  easings,
-} from "@react-spring/web";
+import { useSpring, animated, config as springConfig } from "@react-spring/web";
 import { useMediaQuery } from "@react-hook/media-query";
 
 import { Compass } from "~/components/Compass";
 import { Pulse } from "./Pulse";
+import { isTouchDevice } from "~/utils/isTouchDevice";
 
 export type CompassCursorProps = ComponentProps<typeof Compass> & {
   mousePosition: MousePosition;
@@ -55,18 +50,10 @@ export const CompassCursor = ({
   if (!isOver) pulseFrequency = 0;
 
   return (
-    <Cursor size={size} style={styles} hOffset={0} vOffset={isTouchDevice() ? -40 : 0}>
+    <Cursor size={size} style={styles} hOffset={0} vOffset={isTouchDevice ? -40 : 0}>
       <Pulse frequency={pulseFrequency} />
       <Compass directed size={size} {...compassProps} />
     </Cursor>
-  );
-};
-
-const isTouchDevice = () => {
-  return (
-    "ontouchstart" in window ||
-    navigator.maxTouchPoints > 0 ||
-    Number(navigator?.["maxTouchPoints"]) > 0
   );
 };
 

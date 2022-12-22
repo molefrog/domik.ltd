@@ -1,18 +1,20 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import styled from "@emotion/styled";
 import { keyframes } from "@emotion/react";
 
 import sprite from "~/assets/sprites/wondering-eyes.png";
 
-export const EyedLink = (props: React.ComponentProps<"a">) => {
+export type EyedLinkProps = React.ComponentPropsWithRef<"a">;
+
+export const EyedLink = forwardRef<HTMLAnchorElement, EyedLinkProps>((props, ref) => {
   // opens in a new window by default
   return (
-    <Link target="_blank" rel="noreferrer noopener" {...props}>
+    <Link ref={ref} target="_blank" rel="noreferrer noopener" {...props}>
       {props.children}
       <InlineEyes />
     </Link>
   );
-};
+});
 
 /**
  * Styles

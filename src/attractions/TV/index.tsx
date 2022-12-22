@@ -1,8 +1,13 @@
-import { useState, useCallback, useEffect, useRef, memo, lazy, Suspense } from "react";
+import React, { useState, useCallback, useEffect, useRef, memo, lazy, Suspense } from "react";
 import { useAtom } from "jotai";
+import useMousePosition from "@react-hook/mouse-position";
 
-import { EyedLink } from "~/attractions/EyedLink";
+import { EyedLink, EyedLinkProps } from "~/attractions/EyedLink";
+import { isTouchDevice } from "~/utils/isTouchDevice";
+import { useDelayedSwitch } from "~/hooks/useDelayedSwitch";
 import { currentCassette } from "./state";
+
+import styled from "@emotion/styled";
 
 interface TVProps extends React.ComponentProps<"a"> {
   video: string; // YouTube video ID
@@ -13,50 +18,46 @@ interface TVProps extends React.ComponentProps<"a"> {
 /*
  * Turn on TV with debounce, but turn off immediately
  */
-function useDelayedHover(hover: boolean, delay: number, defValue: boolean = false) {
-  type Timeout = ReturnType<typeof setTimeout>;
-
-  const [val, setVal] = useState(defValue);
-  const tmo = useRef<Timeout>();
-
-  useEffect(() => {
-    if (hover) {
-      if (!tmo.current) tmo.current = setTimeout(() => setVal(hover), delay);
-    } else {
-      if (tmo.current) {
-        clearTimeout(tmo.current);
-        tmo.current = undefined;
-      }
-      setVal(hover);
-    }
-  }, [hover]);
-
-  return val;
-}
 
 export const TV = memo(function TV({ video, from, withSound = false, ...linkProps }: TVProps) {
-  const [hoverOver, setHoverOver] = useState(false);
-  const isPlaying = useDelayedHover(hoverOver, 250);
-  const [, loadCassette] = useAtom(currentCassette);
+  const linkRef = useRef<HTMLAnchorElement>(null);
 
-  const mouseEntered = useCallback(() => setHoverOver(true), []);
-  const mouseLeft = useCallback(() => setHoverOver(false), []);
+  const mousePosition = useMousePosition(linkRef, {
+    fps: 8, // we don't really care about mouse position here
+  });
+
+  const isPlaying = useDelayedSwitch(mousePosition.isOver, {
+    switchOnDelay: isTouchDevice ? 0 : 250,
+    switchOffDelay: isTouchDevice ? 500 : 0,
+  });
+
+  const handleClick = useCallback((e: React.MouseEvent) => {
+    if (isTouchDevice) e.preventDefault();
+  }, []);
+
+  const [, loadCassette] = useAtom(currentCassette);
 
   useEffect(() => {
     loadCassette(isPlaying ? { video, from, withSound } : null);
   }, [isPlaying]);
 
   return (
-    <>
-      <EyedLink
-        href={`https://www.youtube.com/watch?v=${video}`}
-        {...linkProps}
-        onMouseEnter={mouseEntered}
-        onMouseLeave={mouseLeft}
-      />
-    </>
+    <Link
+      ref={linkRef}
+      href={`https://www.youtube.com/watch?v=${video}`}
+      onClick={handleClick}
+      {...(linkProps as EyedLinkProps)}
+    />
   );
 });
+
+const Link = styled(EyedLink)`
+  // disable default iOS touch behaviour
+  user-select: none;
+  touch-action: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+`;
 
 /**
  * TV Scene
