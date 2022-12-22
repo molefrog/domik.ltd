@@ -3,7 +3,9 @@ import styled from "@emotion/styled";
 import { css } from "@emotion/react";
 
 import worklet from "./worklet?url";
-import { useRaf } from "./use-raf";
+
+import { useRAF } from "./useRAF";
+import { useIsInViewport } from "./useIsInViewport";
 
 if ("paintWorklet" in CSS) {
   (CSS as any).paintWorklet.addModule(worklet);
@@ -15,14 +17,34 @@ type Props = {
 
 export const Spoiler = ({ children, reveal = false, ...restProps }: PropsWithChildren<Props>) => {
   const ref = useRef<HTMLSpanElement>(null);
+  const isInViewport = useIsInViewport(ref);
 
-  useEffect(() => {
-    const int = setInterval(() => {
-      ref.current?.style?.setProperty("--time", String(Math.random()));
-    }, 100);
+  const time = useRef<number>(0); // continously growing global time, starts with 0
+  const dt = useRef<number>(0);
 
-    return () => clearInterval(int);
-  });
+  // updates a CSS variable
+  const setCSSVariable = (variable: string, value: string | number) =>
+    ref.current?.style?.setProperty(variable, String(value));
+
+  const shouldRunAnimation = isInViewport && !reveal;
+
+  useRAF((_time, delta) => {
+    const minFPS = 1.0;
+    const maxFPS = 12.0;
+
+    delta = Math.min(delta, 1000.0 / minFPS); // when it's been too long since the last call
+    dt.current += delta;
+
+    // skip frames until delta reach maxFPS delta
+    if (dt.current < 1000.0 / maxFPS) return;
+    time.current += dt.current;
+
+    // reset the delta counter
+    dt.current = 0;
+
+    // redraw
+    setCSSVariable("--time", time.current);
+  }, shouldRunAnimation);
 
   return (
     <Secret ref={ref} reveal={reveal} {...restProps}>
