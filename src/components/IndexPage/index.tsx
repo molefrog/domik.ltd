@@ -2,13 +2,9 @@ import styled from "@emotion/styled";
 import { Global, css } from "@emotion/react";
 
 import { NextChapterBanner } from "~/components/NextChapterBanner";
-import { getLaunchDateForChapter } from "~/chapters";
 
 import { Billboard as BillboardImg } from "./Billboard";
-
 import charactersLayerImg from "~/assets/main/characters.png";
-import hillsBackLayerImg from "~/assets/main/hills-back.png";
-import hillsFrontLayerImg from "~/assets/main/hills-front.png";
 
 export const IndexPage = () => {
   return (
@@ -16,12 +12,14 @@ export const IndexPage = () => {
       <Global styles={styles} />
 
       <Centered>
-        <HillsBack />
         <Billboard>
           <BillboardImg />
         </Billboard>
 
-        <HillsFront />
+        <MenuLayer>
+          <NextChapterBanner launchDate={new Date(2023, 1, 1)} />
+        </MenuLayer>
+
         <Characters />
       </Centered>
     </>
@@ -30,97 +28,104 @@ export const IndexPage = () => {
 
 const styles = css`
   :root {
-    --color-main-background: #c7c7c7;
+    --color-main-background: var(--color-subtle-gray);
     background: var(--color-main-background);
   }
 `;
 
 const Layer = styled.div`
   position: fixed;
-  // pointer-events: none;
+  pointer-events: none;
+`;
+
+const MenuLayer = styled(Layer)`
+  left: 0;
+  right: 0;
+  top: 360px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @media (max-height: 800px) {
+    top: 260px;
+  }
+
+  @media (max-height: 640px) {
+    top: 230px;
+  }
+
+  @media (max-height: 520px) {
+    top: 160px;
+  }
+
+  @media (max-width: 420px), (max-height: 468px) {
+    left: 460px;
+
+    justify-content: flex-start;
+    top: 0;
+    bottom: 0;
+  }
 `;
 
 const Billboard = styled(Layer)`
-  left: calc(16px + 7vw);
-  bottom: calc(280px + 10vh);
+  --height: 340px;
+
+  left: 0;
   right: 0;
-  height: 320px;
+  height: var(--height);
+  top: calc(3vh);
+  top: calc(3svh);
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   aling-items: center;
 
   > svg {
     height: 100%;
   }
 
-  @media (max-width: 640px), (max-height: 520px) {
-    height: 220px;
-    left: 24px;
-    right: 24px;
-    bottom: auto;
+  @media (max-height: 800px) {
+    height: calc(0.8 * var(--height));
   }
 
-  // center and resize based on screen width
-  @media (max-width: 640px) {
-    top: 50px;
-    justify-content: center;
+  @media (max-height: 640px) {
+    height: calc(0.6 * var(--height));
+  }
+
+  @media (max-height: 520px) {
+    height: calc(0.45 * var(--height));
+  }
+
+  @media (max-width: 420px), (max-height: 468px) {
+    justify-content: flex-start;
+    left: 16px;
+    background-position: bottom left;
   }
 `;
 
 const Characters = styled(Layer)`
-  background: url("${charactersLayerImg}") no-repeat left top / contain;
-  left: calc(-32px + 10vw);
+  --height: 280px;
+
+  background: url("${charactersLayerImg}") no-repeat center bottom / contain;
+  left: 0;
   right: 0;
   bottom: 0;
-  height: 320px;
+  height: var(--height);
 
-  @media (max-width: 640px), (max-height: 520px) {
-    left: 32px;
-    right: 32px;
-    bottom: -6px;
-    height: 216px;
+  @media (max-height: 800px) {
+    height: calc(0.9 * var(--height));
   }
 
-  @media (max-width: 640px), {
-    background-position: center bottom;
-  }
-`;
-
-const HillsBack = styled(Layer)`
-  background: url("${hillsBackLayerImg}") no-repeat left top / auto 320px;
-  right: 0;
-  left: calc(-64px + 8vw);
-  bottom: calc(180px + 10vh);
-  height: 320px;
-
-  @media (max-width: 640px), (max-height: 520px) {
-    bottom: auto;
-    top: 64px;
-    left: 0;
-    right: 0;
-    background-size: auto 212px;
-    height: 212px;
-    background-position: center;
-  }
-`;
-
-const HillsFront = styled(Layer)`
-  background: url("${hillsFrontLayerImg}") no-repeat left top / auto 208px;
-  left: calc(464px + 8vw);
-  right: 0;
-  bottom: 64px;
-  height: 208px;
-
-  @media (max-width: 640px), (max-height: 520px) {
-    height: 148px;
-    background-size: auto 148px;
-
-    left: 364px;
-    bottom: 24px;
+  @media (max-height: 640px) {
+    height: calc(0.7 * var(--height));
   }
 
-  @media (max-width: 640px) {
-    display: none;
+  @media (max-height: 520px) {
+    height: calc(0.6 * var(--height));
+  }
+
+  @media (max-width: 420px), (max-height: 468px) {
+    left: 48px;
+    background-position: bottom left;
   }
 `;
 

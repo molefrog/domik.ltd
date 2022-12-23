@@ -1,14 +1,14 @@
 import styled from "@emotion/styled";
 import { SVGTextWithOuterStroke } from "./SVGTextWithOuterStroke";
-import billboardImg from "~/assets/main/billboard.png";
+import billboardImg from "~/assets/main/billboard-hills.png";
 import { ComponentProps } from "react";
 
 export const Billboard = (props: ComponentProps<"svg">) => {
   return (
-    <svg viewBox="0 0 540 380" {...props}>
-      <image xlinkHref={billboardImg} x="0" y="0" width="519" height="372" />
+    <svg viewBox="0 0 885 340" {...props}>
+      <image xlinkHref={billboardImg} x="0" y="0" width="885" height="340" />
 
-      <g transform="rotate(-6) translate(212 190) skewX(-6) scale(0.85)">
+      <g transform="rotate(-6) translate(416 172) skewX(-6) scale(0.68)">
         <Subtitle transform="translate(70, 42)" stroke="white" strokeWidth="8">
           лимитед
         </Subtitle>
