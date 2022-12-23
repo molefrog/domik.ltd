@@ -57,9 +57,9 @@ export async function checkCipherValidity(code?: Code | number) {
  * Chapters available
  */
 export function getLaunchDateForChapter(num: number): Date {
-  const startDate = new Date("2022-10-30");
+  const startDate = new Date("2022-12-26T07:00:00");
 
-  return new Date(startDate.getTime() + num * 7 * 24 * 60 * 60 * 1000);
+  return new Date(startDate.getTime() + num * 24 * 60 * 60 * 1000);
 }
 
 export interface ChapterModule {

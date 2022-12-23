@@ -8,7 +8,6 @@ interface NextChapterBannerProps {
 }
 
 export function NextChapterBanner({ launchDate }: NextChapterBannerProps) {
-  launchDate = new Date(2023, 1, 1);
   const isPastLaunchDate = launchDate.getTime() - Date.now() < 0;
 
   return (
@@ -58,7 +57,9 @@ const Buttons = styled.div`
   margin-top: 32px;
 `;
 
-const Button = styled(Link)<{ primary: boolean }>`
+const Button = styled(Link, {
+  shouldForwardProp: (prop) => !["primary"].includes(prop),
+})<{ primary: boolean }>`
   padding: 7px 14px;
   border-radius: 10px;
   font-size: 18px;
