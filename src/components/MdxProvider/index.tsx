@@ -1,5 +1,5 @@
 import { MDXProvider as Provider } from "@mdx-js/react";
-import { ReactNode } from "react";
+import React, { ReactNode } from "react";
 import styled from "@emotion/styled";
 
 import { TV } from "~/attractions/TV";
@@ -49,7 +49,8 @@ export const MdxProvider = (props: { children: ReactNode }) => {
     <Provider
       components={{
         h1: H1,
-        a: EyedLink,
+        // see https://github.com/mdx-js/mdx/discussions/2086
+        a: EyedLink as React.FunctionComponent<JSX.IntrinsicElements["a"]>,
         em: Em,
         p: P,
         Aside,
