@@ -1,44 +1,28 @@
 import styled from "@emotion/styled";
 import { Global, css } from "@emotion/react";
 
-import { NextChapterBanner } from "~/components/NextChapterBanner";
-
+import { MainMenu } from "./MainMenu";
 import { Billboard as BillboardImg } from "./Billboard";
 import charactersLayerImg from "~/assets/main/characters.png";
 
 export const IndexPage = () => {
   return (
     <>
-      <Global styles={styles} />
+      <Billboard>
+        <BillboardImg />
+      </Billboard>
 
-      <Centered>
-        <Billboard>
-          <BillboardImg />
-        </Billboard>
+      <Characters />
 
-        <MenuLayer>
-          <NextChapterBanner launchDate={new Date(2023, 1, 1)} />
-        </MenuLayer>
-
-        <Characters />
-      </Centered>
+      <Menu>
+        <MainMenu />
+      </Menu>
     </>
   );
 };
 
-const styles = css`
-  :root {
-    --color-main-background: var(--color-subtle-gray);
-    background: var(--color-main-background);
-  }
-`;
-
-const Layer = styled.div`
+const Menu = styled.div`
   position: fixed;
-  pointer-events: none;
-`;
-
-const MenuLayer = styled(Layer)`
   left: 0;
   right: 0;
   top: 360px;
@@ -47,7 +31,7 @@ const MenuLayer = styled(Layer)`
   justify-content: center;
 
   @media (max-height: 800px) {
-    top: 260px;
+    top: 280px;
   }
 
   @media (max-height: 640px) {
@@ -57,19 +41,12 @@ const MenuLayer = styled(Layer)`
   @media (max-height: 520px) {
     top: 160px;
   }
-
-  @media (max-width: 420px), (max-height: 468px) {
-    left: 460px;
-
-    justify-content: flex-start;
-    top: 0;
-    bottom: 0;
-  }
 `;
 
-const Billboard = styled(Layer)`
+const Billboard = styled.div`
   --height: 340px;
 
+  position: fixed;
   left: 0;
   right: 0;
   height: var(--height);
@@ -94,17 +71,12 @@ const Billboard = styled(Layer)`
   @media (max-height: 520px) {
     height: calc(0.45 * var(--height));
   }
-
-  @media (max-width: 420px), (max-height: 468px) {
-    justify-content: flex-start;
-    left: 16px;
-    background-position: bottom left;
-  }
 `;
 
-const Characters = styled(Layer)`
+const Characters = styled.div`
   --height: 280px;
 
+  position: fixed;
   background: url("${charactersLayerImg}") no-repeat center bottom / contain;
   left: 0;
   right: 0;
@@ -122,11 +94,4 @@ const Characters = styled(Layer)`
   @media (max-height: 520px) {
     height: calc(0.6 * var(--height));
   }
-
-  @media (max-width: 420px), (max-height: 468px) {
-    left: 48px;
-    background-position: bottom left;
-  }
 `;
-
-const Centered = styled.div``;
