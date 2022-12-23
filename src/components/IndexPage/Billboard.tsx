@@ -26,7 +26,7 @@ const Title = styled(SVGTextWithOuterStroke)`
   letter-spacing: -2px;
   font-weight: 900;
   text-transform: uppercase;
-  filter: drop-shadow(0px -1px 0px black);
+  filter: drop-shadow(4px 3px 0px black);
 `;
 
 const Subtitle = styled(SVGTextWithOuterStroke)`
@@ -34,5 +34,5 @@ const Subtitle = styled(SVGTextWithOuterStroke)`
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 2px;
-  filter: drop-shadow(1px 1px 0px black);
+  filter: drop-shadow(2px 1px 0px black);
 `;
