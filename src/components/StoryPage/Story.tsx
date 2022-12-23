@@ -89,9 +89,9 @@ const useChapterNumberFromRoute = (max: number): [CurrentChapter, (v: CurrentCha
   const setNumber = useCallback(
     (v: CurrentChapter) => {
       if (v !== undefined) {
-        navigate(`/story/chapter-${v + 1}`);
+        navigate(`/story/chapter-${v + 1}`, { replace: true });
       } else {
-        navigate("/story");
+        navigate("/story", { replace: true });
       }
     },
     [navigate]

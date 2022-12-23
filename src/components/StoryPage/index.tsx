@@ -36,7 +36,7 @@ export const StoryPage = () => {
         setChapters(modules);
       } catch (err) {
         console.error(err);
-        navigate("/");
+        navigate("/x");
       } finally {
         setIsLoading(false);
       }
