@@ -1,9 +1,7 @@
 import styled from "@emotion/styled";
-import { Global, css } from "@emotion/react";
-
 import { MainMenu } from "./MainMenu";
 import { Billboard as BillboardImg } from "./Billboard";
-import charactersLayerImg from "~/assets/main/characters.png";
+import charactersLayerImg from "~/assets/main/characters.webp";
 
 export const IndexPage = () => {
   return (

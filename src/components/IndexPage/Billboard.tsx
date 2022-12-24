@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { SVGTextWithOuterStroke } from "./SVGTextWithOuterStroke";
-import billboardImg from "~/assets/main/billboard-hills.png";
+import billboardImg from "~/assets/main/billboard-hills.webp";
 import { ComponentProps } from "react";
 
 export const Billboard = (props: ComponentProps<"svg">) => {
