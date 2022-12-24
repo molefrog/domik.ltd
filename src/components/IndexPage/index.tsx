@@ -25,13 +25,13 @@ const Menu = styled.div`
   position: fixed;
   left: 0;
   right: 0;
-  top: 360px;
+  top: 380px;
   display: flex;
   align-items: center;
   justify-content: center;
 
   @media (max-height: 800px) {
-    top: 280px;
+    top: 300px;
   }
 
   @media (max-height: 640px) {
@@ -58,6 +58,7 @@ const Billboard = styled.div`
 
   > svg {
     height: 100%;
+    min-width: 680px;
   }
 
   @media (max-height: 800px) {

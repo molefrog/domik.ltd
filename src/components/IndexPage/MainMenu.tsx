@@ -46,9 +46,14 @@ export const MainMenu = () => {
 
 const Buttons = styled.div`
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   gap: 10px;
+  min-width: 520px;
+
+  @media (max-width: 640px) {
+    flex-wrap: wrap;
+    min-width: initial;
+  }
 `;
 
 const Button = styled(Link, {
@@ -58,27 +63,24 @@ const Button = styled(Link, {
   border-radius: 10px;
   font-size: 18px;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   text-align: center;
   color: inherit;
   border: 3px solid transparent;
 
   transform: rotate(-3deg);
+  box-shadow: 0px 3px 0px 2px var(--color-text), 0px 0px 0px 2px var(--color-text);
 
   ${({ primary }) =>
-    primary
-      ? "background: #575756; color: white; "
-      : "background: none; border: 3px solid #575756;"}
+    primary ? "background: var(--color-selected);" : "background: var(--color-bg); "}
 
-  @media (max-width: 640px) {
-    flex: 1 1 100%;
-  }
+  transition: transform 0.15s ease;
+  flex: 1 1 100%;
 
   :hover {
     background: var(--color-selected-vivid);
     border-color: var(--color-selected-vivid);
     color: var(--color-text);
+    transform: translate(0, 3px) rotate(1deg);
   }
 `;
 
@@ -87,7 +89,4 @@ const Menu = styled.div`
   border-radius: 16px;
   font-size: 18px;
   padding: 2px;
-
-  background: var(--color-bg);
-  box-shadow: 0px 0px 12px 12px var(--color-bg);
 `;
