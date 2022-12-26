@@ -24,7 +24,7 @@
     "@vitejs/plugin-basic-ssl": "^1.0.1",
     "colord": "^2.9.3",
     "css-houdini-squircle": "^0.2.1",
-    "jotai": "^1.8.6",
+    "jotai": "^1.12.0",
     "lodash": "^4.17.21",
     "p2-es": "^1.1.6",
     "react": "^18.2.0",
@@ -34,7 +34,7 @@
     "react-use-event-hook": "^0.9.3",
     "react-youtube": "^10.0.0",
     "scroll-into-view": "^1.16.2",
-    "use-debounce": "^8.0.4",
+    "use-debounce": "^9.0.2",
     "use-sound": "^4.0.1",
     "wouter": "^2.8.0"
   },
