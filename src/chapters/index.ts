@@ -26,7 +26,7 @@ export async function digest(code: Code): Promise<Code> {
  * Builds a sequence of valid codes from the given end code
  * If a sequence can't be built, returns an empty array
  */
-export async function buildCodeSequence(code?: Code | number, tries = 16) {
+export async function buildCodeSequence(code?: Code | number, tries = 6) {
   if (!code) return [];
 
   if (typeof code === "number") {
@@ -35,7 +35,7 @@ export async function buildCodeSequence(code?: Code | number, tries = 16) {
 
   let seq = [];
 
-  while (--tries > 0) {
+  while (tries-- >= 0) {
     if (code === IV) return seq.reverse();
     seq.push(code);
 
