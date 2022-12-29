@@ -42,6 +42,7 @@ const Tag = styled.span`
   margin: 0 -4px;
   cursor: crosshair;
 
+  border-radius: 4px; // fallback
   // rounded squircle borders
   --squircle-radius: 16px;
   --squircle-smooth: 0.6;
@@ -51,6 +52,9 @@ const Tag = styled.span`
   --pulse-delay: 0s;
 
   animation: 3s ${pulseAnimation} infinite ease-out var(--pulse-delay);
+  touch-action: none;
+  -webkit-touch-callout: none;
+  user-select: none;
 
   @media (prefers-reduced-motion) {
     animation: none;

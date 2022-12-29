@@ -8,6 +8,7 @@ const Glow = styled.span`
   inset: 0 0 0 0;
 
   // rounded squircle borders
+  border-radius: 4px; // fallback
   --squircle-radius: 16px;
   --squircle-smooth: 0.6;
   mask-image: paint(squircle);
