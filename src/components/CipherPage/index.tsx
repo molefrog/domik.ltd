@@ -158,6 +158,10 @@ const Bottom = styled.div`
   padding: 32px 0;
   opacity: 0.2;
   pointer-events: none;
+
+  @media (max-width: 768px) {
+    padding: 16px 0;
+  }
 `;
 
 const Container = styled.div<{ fadeOut?: boolean }>`
@@ -181,7 +185,7 @@ const EnterCipher = styled.div`
   text-align: center;
   flex: 1 1;
   padding: 64px 16px 32px 16px;
-  container-type: size;
+  container-type: inline-size;
 
   @media (max-width: 768px) {
     padding: 32px 16px;
@@ -195,6 +199,10 @@ const EnterCipherHeader = styled.h1`
   @media (max-width: 768px) {
     font-size: 28px;
   }
+
+  @media (max-width: 480px) {
+    font-size: 24px;
+  }
 `;
 
 const EnterCipherTitle = styled.h2`
@@ -207,5 +215,9 @@ const EnterCipherTitle = styled.h2`
 
   @media (max-width: 768px) {
     font-size: 18px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 17px;
   }
 `;
