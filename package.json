@@ -1,5 +1,5 @@
 {
-  "name": "confused",
+  "name": "@molefrog/domik-ltd",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -36,7 +36,7 @@
     "scroll-into-view": "^1.16.2",
     "use-debounce": "^9.0.2",
     "use-sound": "^4.0.1",
-    "wouter": "^2.8.0"
+    "wouter": "^2.10.0-alpha.1"
   },
   "devDependencies": {
     "@mdx-js/rollup": "^2.1.4",
