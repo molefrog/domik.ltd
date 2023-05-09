@@ -6,7 +6,7 @@ import basicSsl from "@vitejs/plugin-basic-ssl";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), mdx({ providerImportSource: "@mdx-js/react" }), basicSsl()],
+  plugins: [react(), mdx({ providerImportSource: "@mdx-js/react" })],
 
   resolve: {
     alias: {

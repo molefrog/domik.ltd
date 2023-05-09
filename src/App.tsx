@@ -8,6 +8,7 @@ import { IndexPage } from "~/components/IndexPage";
 import { TVPlayer } from "./attractions/TV";
 
 import { usePreloadedResources } from "~/preloadResources";
+import { RoutesWithLocale } from "./i18n";
 
 const PlaygroundPage = lazy(() => import("~/components/PlaygroundPage"));
 
@@ -15,21 +16,23 @@ function App() {
   usePreloadedResources();
 
   return (
-    <Body>
-      <Switch>
-        <Route path="/" component={IndexPage} />
-        <Route path="/x/:any*" component={CipherPage} />
-        <Route path="/story/:any*" component={StoryPage} />
+    <RoutesWithLocale>
+      <Body>
+        <Switch>
+          <Route path="/" component={IndexPage} />
+          <Route path="/x/:any*" component={CipherPage} />
+          <Route path="/story/:any*" component={StoryPage} />
 
-        {import.meta.env.DEV && <Route path="/playground" component={PlaygroundPage} />}
+          {import.meta.env.DEV && <Route path="/playground" component={PlaygroundPage} />}
 
-        <Route>
-          <Redirect to="/" />
-        </Route>
-      </Switch>
+          <Route>
+            <Redirect to="/" />
+          </Route>
+        </Switch>
 
-      <TVPlayer />
-    </Body>
+        <TVPlayer />
+      </Body>
+    </RoutesWithLocale>
   );
 }
 
