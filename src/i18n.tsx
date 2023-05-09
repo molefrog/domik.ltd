@@ -7,17 +7,17 @@ export type Locale = "en" | "ru";
 
 export const useLocale = () => useContext(LocaleContext);
 
-const RE_LOCALE = /^\/(ru|en)/i;
+const DEFAULT_LOCALE = "ru";
 
 /**
  * Extracts locale from the URL and creates a nested router context
  */
 export const RoutesWithLocale = ({ children }: { children: ReactNode }) => {
   const [location] = useLocation();
-  const [, locale] = RE_LOCALE.exec(location) ?? [];
+  const [, locale] = /^\/(ru|en)/i.exec(location) ?? [];
 
-  const currentLocale = (locale ?? "en").toLowerCase() as Locale;
-  const routerBase = locale ? `/${locale}` : "/"; // all nested routes will be relative to /:locale
+  const currentLocale = (locale ?? DEFAULT_LOCALE).toLowerCase() as Locale;
+  const routerBase = locale ? `/${locale}` : ""; // all nested routes will be relative to /:locale
 
   return (
     <LocaleContext.Provider value={currentLocale}>

@@ -8,12 +8,15 @@ import { Story } from "./Story";
 import { buildCodeSequence, ChapterModule, chapterModules } from "~/chapters";
 import { acceptedCipher } from "~/state";
 import { delay } from "~/utils/promises";
+import { useLocale } from "~/i18n";
 
 export const StoryPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [storedCipher] = useAtom(acceptedCipher);
   const [, navigate] = useLocation();
   const [chapters, setChapters] = useState<Array<ChapterModule>>([]);
+
+  const locale = useLocale();
 
   useEffect(() => {
     (async () => {
@@ -30,7 +33,7 @@ export const StoryPage = () => {
         // dynamically load chapter modules
         const [, ...modules] = await Promise.all([
           delay(import.meta.env.DEV ? 0 : 2000), // artificial delay
-          ...chapterModules.slice(0, codes.length).map((fn) => fn()),
+          ...chapterModules.slice(0, codes.length).map((fn) => fn(locale)),
         ]);
 
         setChapters(modules);
@@ -41,7 +44,7 @@ export const StoryPage = () => {
         setIsLoading(false);
       }
     })();
-  }, [storedCipher]);
+  }, [locale, storedCipher]);
 
   if (isLoading) {
     return (
