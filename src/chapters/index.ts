@@ -1,5 +1,5 @@
 import { FunctionComponent } from "react";
-import { Locale } from "~/i18n";
+import { Locale } from "~/i18n/locale";
 
 type Code = string;
 
@@ -71,7 +71,8 @@ export interface ChapterModule {
 export const chapterModules = [
   (l: Locale) => import(`~/chapters/1-one/${l}.mdx`) as Promise<ChapterModule>,
   (l: Locale) => import(`~/chapters/2-two/${l}.mdx`) as Promise<ChapterModule>,
-  (l: Locale) => import(`~/chapters/3-three/${l}.mdx`) as Promise<ChapterModule>,
+  (l: Locale) =>
+    import(`~/chapters/3-three/${l}.mdx`) as Promise<ChapterModule>,
   (l: Locale) => import(`~/chapters/4-four/${l}.mdx`) as Promise<ChapterModule>,
   (l: Locale) => import(`~/chapters/5-five/${l}.mdx`) as Promise<ChapterModule>,
   (l: Locale) => import(`~/chapters/6-six/${l}.mdx`) as Promise<ChapterModule>,
