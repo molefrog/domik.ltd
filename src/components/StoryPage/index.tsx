@@ -8,7 +8,7 @@ import { Story } from "./Story";
 import { buildCodeSequence, ChapterModule, chapterModules } from "~/chapters";
 import { acceptedCipher } from "~/state";
 import { delay } from "~/utils/promises";
-import { useLocale } from "~/i18n";
+import { useLocale } from "~/i18n/hooks";
 
 export const StoryPage = () => {
   const [isLoading, setIsLoading] = useState(true);

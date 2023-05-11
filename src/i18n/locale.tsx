@@ -1,5 +1,6 @@
 import { useLocation, Router, useRouter } from "wouter";
-import { ReactNode, createContext, useContext } from "react";
+import { ReactNode, createContext, useContext, useLayoutEffect } from "react";
+import { useI18n } from "./i18n";
 
 const LocaleContext = createContext<Locale>("en");
 
@@ -19,9 +20,12 @@ export const RoutesWithLocale = ({ children }: { children: ReactNode }) => {
   const currentLocale = (locale ?? DEFAULT_LOCALE).toLowerCase() as Locale;
   const routerBase = locale ? `/${locale}` : ""; // all nested routes will be relative to /:locale
 
+  const i18n = useI18n();
+  if (i18n.locale() !== currentLocale) i18n.locale(currentLocale);
+
   return (
     <LocaleContext.Provider value={currentLocale}>
-      <Router base={routerBase} parent={useRouter()}>
+      <Router key={currentLocale} base={routerBase} parent={useRouter()}>
         {children}
       </Router>
     </LocaleContext.Provider>

@@ -3,18 +3,22 @@ import { SVGTextWithOuterStroke } from "./SVGTextWithOuterStroke";
 import billboardImg from "~/assets/main/billboard-hills.webp";
 import { ComponentProps } from "react";
 
+import { useI18n } from "~/i18n/hooks";
+
 export const Billboard = (props: ComponentProps<"svg">) => {
+  const i18n = useI18n();
+
   return (
     <svg viewBox="0 0 885 340" {...props}>
       <image xlinkHref={billboardImg} x="0" y="0" width="885" height="340" />
 
       <g transform="rotate(-6) translate(416 172) skewX(-6) scale(0.68)">
         <Subtitle transform="translate(70, 42)" stroke="white" strokeWidth="8">
-          лимитед
+          {i18n.t("banner.ltd")}
         </Subtitle>
 
         <Title stroke="white" strokeWidth="16">
-          домик
+          {i18n.t("banner.domik")}
         </Title>
       </g>
     </svg>
