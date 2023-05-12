@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { useRoute, useLocation } from "wouter";
+import { useRoute, useLocation, Link } from "wouter";
 import { useDebounce } from "use-debounce";
 import { useAtom } from "jotai";
 
@@ -13,6 +13,9 @@ import { useClickSound, useSuccessSound } from "~/hooks/useSounds";
 import { delay } from "~/utils/promises";
 import { checkCipherValidity } from "~/chapters";
 import { newChapterUnlocked, acceptedCipher } from "~/state";
+import "~/utils/squircle";
+
+import closeIcon from "~/assets/icons/close.svg";
 
 const DEFAULT_VALUE = 0o0;
 
@@ -125,6 +128,12 @@ export function CipherPage() {
 
   return (
     <Container fadeOut={isLoading}>
+      <Link href="/story">
+        <Close>
+          <img src={closeIcon} alt="Go back"></img>
+        </Close>
+      </Link>
+
       <EnterCipher>
         <EnterCipherHeader>Знаешь секретный шифр?</EnterCipherHeader>
         <EnterCipherTitle>
@@ -132,12 +141,14 @@ export function CipherPage() {
           последовательность символов.
         </EnterCipherTitle>
 
-        <CipherInput
-          ref={inputRef}
-          cipher={cipher}
-          readonly={inputDisabled}
-          onChange={(x) => setCipher(x)}
-        />
+        <InputContainer>
+          <CipherInput
+            ref={inputRef}
+            cipher={cipher}
+            readonly={inputDisabled}
+            onChange={(x) => setCipher(x)}
+          />
+        </InputContainer>
       </EnterCipher>
 
       <Bottom>
@@ -172,6 +183,7 @@ const Container = styled.div<{ fadeOut?: boolean }>`
   align-items: stretch;
   justify-content: center;
   transition: opacity 0.3s ease, transform 1s ease;
+  position: relative;
 
   ${(props) =>
     props.fadeOut &&
@@ -186,9 +198,12 @@ const EnterCipher = styled.div`
   flex: 1 1;
   padding: 64px 16px 32px 16px;
   container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 
   @media (max-width: 768px) {
-    padding: 32px 16px;
+    padding: 48px 16px;
   }
 `;
 
@@ -219,5 +234,60 @@ const EnterCipherTitle = styled.h2`
 
   @media (max-width: 480px) {
     font-size: 17px;
+  }
+`;
+
+const InputContainer = styled.div`
+  margin-bottom: 96px;
+
+  @media (max-width: 768px) {
+    margin-bottom: 48px;
+  }
+`;
+
+const Close = styled.button`
+  width: 56px;
+  height: 56px;
+
+  position: absolute;
+  z-index: 100;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  top: 24px;
+  right: 24px;
+
+  user-select: none;
+  cursor: pointer;
+  appearance: none;
+  outline: none;
+  border: none;
+  background: var(--color-embossed);
+
+  --squircle-radius: 12px;
+  --squircle-smooth: 0.6;
+  --squircle-color: #664eff;
+  mask-image: paint(squircle);
+  border-radius: 12px;
+
+  & img {
+    width: 40%;
+    height: 40%;
+    opacity: 0.25;
+  }
+
+  &:hover img {
+    opacity: 0.75;
+  }
+
+  &:active img {
+    opacity: 1;
+  }
+
+  @media (max-width: 768px) {
+    width: 48px;
+    height: 48px;
+    top: 12px;
+    right: 12px;
   }
 `;
