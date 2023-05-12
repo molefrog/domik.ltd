@@ -277,7 +277,7 @@ const Close = styled.button`
   }
 
   & img {
-    width: 45%;
+    width: 20px;
     opacity: 0.25;
   }
 
@@ -294,5 +294,9 @@ const Close = styled.button`
     height: 48px;
     top: 12px;
     right: 12px;
+
+    & img {
+      width: 16px;
+    }
   }
 `;
