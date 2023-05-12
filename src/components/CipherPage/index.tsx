@@ -129,7 +129,7 @@ export function CipherPage() {
   return (
     <Container fadeOut={isLoading}>
       <Link href="/story">
-        <Close>
+        <Close aria-label="Close">
           <img src={closeIcon} alt="Go back"></img>
         </Close>
       </Link>
@@ -256,6 +256,7 @@ const Close = styled.button`
   justify-content: center;
   top: 24px;
   right: 24px;
+  flex: 0 0 auto;
 
   user-select: none;
   cursor: pointer;
@@ -263,6 +264,7 @@ const Close = styled.button`
   outline: none;
   border: none;
   background: var(--color-embossed);
+  box-sizing: border-box;
 
   --squircle-radius: 12px;
   --squircle-smooth: 0.6;
@@ -270,9 +272,12 @@ const Close = styled.button`
   mask-image: paint(squircle);
   border-radius: 12px;
 
+  &:focus-visible {
+    box-shadow: inset 0px 0px 0px 4px var(--color-selected-vivid);
+  }
+
   & img {
-    width: 40%;
-    height: 40%;
+    width: 45%;
     opacity: 0.25;
   }
 
