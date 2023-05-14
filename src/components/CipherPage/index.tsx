@@ -132,7 +132,7 @@ export function CipherPage() {
 
   return (
     <Container fadeOut={isLoading}>
-      <Link href="/story">
+      <Link href="/">
         <Close aria-label="Close">
           <img src={closeIcon} alt="Go back"></img>
         </Close>

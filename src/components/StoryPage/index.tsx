@@ -12,7 +12,7 @@ import { useLocale } from "~/i18n/hooks";
 
 export const StoryPage = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [storedCipher] = useAtom(acceptedCipher);
+  const [storedCipher, setStoredCipher] = useAtom(acceptedCipher);
   const [, navigate] = useLocation();
   const [chapters, setChapters] = useState<Array<ChapterModule>>([]);
 
@@ -27,6 +27,7 @@ export const StoryPage = () => {
 
         // invalid secret code provided
         if (!valid) {
+          setStoredCipher(undefined);
           throw new Error("Provided cipher is not valid!");
         }
 
@@ -44,7 +45,7 @@ export const StoryPage = () => {
         setIsLoading(false);
       }
     })();
-  }, [locale, storedCipher]);
+  }, [locale, storedCipher, setStoredCipher]);
 
   if (isLoading) {
     return (
