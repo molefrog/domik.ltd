@@ -46,7 +46,7 @@ async function buildCodeSequence(code?: Code | number, tries = 6) {
   return [];
 }
 
-const REQUIRE_CODE_FOR_EACH_CHAPTER = true;
+const REQUIRE_CODE_FOR_EACH_CHAPTER = import.meta.env.VITE_REQUIRE_CODE_FOR_EACH_CHAPTER === "true";
 
 interface CipherValidity {
   valid: boolean;
