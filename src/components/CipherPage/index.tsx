@@ -65,7 +65,7 @@ export function CipherPage() {
   const [playSuccess] = useSuccessSound();
 
   // when the sequence entered matches the secret
-  const acceptCipher = async (cipher: Cipher, chaptersUnlocked: number) => {
+  const acceptCipher = async (cipher: Cipher, navigateToChapter: number) => {
     setCipher(cipher);
     setInputDisabled(true);
 
@@ -84,7 +84,7 @@ export function CipherPage() {
 
     // save the matched cipher
     setStoredCipher(cipher);
-    navigate(`/story/chapter-${chaptersUnlocked}`);
+    navigate(`/story/chapter-${navigateToChapter}`);
   };
 
   // customize page title
@@ -120,9 +120,13 @@ export function CipherPage() {
   // check the cipher validity
   useEffect(() => {
     (async () => {
-      const { valid, chaptersUnlocked } = await checkCipherValidity(debouncedCipher);
+      const { valid, chaptersUnlocked, startReadingFromChapter } = await checkCipherValidity(
+        debouncedCipher
+      );
 
-      if (valid) acceptCipher(debouncedCipher, chaptersUnlocked);
+      const navigateToChapter = startReadingFromChapter ?? chaptersUnlocked;
+
+      if (valid) acceptCipher(debouncedCipher, navigateToChapter);
     })();
   }, [debouncedCipher]);
 

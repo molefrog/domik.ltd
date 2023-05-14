@@ -1,45 +1,18 @@
-import { useEffect, useState } from "react";
-import { useAtom } from "jotai";
+import { useState } from "react";
+
 import styled from "@emotion/styled";
 import { Link } from "wouter";
 
-import { acceptedCipher } from "~/state";
-import { checkCipherValidity } from "~/chapters";
-
 export const MainMenu = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [chaptersUnlocked, setChaptersUnlocked] = useState(0);
-  const [storedCipher] = useAtom(acceptedCipher);
-
-  useEffect(() => {
-    (async () => {
-      setIsLoading(true);
-      const { chaptersUnlocked } = await checkCipherValidity(storedCipher);
-      setChaptersUnlocked(chaptersUnlocked);
-      setIsLoading(false);
-    })();
-  }, []);
-
   return (
     <Menu>
-      {!isLoading && (
-        <Buttons>
-          {chaptersUnlocked <= 0 ? (
-            <>
-              <Button primary to="/x">
-                Читать первую главу
-              </Button>
-            </>
-          ) : (
-            <>
-              <Button primary to="/x">
-                Открыть новую главу
-              </Button>
-              <Button to="/story">Продолжить читать</Button>
-            </>
-          )}
-        </Buttons>
-      )}
+      <Buttons>
+        <Button primary to="/story">
+          Читать
+        </Button>
+
+        <Button to="/x">Ввести код</Button>
+      </Buttons>
     </Menu>
   );
 };

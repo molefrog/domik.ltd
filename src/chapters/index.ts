@@ -16,7 +16,7 @@ const bytesToOct = (bytes: number[]): Code =>
  * Hashes the code (as an octal string) with SHA-256
  * and then takes the first 8 octal digits
  */
-export async function digest(code: Code): Promise<Code> {
+async function digest(code: Code): Promise<Code> {
   const msgUint8 = new TextEncoder().encode(code);
   const hash = await crypto.subtle.digest("SHA-256", msgUint8);
 
@@ -27,7 +27,7 @@ export async function digest(code: Code): Promise<Code> {
  * Builds a sequence of valid codes from the given end code
  * If a sequence can't be built, returns an empty array
  */
-export async function buildCodeSequence(code?: Code | number, tries = 6) {
+async function buildCodeSequence(code?: Code | number, tries = 6) {
   if (!code) return [];
 
   if (typeof code === "number") {
@@ -46,10 +46,38 @@ export async function buildCodeSequence(code?: Code | number, tries = 6) {
   return [];
 }
 
+const REQUIRE_CODE_FOR_EACH_CHAPTER = true;
+
+interface CipherValidity {
+  valid: boolean;
+  chaptersUnlocked: number;
+  startReadingFromChapter?: number;
+}
+
 /*
  * Checks if the code matches any chapter from the book
  */
-export async function checkCipherValidity(code?: Code | number) {
+export async function checkCipherValidity(code?: Code | number): Promise<CipherValidity> {
+  if (!REQUIRE_CODE_FOR_EACH_CHAPTER) {
+    // first tree chapters are available without a code
+    if (code === undefined) return { valid: true, chaptersUnlocked: 3 };
+
+    const codes = await buildCodeSequence(code);
+
+    if (codes.length % 3 !== 0) {
+      // code only works for 3, 6, and so on chapters
+      return { valid: false, chaptersUnlocked: 0 };
+    }
+
+    return {
+      valid: codes.length > 0,
+      chaptersUnlocked: codes.length,
+      // 2 -> 1, 3 -> 1, 4 -> 4, 6 -> 4
+      startReadingFromChapter: 3 * (Math.ceil(codes.length / 3) - 1) + 1,
+    };
+  }
+
+  // normal mode: require a code for each chapter
   const codes = await buildCodeSequence(code);
   return { valid: codes.length > 0, chaptersUnlocked: codes.length };
 }
@@ -71,8 +99,7 @@ export interface ChapterModule {
 export const chapterModules = [
   (l: Locale) => import(`~/chapters/1-one/${l}.mdx`) as Promise<ChapterModule>,
   (l: Locale) => import(`~/chapters/2-two/${l}.mdx`) as Promise<ChapterModule>,
-  (l: Locale) =>
-    import(`~/chapters/3-three/${l}.mdx`) as Promise<ChapterModule>,
+  (l: Locale) => import(`~/chapters/3-three/${l}.mdx`) as Promise<ChapterModule>,
   (l: Locale) => import(`~/chapters/4-four/${l}.mdx`) as Promise<ChapterModule>,
   (l: Locale) => import(`~/chapters/5-five/${l}.mdx`) as Promise<ChapterModule>,
   (l: Locale) => import(`~/chapters/6-six/${l}.mdx`) as Promise<ChapterModule>,

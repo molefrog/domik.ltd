@@ -5,7 +5,7 @@ import { useLocation } from "wouter";
 
 import { BumperCar } from "~/components/BumperCar";
 import { Story } from "./Story";
-import { buildCodeSequence, ChapterModule, chapterModules } from "~/chapters";
+import { checkCipherValidity, ChapterModule, chapterModules } from "~/chapters";
 import { acceptedCipher } from "~/state";
 import { delay } from "~/utils/promises";
 import { useLocale } from "~/i18n/hooks";
@@ -23,17 +23,17 @@ export const StoryPage = () => {
       setIsLoading(true);
 
       try {
-        const codes = await buildCodeSequence(storedCipher);
+        const { valid, chaptersUnlocked } = await checkCipherValidity(storedCipher);
 
         // invalid secret code provided
-        if (!codes.length) {
+        if (!valid) {
           throw new Error("Provided cipher is not valid!");
         }
 
         // dynamically load chapter modules
         const [, ...modules] = await Promise.all([
           delay(import.meta.env.DEV ? 0 : 2000), // artificial delay
-          ...chapterModules.slice(0, codes.length).map((fn) => fn(locale)),
+          ...chapterModules.slice(0, chaptersUnlocked).map((fn) => fn(locale)),
         ]);
 
         setChapters(modules);
