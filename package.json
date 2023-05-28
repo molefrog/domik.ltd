@@ -41,6 +41,7 @@
     "wouter": "^2.11.0-dev.1"
   },
   "devDependencies": {
+    "@mantine/hooks": "^6.0.11",
     "@mdx-js/rollup": "^2.1.4",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",

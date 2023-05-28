@@ -1,11 +1,13 @@
 import styled from "@emotion/styled";
 
-import useHover from "@react-hook/hover";
+import { useClickOutside } from "@mantine/hooks";
 import useMouse, { MousePosition } from "@react-hook/mouse-position";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { symbolForOct } from "~/assets/symbols/oct";
 import { useRAF } from "../Spoiler/useRAF";
+
+import { isTouchDevice } from "~/utils/isTouchDevice";
 
 interface Props {
   oct: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
@@ -25,11 +27,17 @@ const useNegativePhotoEffect = (active: boolean) => {
 };
 
 export const Gem = (props: Props) => {
-  const wrapperRef = useRef<HTMLElement>(null);
+  const [touchToggle, setTouchToggle] = useState(false);
+
+  const wrapperRef = useClickOutside(() => {
+    setTouchToggle(false);
+  });
+  const mousePosition = useMouse(wrapperRef);
+
   const stoneRef = useRef<HTMLElement>(null);
 
-  const isHovering = useHover(wrapperRef);
-  const mousePosition = useMouse(wrapperRef);
+  // on touch devices tap to toggle, on desktop hover to toggle
+  const isHovering = isTouchDevice ? touchToggle : mousePosition.isOver;
 
   useNegativePhotoEffect(isHovering);
 
@@ -76,7 +84,7 @@ export const Gem = (props: Props) => {
   }, [isHovering]);
 
   return (
-    <Wrapper ref={wrapperRef} hovered={isHovering}>
+    <Wrapper ref={wrapperRef} hovered={isHovering} onClick={() => setTouchToggle((x) => !x)}>
       <Gemstone hovered={isHovering}>
         <Stone
           ref={stoneRef}
@@ -97,6 +105,8 @@ const Wrapper = styled.span<{ hovered: boolean }>`
   vertical-align: baseline;
   transition: box-shadow 0.2s ease;
   position: relative;
+  touch-action: none;
+  user-select: none;
 
   ${({ hovered }) =>
     hovered &&
@@ -122,7 +132,8 @@ const Gemstone = styled.span<{ hovered: boolean }>`
   justify-content: center;
 
   transition: transform 0.15s ease-out 0.2s;
-  ${({ hovered }) => hovered && `transform: translate3d(0, -32px, 0) scale(4.0);`}
+  ${({ hovered }) => hovered && `transform: translateY(-32px) scale(4.0);`}
+  will-change: transform;
 `;
 
 const Stone = styled.span`
@@ -140,4 +151,5 @@ const Stone = styled.span`
   background-size: 80%;
 
   transition: transform 0.1s linear;
+  will-change: transform;
 `;
