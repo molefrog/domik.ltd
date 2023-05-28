@@ -107,13 +107,15 @@ const Wrapper = styled.span<{ hovered: boolean }>`
 `;
 
 const Gemstone = styled.span<{ hovered: boolean }>`
-  width: 48px;
-  height: 48px;
+  --hover-area: 52px;
+
+  width: var(--hover-area);
+  height: var(--hover-area);
   cursor: pointer;
 
   position: absolute;
-  bottom: calc(-2px - 0.5 * (48px - 22px));
-  left: calc(-0.5 * (48px - 14px));
+  bottom: calc(-2px - 0.5 * (var(--hover-area) - 22px));
+  left: calc(-0.5 * (var(--hover-area) - 14px));
 
   display: flex;
   align-items: center;
