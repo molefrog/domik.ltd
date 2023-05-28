@@ -3,16 +3,7 @@ import styled from "@emotion/styled";
 
 import { usePrevious } from "~/hooks/usePrevious";
 
-import oct0 from "~/assets/symbols/0.svg";
-import oct1 from "~/assets/symbols/1.svg";
-import oct2 from "~/assets/symbols/2.svg";
-import oct3 from "~/assets/symbols/3.svg";
-import oct4 from "~/assets/symbols/4.svg";
-import oct5 from "~/assets/symbols/5.svg";
-import oct6 from "~/assets/symbols/6.svg";
-import oct7 from "~/assets/symbols/7.svg";
-
-const symbols = [oct0, oct1, oct2, oct3, oct4, oct5, oct6, oct7];
+import { symbolForOct } from "~/assets/symbols/oct";
 
 export enum Direction {
   Backward = -1,
@@ -33,7 +24,7 @@ interface TransitionItem {
 const Symbol = (props: { value: number }) => {
   return (
     <SymbolContainer>
-      <img src={symbols[props.value % 8]} />
+      <img src={symbolForOct(props.value)} />
     </SymbolContainer>
   );
 };
