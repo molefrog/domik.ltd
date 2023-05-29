@@ -23,6 +23,7 @@ const styles = css`
     --color-selected-light: var(--color-banana-yellow);
     --color-selected-vivid: #fac753;
     --color-embossed: var(--color-twilight-blue);
+    --color-embossed-light: #f0f0ed;
     --color-embossed-dark: var(--color-carrara);
     --color-text-highlight: #e386b2;
     --color-subtle-gray: #eaeaea;

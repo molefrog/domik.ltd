@@ -5,6 +5,7 @@ import { useLocation, useRoute } from "wouter";
 import { getLaunchDateForChapter, ChapterModule, totalNumberOfChapters } from "~/chapters";
 import { NextChapterBanner } from "~/components/NextChapterBanner";
 import { ReadingProgress } from "../ReadingProgress";
+import { Navigation } from "../Navigation";
 
 // hooks
 import { useChapterProgress, useSyncState } from "./useChapterProgress";
@@ -36,36 +37,41 @@ export const Story = ({ chapters }: StoryProps) => {
   const moreChaptersAvailable = chapters.length < totalNumberOfChapters;
 
   return (
-    <Article>
-      <ReadingProgress progress={progress} max={maxProgress} />
+    <>
+      <Article>
+        <ReadingProgress progress={progress} max={maxProgress} />
 
-      <Chapters>
-        {chapters.map((mod, index) => {
-          const Mdx = mod.default;
+        <Chapters>
+          {chapters.map((mod, index) => {
+            const Mdx = mod.default;
 
-          return (
-            <ChapterContent
-              key={index}
-              ref={(el) => {
-                chapterRefs[index] = el;
+            return (
+              <ChapterContent
+                key={index}
+                ref={(el) => {
+                  chapterRefs[index] = el;
 
-                if (chapterRefs.every((x) => x) && chapterElements.length <= 0) {
-                  setChapterElements(chapterRefs);
-                }
-              }}
-            >
-              <Mdx />
-            </ChapterContent>
-          );
-        })}
+                  if (chapterRefs.every((x) => x) && chapterElements.length <= 0) {
+                    setChapterElements(chapterRefs);
+                  }
+                }}
+              >
+                <Mdx />
+              </ChapterContent>
+            );
+          })}
 
-        {moreChaptersAvailable && (
-          <Banner>
-            <NextChapterBanner launchDate={getLaunchDateForChapter(chapters.length)} />
-          </Banner>
-        )}
-      </Chapters>
-    </Article>
+          {moreChaptersAvailable && (
+            <Banner>
+              <NextChapterBanner launchDate={getLaunchDateForChapter(chapters.length)} />
+            </Banner>
+          )}
+        </Chapters>
+      </Article>
+
+      {/* Navigate between chapters, change language */}
+      <Navigation chapters={chapters} currentChapter={currentChapterIdx} />
+    </>
   );
 };
 
