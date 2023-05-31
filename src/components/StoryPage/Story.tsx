@@ -70,7 +70,7 @@ export const Story = ({ chapters }: StoryProps) => {
       </Article>
 
       {/* Navigate between chapters, change language */}
-      <Navigation chapters={chapters} currentChapter={currentChapterIdx} />
+      <Navigation chapters={chapters} currentChapter={currentChapterIdx ?? 0} />
     </>
   );
 };
