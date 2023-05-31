@@ -55,11 +55,21 @@ export const Navigation = ({ chapters, currentChapter }: NavigationProps) => {
               )}
 
               <Bottom>
-                <LangSwitch>
-                  <LangSwitchItem selected={locale === "en"} href={`~/en${currentPath}`}>
+                <LangSwitch role="radiogroup" aria-label="Switch language">
+                  <LangSwitchItem
+                    role="radio"
+                    aria-label="English"
+                    selected={locale === "en"}
+                    href={`~/en${currentPath}`}
+                  >
                     EN
                   </LangSwitchItem>
-                  <LangSwitchItem selected={locale === "ru"} href={`~/ru${currentPath}`}>
+                  <LangSwitchItem
+                    role="radio"
+                    aria-label="Russian"
+                    selected={locale === "ru"}
+                    href={`~/ru${currentPath}`}
+                  >
                     RU
                   </LangSwitchItem>
                 </LangSwitch>
@@ -69,7 +79,7 @@ export const Navigation = ({ chapters, currentChapter }: NavigationProps) => {
         );
       })}
 
-      <Toggle active={isOpen} onClick={() => setIsOpen((x) => !x)}>
+      <Toggle aria-label="Open menu" active={isOpen} onClick={() => setIsOpen((x) => !x)}>
         <img alt="Menu" src={hamburderIcon} />
       </Toggle>
     </>
