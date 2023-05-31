@@ -23,7 +23,7 @@ export const useChapterProgress = (elements: Array<HTMLElement | null>, precisio
       // array isn't ready yet
       if (elements.some((el) => !el)) return;
 
-      if (to && elements[to]) {
+      if (to !== undefined && elements[to]) {
         scrollIntoView(elements[to]!, {
           time: import.meta.env.DEV ? 0 : 1000, // do not animate in dev
         });
