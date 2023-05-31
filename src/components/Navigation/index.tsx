@@ -3,86 +3,101 @@ import { ChapterModule, totalNumberOfChapters } from "~/chapters";
 import { Link, useLocation } from "wouter";
 import { useLocale } from "~/i18n/locale";
 
-import { useState } from "react";
-import { useTransition, animated, config } from "@react-spring/web";
+import { useEffect, useState } from "react";
+import { useTransition, animated, config, SpringValue } from "@react-spring/web";
 
 import lockIcon from "~/assets/icons/lock.svg";
 import hamburderIcon from "~/assets/icons/hamburger.svg";
+import { useClickOutside } from "@mantine/hooks";
+import useChange from "@react-hook/change";
 
 interface NavigationProps {
   chapters: ChapterModule[];
   currentChapter: number;
 }
 
-export const Navigation = ({ chapters, currentChapter }: NavigationProps) => {
+type MenuProps = NavigationProps & { onClose: () => void; style: MenuStyle };
+
+type MenuStyle = { opacity: SpringValue<number>; rotate: SpringValue<string> };
+
+const Menu = ({ currentChapter, chapters, style, onClose }: MenuProps) => {
   const [currentPath] = useLocation();
   const locale = useLocale();
+
+  return (
+    <MenuPopover style={style}>
+      {chapters.map((module, index) => {
+        return (
+          <Chapter
+            key={index}
+            active={currentChapter === index}
+            href={`/story/chapter-${index + 1}`}
+            onClick={onClose}
+          >
+            {module.title}
+          </Chapter>
+        );
+      })}
+      {chapters.length < totalNumberOfChapters && (
+        <LockedChapter href="/x">
+          {""}
+          <img src={lockIcon} alt="This chapter is locked!" />
+        </LockedChapter>
+      )}
+      <Bottom>
+        <LangSwitch role="radiogroup" aria-label="Switch language">
+          <LangSwitchItem
+            role="radio"
+            aria-label="English"
+            selected={locale === "en"}
+            href={`~/en${currentPath}`}
+            onClick={onClose}
+          >
+            EN
+          </LangSwitchItem>
+          <LangSwitchItem
+            role="radio"
+            aria-label="Russian"
+            selected={locale === "ru"}
+            href={`~/ru${currentPath}`}
+            onClick={onClose}
+          >
+            RU
+          </LangSwitchItem>
+        </LangSwitch>
+      </Bottom>
+    </MenuPopover>
+  );
+};
+
+export const Navigation = (props: NavigationProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const transitions = useTransition(isOpen, {
     from: { opacity: 0, rotate: "35deg" },
     enter: { opacity: 1, rotate: "-1deg" },
-    leave: { opacity: 0, rotate: "45deg" },
-    config: (a, b, c) => {
-      if (c === "enter") return config.wobbly;
+    leave: { opacity: 0, rotate: "35deg" },
+    config: () => {
       return config.stiff;
     },
   });
 
+  const closeMenu = () => {
+    setIsOpen(false);
+  };
+
+  const popoverRef = useClickOutside(closeMenu);
+
   return (
-    <>
+    <div ref={popoverRef}>
       {transitions((style, item) => {
-        return (
-          item && (
-            <Menu style={style}>
-              {chapters.map((module, index) => {
-                return (
-                  <Chapter
-                    key={index}
-                    active={currentChapter === index}
-                    href={`/story/chapter-${index + 1}`}
-                  >
-                    {module.title}
-                  </Chapter>
-                );
-              })}
-
-              {chapters.length < totalNumberOfChapters && (
-                <LockedChapter href="/x">
-                  {""}
-                  <img src={lockIcon} alt="This chapter is locked!" />
-                </LockedChapter>
-              )}
-
-              <Bottom>
-                <LangSwitch role="radiogroup" aria-label="Switch language">
-                  <LangSwitchItem
-                    role="radio"
-                    aria-label="English"
-                    selected={locale === "en"}
-                    href={`~/en${currentPath}`}
-                  >
-                    EN
-                  </LangSwitchItem>
-                  <LangSwitchItem
-                    role="radio"
-                    aria-label="Russian"
-                    selected={locale === "ru"}
-                    href={`~/ru${currentPath}`}
-                  >
-                    RU
-                  </LangSwitchItem>
-                </LangSwitch>
-              </Bottom>
-            </Menu>
-          )
-        );
+        return item && <Menu style={style} onClose={closeMenu} {...props} />;
       })}
 
       <Toggle aria-label="Open menu" active={isOpen} onClick={() => setIsOpen((x) => !x)}>
         <img alt="Menu" src={hamburderIcon} />
       </Toggle>
-    </>
+    </div>
   );
 };
 
@@ -90,8 +105,8 @@ const Toggle = styled.button<{ active: boolean }>`
   position: fixed;
   top: 20px;
   left: 20px;
-  width: 48px;
-  height: 48px;
+  width: 52px;
+  height: 52px;
   background: var(--color-embossed);
   border-radius: 12px;
 
@@ -191,7 +206,7 @@ const LangSwitchItem = styled(Link, {
       font-weight: 600;`}
 `;
 
-const Menu = styled(animated.div)`
+const MenuPopover = styled(animated.div)`
   --shadow-contour: 6px;
 
   position: fixed;
