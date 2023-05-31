@@ -8,6 +8,7 @@ import { Spoiler } from "~/attractions/Spoiler";
 import { SlurredSpeech } from "~/attractions/SlurredSpeech";
 import { HouseBuilder } from "~/attractions/HouseBuilder";
 import { FullWidth } from "~/attractions/FullWidth";
+import { Navigation } from "../Navigation";
 import * as Credits from "~/attractions/Credits";
 import mapImage from "~/chapters/3-three/map.webp";
 
@@ -21,6 +22,7 @@ export default function PlaygroundPage() {
 
   return (
     <Container>
+      <Navigation chapters={[]} currentChapter={0} />
       <p>
         Смотри, какая <TV video="dQw4w9WgXcQ">нелепая схема</TV>, — мне бросилась в глаза книжечка
         на стенде, в котором обычно продавались путеводители и карты. Только эта книга отличалась от
