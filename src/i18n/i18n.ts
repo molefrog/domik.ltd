@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import rosetta, { type Rosetta } from "rosetta";
+import rosetta from "rosetta";
 import { en, ru } from "./translations";
 
 export const i18n = rosetta({ en });

@@ -2,7 +2,7 @@ import { useState, useEffect, FunctionComponent, useCallback } from "react";
 import styled from "@emotion/styled";
 import { useLocation, useRoute } from "wouter";
 
-import { getLaunchDateForChapter, ChapterModule, totalNumberOfChapters } from "~/chapters";
+import { ChapterModule, totalNumberOfChapters } from "~/chapters";
 import { NextChapterBanner } from "~/components/NextChapterBanner";
 import { ReadingProgress } from "../ReadingProgress";
 import { Navigation } from "../Navigation";
@@ -63,7 +63,7 @@ export const Story = ({ chapters }: StoryProps) => {
 
           {moreChaptersAvailable && (
             <Banner>
-              <NextChapterBanner launchDate={getLaunchDateForChapter(chapters.length)} />
+              <NextChapterBanner />
             </Banner>
           )}
         </Chapters>

@@ -15,6 +15,8 @@ import { checkCipherValidity } from "~/chapters";
 import { newChapterUnlocked, acceptedCipher } from "~/state";
 import "~/utils/squircle";
 
+import { useI18n } from "~/i18n/i18n";
+
 import closeIcon from "~/assets/icons/close.svg";
 
 const DEFAULT_VALUE = 0o0;
@@ -57,6 +59,8 @@ export function CipherPage() {
 
   const firstRender = useRef(true);
   const inputRef = useRef<CipherInputRef>(null);
+
+  const { t } = useI18n();
 
   const [, navigate] = useLocation();
 
@@ -139,11 +143,8 @@ export function CipherPage() {
       </Link>
 
       <EnterCipher>
-        <EnterCipherHeader>Знаешь секретный шифр?</EnterCipherHeader>
-        <EnterCipherTitle>
-          Нет кода — нет и истории. Открывай доступ к новым главам, используя секретную
-          последовательность символов.
-        </EnterCipherTitle>
+        <EnterCipherHeader>{t("cipherPage.title")}</EnterCipherHeader>
+        <EnterCipherTitle>{t("cipherPage.subtitle")}</EnterCipherTitle>
 
         <InputContainer>
           <CipherInput
@@ -229,7 +230,7 @@ const EnterCipherTitle = styled.h2`
   margin: 0 auto;
   margin-bottom: 48px;
   font-size: 22px;
-  max-width: 680px;
+  max-width: 700px;
   line-height: 1.4;
 
   @media (max-width: 768px) {

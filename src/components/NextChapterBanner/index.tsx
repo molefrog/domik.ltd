@@ -2,31 +2,23 @@ import { Link } from "wouter";
 import { Countdown } from "~/components/Countdown";
 
 import styled from "@emotion/styled";
+import { useI18n } from "~/i18n/i18n";
 
-interface NextChapterBannerProps {
-  launchDate: Date;
-}
+interface NextChapterBannerProps {}
 
-export function NextChapterBanner({ launchDate }: NextChapterBannerProps) {
-  const isPastLaunchDate = launchDate.getTime() - Date.now() < 0;
+export function NextChapterBanner({}: NextChapterBannerProps) {
+  const { t } = useI18n();
 
   return (
     <Container>
       <AvailableIn>
-        <AvailableLabel>
-          {!isPastLaunchDate ? "Интересно, что же будет дальше?" : "Новая глава уже доступна!"}
-        </AvailableLabel>
-
-        <CountdownLabel to={launchDate} />
+        <AvailableLabel>{t("storyPage.unlock.text")}</AvailableLabel>
       </AvailableIn>
 
       <Buttons>
         <Button primary to="/x">
-          {"Ввести код"}
+          {t("storyPage.unlock.button")}
         </Button>
-        <SubscribeButton target="_blank" rel="noreferrer noopener" href="https://t.me/domik_ltd">
-          Узнать о выходе
-        </SubscribeButton>
       </Buttons>
     </Container>
   );
@@ -37,16 +29,8 @@ const AvailableIn = styled.div`
 `;
 
 const AvailableLabel = styled.div`
-  max-width: 320px;
   line-height: 1.4;
-  margin-bottom: 10px;
   color: var(--color-text-gray);
-`;
-
-const CountdownLabel = styled(Countdown)`
-  font-size: 32px;
-  font-weight: bold;
-  white-space: nowrap;
 `;
 
 const Buttons = styled.div`
@@ -54,7 +38,7 @@ const Buttons = styled.div`
   flex-wrap: wrap;
   align-items: center;
   gap: 10px;
-  margin-top: 32px;
+  margin-top: 24px;
 `;
 
 const Button = styled(Link, {
