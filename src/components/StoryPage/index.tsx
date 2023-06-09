@@ -8,7 +8,7 @@ import { Story } from "./Story";
 import { checkCipherValidity, ChapterModule, chapterModules } from "~/chapters";
 import { acceptedCipher } from "~/state";
 import { delay } from "~/utils/promises";
-import { useLocale } from "~/i18n/hooks";
+import { useI18n, useLocale } from "~/i18n/hooks";
 
 export const StoryPage = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -17,6 +17,7 @@ export const StoryPage = () => {
   const [chapters, setChapters] = useState<Array<ChapterModule>>([]);
 
   const locale = useLocale();
+  const { t } = useI18n();
 
   useEffect(() => {
     (async () => {
@@ -54,8 +55,9 @@ export const StoryPage = () => {
           <BumperCar animation width={128} />
         </div>
         <LoaderText>
-          Подождите немножко,
-          <br /> мы готовим для вас историю...
+          {t("storyPage.loader.lineOne")}
+          <br />
+          {t("storyPage.loader.lineTwo")}
         </LoaderText>
       </Loader>
     );

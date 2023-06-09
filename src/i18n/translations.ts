@@ -9,6 +9,10 @@ export const en = {
       "No code, no story. Use the secret sequence of characters to unlock the next chapter.",
   },
   storyPage: {
+    loader: {
+      lineOne: "Please wait a moment,",
+      lineTwo: "we're getting the story ready...",
+    },
     unlock: {
       text: "We could show you what happened next, but it would be too boring.",
       button: "Unlock more chapters",
@@ -28,6 +32,10 @@ export const ru = {
       "открыть следующую главу.",
   },
   storyPage: {
+    loader: {
+      lineOne: "Подождите немного,",
+      lineTwo: "мы готовим для вас историю...",
+    },
     unlock: {
       text: "Мы могли бы показать вам, что было дальше, но это было бы слишком скучно.",
       button: "Открыть следующую главу",
