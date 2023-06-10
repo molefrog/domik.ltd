@@ -1,3 +1,165 @@
-export const title = "01. Intro";
+import { useState } from "react";
+import map from "./map.webp";
 
-# 01. Intro
+export const title = "03. Stories";
+
+# 03. Stories
+
+We hovered along for a few more hours. The body of water we crossed was not a river but a whole
+system of connected canals, separated by small pockets of land. The view from the cockpit of the car
+was just breathtaking. Enormous water lilies dotted the surface of the of the canals, and then all
+at once they were replaced by beautiful sloping trees, partially submerged in the water. I caught
+myself thinking that I would have given anything to feast my eyes on
+{<TV video="qZ0_aa6RxvQ" from="59:20">that view</TV>} for all eternity. It's amazing that the mere
+sight of nature suffuses us with such peace and tranquillity — a frequently overlooked phenomenon.
+
+At some point, the canal system began to lose its structure: the channels were thinning, and the
+main waterway was becoming narrower and narrower. Eventually, we came to a slightly sloping shore
+and turned off the air cushion.
+
+We then drove along a wide road flanked by a green plain for another two or three hours. I began to
+notice other cars coming towards us. It was clear from their frequency that we had reached the main
+road.
+
+Ash pressed a small button on the dashboard and the compass needle pointed south-southwest.
+
+“I think we're running low on power. Let's stop at this service station just before we turn the
+corner," he suggested.
+
+The service — or rather recharging — station, was a small hill with four tunnels running through it.
+There was a platform at the entrance of each tunnel to which the car had to be driven, and then the
+platform would guide the car down a conveyor belt inside the tunnel. What happened next in the
+tunnel was still not very clear to us (the conveyor wouldn't start until you got out of the car). It
+seemed that mechanisms would somehow connect to the car's body and charge it, and separate sensors
+would check that the air cushion was working properly.
+
+The procedure took just over half an hour, so we decided to take the stairs up to
+{<TV video="SoJFPa3wfJ0" from="2:52" withSound> the roadside shop</TV>} at the very top of the hill.
+
+“Hey look at this ridiculous map!" I said. A book on a stand for guidebooks and maps had caught my
+eye. But this book seemed different to the others. Unlike the standard maps there, it was hand-drawn
+and depicted strange objects instead of cities, such as: a toilet bowl, bowling pins and a pencil
+sharpener.
+
+“It probably got here by accident…. it could be from the children's section," Ash replied with some
+difficulty, as he'd just stuffed a croissant into his mouth.
+
+“No, no, look, it says here: 'A Guide to Roadside Monuments of Cultural Importance.'
+{<Gem oct={4} />} It seems to be an actual map, apparently, for people who like to stop and look at,
+well… an enormous toilet by the roadside. It says here that this Monument Valley starts after 50km,
+if we go a bit off our route. It's hard to imagine who'd be interested in that, to be honest...”
+
+“Yes, what a waste of time. It's also off the main road, so I'm sure that nobody bothers to go
+there.”
+
+...
+
+Yet within half an hour we were looking at a gargantuan (the biggest in the world, according to the
+book) lava lamp. Yes, it was interesting to see what kind of idiot had wanted to break that record.
+
+Having suddenly developed a keen interest in the topic, Ash was now not letting the map out of his
+hands:
+
+“It says here that it took 'three truckloads of wax of different colours and densities' to create.
+And the lamp is hardly ever turned off, because it takes hours to heat up and cool down. Also, 'the
+switched-on lamp is meant to symbolise the chaos that prevails in the universe, the increasing
+entropy, the peak of structure and destruction...'"
+
+“Honestly, who writes these brochures anyway?!” I retorted. “I don't understand why it's so
+complicated. Surely you can just say something like: 'The lamp is glowing and there are gooey blobs
+floating around in it.' That's it!”
+
+“Well... Because the book says that wax never takes the same shape twice. Every moment is unique, in
+fact the lamp gives rise to states the universe has never seen before.”
+
+On that note, we raised our heads almost simultaneously and stared at the
+{<TV video="zbo6jUGrwdk">blobs of wax</TV>} floating inside the lamp. We gazed at their movement for
+a while longer, and then set off again.
+
+export const MapPuzzle = () => {
+  const [solved, setSolved] = useState(false);
+  return (
+    <ConnectTheDots
+      baseWidth={670}
+      dots={[
+        [187, 338],
+        [206, 498],
+        [338, 537],
+        [475, 500],
+        [562, 315],
+        [404, 312],
+      ]}
+      initialPath={[]}
+      successPredicate={(seq) => seq[seq.length - 1] === 2 && seq[0] === 0}
+      image={map}
+      onSuccessChange={(success) => setSolved(success)}
+    >
+      <Aside sticky>
+        <p>
+          <Spoiler reveal={solved}>
+            According to the book, an idea was expressed in each of the road monuments. The ball of
+            rubber string, the lava lamp, and even the toilet had a good reason for being built.
+          </Spoiler>
+        </p>
+        <p>
+          <Spoiler reveal={solved}>
+            But should there be a reason for everything we do? I mean, sometimes we just act
+            spontaneously - it seems right in the moment. And sometimes, it is precisely out of this
+            randomness and aimlessness that meaning actually appears.
+          </Spoiler>
+        </p>
+      </Aside>
+    </ConnectTheDots>
+  );
+};
+
+<MapPuzzle />
+
+The map had a fairly non-linear structure, so we visited the monuments of 'cultural significance' in
+completely random order.
+
+Perhaps the most memorable was <TV video="LOiCbf65B2Y" from="0:35">the giant ball of rubber
+string</TV>. It was truly enormous: the size of a seven-storey house. Originally, we hadn't planned
+to visit it at all — it didn't look very impressive on the map, but up close its sheer size was
+breathtaking.
+
+We took a seat on one of the viewing platforms at a decent distance from the ball.
+
+“Yes, a fascinating sight. I wonder what the brochure thinks the ball symbolises. Surely 'the
+structure of the solar system, the centrism of life or the orb as a primitive beginning?'” I said.
+
+“Let me see," Ash said, fiddling with the map, "OK, it says here that 'symbolises a big ball of
+rubber string'. Sounds about right!”
+
+“Whoever wrote this book must have seen the ball only once in his life.” said an unknown voice.
+
+We turned around. An old man was sitting not far from us, smoking a pipe.
+
+“I've lived here a long time and I've seen all three versions of the ball.”
+
+“Wait, so this is a copy?” I was surprised.
+
+“More like a new iteration. The rubber in our area is not as reliable as you might think, so every
+ten to fifteen years, the ball is dismantled and a new one is put together. The old rubber string is
+not thrown away, but recycled and used to make a lot of small rubber bands to make pickle jars seal
+properly for the winter.”
+
+“I wonder what they do with the old lava lamp wax then...”
+
+“I'm not in charge of the lava lamp, but it's said that the universe itself absorbs it over time".
+the old man took a long puff from his pipe.”
+
+“Ah, yes, the universe...”
+
+“Actually, you know what the interesting thing is, lads? The ball always starts and ends roughly the
+same way, although a lot of tourists are interested in finding the end. Everyone asks: "show me the
+end of the ball," so they can take pictures with it. But for me, the most important thing is what's
+inside.”
+
+The old man took another deep puff.
+
+“Each version of the ball has a clear beginning and end. And the path that the rubber string travels
+is the interesting part. For me it's a new story every time, a pattern I never tire of exploring...”
+
+I don't remember how long we meditatively contemplated the ball. Everyone was immersed in their own
+thoughts and the old man was slowly smoking his pipe.
