@@ -1,0 +1,3 @@
+{
+  "startCommand": "VITE_PREVIEW_MODE=true npm run dev"
+}

@@ -48,6 +48,8 @@ async function buildCodeSequence(code?: Code | number, tries = 6) {
 
 const REQUIRE_CODE_FOR_EACH_CHAPTER = import.meta.env.VITE_REQUIRE_CODE_FOR_EACH_CHAPTER === "true";
 
+const PREVIEW_MODE = import.meta.env.VITE_PREVIEW_MODE === "true";
+
 interface CipherValidity {
   valid: boolean;
   chaptersUnlocked: number;
@@ -58,6 +60,14 @@ interface CipherValidity {
  * Checks if the code matches any chapter from the book
  */
 export async function checkCipherValidity(code?: Code | number): Promise<CipherValidity> {
+  if (PREVIEW_MODE) {
+    return {
+      valid: true,
+      chaptersUnlocked: totalNumberOfChapters,
+      startReadingFromChapter: 0,
+    };
+  }
+
   if (!REQUIRE_CODE_FOR_EACH_CHAPTER) {
     // first tree chapters are available without a code
     if (code === undefined) return { valid: true, chaptersUnlocked: 3 };
