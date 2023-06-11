@@ -9,9 +9,7 @@
     "preview": "vite preview"
   },
   "stackblitz": {
-    "env": {
-      "VITE_PREVIEW_MODE": "true"
-    }
+    "startCommand": "VITE_PREVIEW_MODE=true npm run dev"
   },
   "dependencies": {
     "@emotion/css": "^11.10.5",
