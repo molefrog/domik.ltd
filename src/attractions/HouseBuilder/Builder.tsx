@@ -87,7 +87,6 @@ export const Builder = ({ houseState, gridStep }: Props) => {
                   <SeparatorWithControls>
                     <Button
                       icon="plus"
-                      iconSize={`${gridStep * 0.6}px`}
                       width={buttonWidth}
                       height={buttonHeight}
                       onClick={() => buildNewFloor(index)}
@@ -96,7 +95,6 @@ export const Builder = ({ houseState, gridStep }: Props) => {
                     {canRemoveBlock && (
                       <Button
                         icon="minus"
-                        iconSize={`${gridStep * 0.6}px`}
                         width={buttonWidth}
                         height={buttonHeight}
                         onClick={() => demolishFloor(index)}
