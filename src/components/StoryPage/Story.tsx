@@ -125,5 +125,5 @@ const Article = styled.article`
 `;
 
 const Banner = styled.div`
-  margin-top: 48px;
+  margin-top: 32px;
 `;

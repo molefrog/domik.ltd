@@ -14,7 +14,7 @@ export const en = {
       lineTwo: "we're getting the story ready...",
     },
     unlock: {
-      text: "We could show you what happened next, but it would be too boring.",
+      text: "We could show you what happened next, but it would be too easy.",
       button: "Unlock more chapters",
     },
   },
@@ -37,7 +37,7 @@ export const ru = {
       lineTwo: "мы готовим для вас историю...",
     },
     unlock: {
-      text: "Мы могли бы показать вам, что было дальше, но это было бы слишком скучно.",
+      text: "Мы могли бы продолжить, но это было бы слишком просто.",
       button: "Открыть следующую главу",
     },
   },

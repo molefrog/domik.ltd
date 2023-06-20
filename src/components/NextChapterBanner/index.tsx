@@ -1,8 +1,8 @@
 import { Link } from "wouter";
-import { Countdown } from "~/components/Countdown";
-
 import styled from "@emotion/styled";
 import { useI18n } from "~/i18n/i18n";
+
+import bannerImg from "~/assets/sprites/unlock-chapters-banner.svg";
 
 interface NextChapterBannerProps {}
 
@@ -11,22 +11,38 @@ export function NextChapterBanner({}: NextChapterBannerProps) {
 
   return (
     <Container>
-      <AvailableIn>
-        <AvailableLabel>{t("storyPage.unlock.text")}</AvailableLabel>
-      </AvailableIn>
+      <Banner aria-hidden={true} src={bannerImg} />
 
-      <Buttons>
-        <Button primary to="/x">
-          {t("storyPage.unlock.button")}
-        </Button>
-      </Buttons>
+      <TextContainer>
+        <div>
+          <AvailableIn>
+            <AvailableLabel>{t("storyPage.unlock.text")}</AvailableLabel>
+          </AvailableIn>
+
+          <Buttons>
+            <Button primary to="/x">
+              {t("storyPage.unlock.button")}
+            </Button>
+          </Buttons>
+        </div>
+      </TextContainer>
     </Container>
   );
 }
 
-const AvailableIn = styled.div`
-  margin-right: 24px;
+const Container = styled.div`
+  position: relative;
+  overflow: hidden;
 `;
+
+const Banner = styled.img`
+  pointer-events: none;
+  user-select: none;
+  width: 100%;
+  min-width: 600px;
+`;
+
+const AvailableIn = styled.div``;
 
 const AvailableLabel = styled.div`
   line-height: 1.4;
@@ -38,7 +54,6 @@ const Buttons = styled.div`
   flex-wrap: wrap;
   align-items: center;
   gap: 10px;
-  margin-top: 24px;
 `;
 
 const Button = styled(Link, {
@@ -54,6 +69,8 @@ const Button = styled(Link, {
   color: inherit;
   border: 3px solid transparent;
 
+  margin-top: 12px;
+
   ${({ primary }) =>
     primary
       ? "background: var(--color-selected);"
@@ -61,6 +78,9 @@ const Button = styled(Link, {
 
   @media (max-width: 640px) {
     flex: 1 1 100%;
+    font-size: 16px;
+    padding: 5px 12px;
+    margin-top: 8px;
   }
 
   :hover {
@@ -71,9 +91,22 @@ const Button = styled(Link, {
 
 const SubscribeButton = Button.withComponent("a");
 
-const Container = styled.div`
-  background: var(--color-embossed);
-  padding: 32px;
-  border-radius: 16px;
+const TextContainer = styled.div`
+  position: absolute;
+  top: 45%;
+  right: 10%;
+  left: 5%;
+  bottom: 16%;
   font-size: 17px;
+
+  display: flex;
+  align-items: center;
+
+  @media (max-width: 640px) {
+    top: 46%;
+    right: 3%;
+    left: 7%;
+    bottom: 16%;
+    font-size: 16px;
+  }
 `;
