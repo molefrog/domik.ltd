@@ -69,7 +69,7 @@ export const Button = styled.button<ButtonProps>`
     transform: translateY(1px);
   }
 
-  ${({ icon, iconSize = "60%" }) =>
+  ${({ icon, iconSize = "50%" }) =>
     icon &&
     css`
       &:before {
