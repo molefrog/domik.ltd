@@ -22,7 +22,6 @@ interface ButtonProps {
   height?: string;
   aspect?: string;
   icon?: keyof typeof ICONS;
-  iconSize?: string;
 }
 
 /**
@@ -69,15 +68,22 @@ export const Button = styled.button<ButtonProps>`
     transform: translateY(1px);
   }
 
-  ${({ icon, iconSize = "50%" }) =>
+  ${({ icon }) =>
     icon &&
     css`
       &:before {
         content: "";
         display: inline-block;
-        width: ${iconSize};
-        height: ${iconSize};
+        width: 50%;
+        height: 50%;
         background: url("${ICONS[icon!]}") center / contain no-repeat;
+      }
+
+      @media (max-width: 768px) {
+        &:before {
+          width: 60%;
+          height: 60%;
+        }
       }
     `}
 `;
