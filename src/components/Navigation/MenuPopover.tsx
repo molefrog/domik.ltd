@@ -173,7 +173,7 @@ const Popover = styled(animated.div)`
   min-height: 420px;
 
   border-image-source: url(${menuBorderImg});
-  border-image-slice: 190 200 190 200;
+  border-image-slice: 200 190 fill;
   border-image-width: calc(95px * 0.8) calc(100px * 0.8);
   border-image-repeat: stretch;
 
