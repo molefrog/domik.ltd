@@ -6,6 +6,8 @@ export const en = {
   indexPage: {
     title: "Domik Ltd.",
     readTheStory: "Read the story",
+    unlockYourHome: "Unlock your fantasy home with 'Domik Limited'!",
+    budgetNote: "(as long as your dreams don't exceed our budget!)",
   },
   cipherPage: {
     title: "Hold your horses!",
@@ -32,6 +34,8 @@ export const ru = {
   indexPage: {
     title: "Домик лимитед",
     readTheStory: "Читать историю",
+    unlockYourHome: "Постройте дом мечты с 'Домик Лимитед'!",
+    budgetNote: "(если только ваши мечты не превышают наш бюджет!)",
   },
   cipherPage: {
     title: "Введите код и продолжайте путешествие!",

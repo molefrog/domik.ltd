@@ -3,9 +3,11 @@ import { MainMenu } from "./MainMenu";
 import { Billboard as BillboardImg } from "./Billboard";
 import { Link } from "wouter";
 import { useLocale } from "~/i18n/locale";
+import { useI18n } from "~/i18n/i18n";
 
 export const IndexPage = () => {
   const locale = useLocale();
+  const { t } = useI18n();
 
   return (
     <>
@@ -17,7 +19,7 @@ export const IndexPage = () => {
       </Menu>
 
       <Footer>
-        Unlock your fantasy home with 'Domik Limited'! ·{" "}
+        {t("indexPage.unlockYourHome")} ·{" "}
         <LangLink active={locale === "en"} to="~/en">
           English
         </LangLink>{" "}
@@ -26,7 +28,7 @@ export const IndexPage = () => {
           На русском
         </LangLink>
         <Sub>
-          (as long as your dreams don't exceed our budget!)
+          {t("indexPage.budgetNote")}
           {" · "}
           <a href="https://github.com/molefrog/domik.ltd" rel="noopener noreferrer" target="_blank">
             Source on GitHub
