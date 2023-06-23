@@ -18,7 +18,7 @@ export const en = {
       lineTwo: "we're getting the story ready...",
     },
     unlock: {
-      text: "We could show you what happened next, but it would be too easy.",
+      text: "We could show you what happens next, but that would be too easy.",
       button: "Unlock more chapters",
     },
   },
