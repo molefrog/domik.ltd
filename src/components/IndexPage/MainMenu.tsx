@@ -1,17 +1,17 @@
-import { useState } from "react";
-
 import styled from "@emotion/styled";
 import { Link } from "wouter";
 
+import { useI18n } from "~/i18n/i18n";
+
 export const MainMenu = () => {
+  const i18n = useI18n();
+
   return (
     <Menu>
       <Buttons>
         <Button primary to="/story">
-          Читать
+          {i18n.t("indexPage.readTheStory")}
         </Button>
-
-        <Button to="/x">Ввести код</Button>
       </Buttons>
     </Menu>
   );
@@ -21,7 +21,6 @@ const Buttons = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
-  min-width: 520px;
 
   @media (max-width: 640px) {
     flex-wrap: wrap;
@@ -39,12 +38,13 @@ const Button = styled(Link, {
   text-align: center;
   color: inherit;
   border: 3px solid transparent;
+  min-width: 224px;
 
   transform: rotate(-3deg);
-  box-shadow: 0px 3px 0px 2px var(--color-text), 0px 0px 0px 2px var(--color-text);
+  box-shadow: 0px 3px 0px 2px var(--color-selected-vivid),
+    0px 0px 0px 2px var(--color-selected-vivid);
 
-  ${({ primary }) =>
-    primary ? "background: var(--color-selected);" : "background: var(--color-bg); "}
+  ${({ primary }) => (primary ? "background: #ffd172;" : "background: var(--color-bg);")}
 
   transition: transform 0.15s ease;
   flex: 1 1 100%;
