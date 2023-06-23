@@ -125,7 +125,7 @@ modular houses. We tried to {<Emotion feeling="happiness"> to appreciate every m
 knowing that soon everyone would have to go back to their regular lives.
 
 export const CreditsSection = () => {
-  const [revealTitles, setRevealTitles] = useState(true);
+  const [revealTitles, setRevealTitles] = useState(false);
   useEffect(() => {
     const handler = (e) => setRevealTitles(e.detail);
     mediator.addEventListener("successChange", handler);
