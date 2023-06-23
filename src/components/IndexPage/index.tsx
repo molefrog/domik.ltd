@@ -72,13 +72,10 @@ const Menu = styled.div`
   align-items: center;
   justify-content: center;
   padding-top: 80px;
+  overflow: hidden;
 
   @media (max-width: 1024px) {
     padding-top: 40px;
-  }
-
-  @media (max-width: 768px) {
-    padding-top: 20px;
   }
 `;
 
@@ -94,7 +91,8 @@ const Billboard = styled.div`
     width: 100%;
   }
 
-  @media (max-width: 380px) {
-    margin-left: -24px;
+  @media (max-width: 480px) {
+    transform-origin: top center;
+    transform: scale(0.7);
   }
 `;
