@@ -7,32 +7,36 @@ export const IndexPage = () => {
     <Menu>
       <Billboard>
         <BillboardImg />
+        <MainMenu />
       </Billboard>
-
-      <MainMenu />
     </Menu>
   );
 };
 
 const Menu = styled.div`
-  min-height: 100vh;
-  min-height: 100dvh;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-bottom: 196px;
+  padding-top: 80px;
+
+  @media (max-width: 1024px) {
+    padding-top: 40px;
+  }
+
+  @media (max-width: 768px) {
+    padding-top: 20px;
+  }
 `;
 
 const Billboard = styled.div`
   display: flex;
   justify-content: center;
   margin-bottom: 24px;
-  align-self: stretch;
+  position: relative;
+  width: 740px;
+  flex-shrink: 0;
 
-  > svg {
-    width: 100%;
-    min-width: 600px;
-    max-width: 720px;
+  @media (max-width: 380px) {
+    margin-left: -24px;
   }
 `;

@@ -31,16 +31,16 @@ const Buttons = styled.div`
 const Button = styled(Link, {
   shouldForwardProp: (prop) => !["primary"].includes(prop),
 })<{ primary: boolean }>`
-  padding: 7px 14px;
+  padding: 6px 14px;
   border-radius: 10px;
   font-size: 18px;
   white-space: nowrap;
   text-align: center;
   color: inherit;
   border: 3px solid transparent;
-  min-width: 224px;
+  min-width: 174px;
 
-  transform: rotate(-3deg);
+  transform: rotate(-4deg);
   box-shadow: 0px 3px 0px 2px var(--color-selected-vivid),
     0px 0px 0px 2px var(--color-selected-vivid);
 
@@ -59,7 +59,9 @@ const Button = styled(Link, {
 
 const Menu = styled.div`
   margin: 0 16px;
-  border-radius: 16px;
   font-size: 18px;
   padding: 2px;
+  position: absolute;
+  top: 226px;
+  left: 368px;
 `;
