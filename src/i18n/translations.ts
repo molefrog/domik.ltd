@@ -3,6 +3,10 @@ export const en = {
     domik: "Domik",
     ltd: "Limited",
   },
+  indexPage: {
+    title: "Domik Ltd.",
+    readTheStory: "Read the story",
+  },
   cipherPage: {
     title: "Hold your horses!",
     subtitle:
@@ -24,6 +28,10 @@ export const ru = {
   banner: {
     domik: "Домик",
     ltd: "лимитед",
+  },
+  indexPage: {
+    title: "Домик лимитед",
+    readTheStory: "Читать историю",
   },
   cipherPage: {
     title: "Введите код и продолжайте путешествие!",

@@ -8,7 +8,7 @@ export type Locale = "en" | "ru";
 
 export const useLocale = () => useContext(LocaleContext);
 
-const DEFAULT_LOCALE = "ru";
+const DEFAULT_LOCALE = "en";
 
 /**
  * Extracts locale from the URL and creates a nested router context
