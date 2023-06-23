@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
-import { ChapterModule, totalNumberOfChapters } from "~/chapters";
 import { Link, useLocation } from "wouter";
+import { ChapterModule, totalNumberOfChapters } from "~/chapters";
 import { useLocale } from "~/i18n/locale";
 
 import { animated, SpringValue } from "@react-spring/web";
@@ -8,6 +8,9 @@ import { animated, SpringValue } from "@react-spring/web";
 import lockIcon from "~/assets/icons/lock.svg";
 import menuBorderImg from "~/assets/sprites/menu-borders.png";
 import domikImg from "~/assets/sprites/menu-domik.svg";
+
+import { ComponentProps } from "react";
+import { ChapterCheckmark } from "./ChapterCheckmark";
 
 export interface NavigationProps {
   chapters: ChapterModule[];
@@ -29,6 +32,14 @@ export const MenuPopover = ({ currentChapter, chapters, style, onClose }: MenuPr
 
       <Chapters>
         {chapters.map((module, index) => {
+          let completion: ComponentProps<typeof Checkmark>["completion"] = null;
+
+          if (index < currentChapter) {
+            completion = "inprogress";
+          } else if (index === currentChapter) {
+            completion = "done";
+          }
+
           return (
             <Chapter
               key={index}
@@ -36,6 +47,8 @@ export const MenuPopover = ({ currentChapter, chapters, style, onClose }: MenuPr
               href={`/story/chapter-${index + 1}`}
               onClick={onClose}
             >
+              <Checkmark completion={completion} />
+
               {module.title}
             </Chapter>
           );
@@ -74,9 +87,14 @@ export const MenuPopover = ({ currentChapter, chapters, style, onClose }: MenuPr
   );
 };
 
+const Checkmark = styled(ChapterCheckmark)`
+  position: absolute;
+  top: 0;
+  left: -2px;
+`;
+
 const Chapters = styled.div`
   flex-grow: 1;
-  // min-height: 240px;
 `;
 
 const Chapter = styled(Link, {
@@ -92,11 +110,13 @@ const Chapter = styled(Link, {
   align-items: center;
   padding: 0 12px;
 
+  position: relative;
+
   &:hover {
     font-weight: 600;
   }
 
-  ${({ active }) => active && "font-weight: 600"}
+  ${({ active }) => active && "font-weight: 600;"}
 `;
 
 const LockedChapter = styled(Chapter)`
@@ -169,8 +189,8 @@ const Popover = styled(animated.div)`
   top: 40px;
   padding: 40px 34px;
 
-  width: 340px;
-  min-height: 420px;
+  width: 350px;
+  height: 500px;
 
   border-image-source: url(${menuBorderImg});
   border-image-slice: 200 190 fill;
@@ -184,8 +204,11 @@ const Popover = styled(animated.div)`
   transform-origin: 16px 16px;
 
   @media (max-width: 480px) {
-    left: 20px;
+    --pad: 12px;
+
+    left: var(--pad);
     top: 72px;
-    width: calc(100% - 2 * 20px);
+    width: calc(100% - 2 * var(--pad));
+    height: auto;
   }
 `;
