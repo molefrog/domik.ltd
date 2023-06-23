@@ -9,6 +9,7 @@ import hamburderIcon from "~/assets/icons/hamburger.svg";
 
 export const Navigation = (props: NavigationProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [closeDelay, setCloseDelay] = useState(0);
 
   const transitions = useTransition(isOpen, {
     from: { opacity: 0, rotate: "35deg" },
@@ -17,18 +18,20 @@ export const Navigation = (props: NavigationProps) => {
     config: () => {
       return config.stiff;
     },
+    delay: isOpen ? 0 : closeDelay,
   });
 
-  const closeMenu = () => {
+  const closeMenu = (delay: number) => {
+    setCloseDelay(delay);
     setIsOpen(false);
   };
 
-  const popoverRef = useClickOutside(closeMenu);
+  const popoverRef = useClickOutside(() => closeMenu(0));
 
   return (
     <div ref={popoverRef}>
       {transitions((style, item) => {
-        return item && <MenuPopover style={style} onClose={closeMenu} {...props} />;
+        return item && <MenuPopover style={style} onClose={() => closeMenu(1000)} {...props} />;
       })}
 
       <Toggle aria-label="Open menu" active={isOpen} onClick={() => setIsOpen((x) => !x)}>

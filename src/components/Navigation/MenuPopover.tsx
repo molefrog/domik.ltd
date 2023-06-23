@@ -35,9 +35,9 @@ export const MenuPopover = ({ currentChapter, chapters, style, onClose }: MenuPr
           let completion: ComponentProps<typeof Checkmark>["completion"] = null;
 
           if (index < currentChapter) {
-            completion = "inprogress";
-          } else if (index === currentChapter) {
             completion = "done";
+          } else if (index === currentChapter) {
+            completion = "inprogress";
           }
 
           return (
