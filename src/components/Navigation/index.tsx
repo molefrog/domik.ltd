@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 
 import { useState } from "react";
-import { useTransition, config } from "@react-spring/web";
+import { useTransition, config, easings } from "@react-spring/web";
 import { useClickOutside } from "@mantine/hooks";
 
 import { MenuPopover, NavigationProps } from "./MenuPopover";
@@ -12,10 +12,14 @@ export const Navigation = (props: NavigationProps) => {
   const [closeDelay, setCloseDelay] = useState(0);
 
   const transitions = useTransition(isOpen, {
-    from: { opacity: 0, rotate: "35deg" },
-    enter: { opacity: 1, rotate: "-1deg" },
-    leave: { opacity: 0, rotate: "35deg" },
-    config: () => {
+    from: { opacity: 0, translateY: "-100%", rotate: "25deg" },
+    enter: { opacity: 1, translateY: "0", rotate: "0deg" },
+    leave: { opacity: 1, translateY: "-120%", rotate: "-5deg" },
+    config: (_, __, state) => {
+      if (state === "leave") {
+        return { duration: 600, easing: easings.easeInOutBack };
+      }
+
       return config.stiff;
     },
     delay: isOpen ? 0 : closeDelay,

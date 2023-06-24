@@ -140,7 +140,7 @@ const Home = styled.div`
   border-bottom: 2px dashed var(--color-subtle-gray);
   border-top: 2px dashed var(--color-subtle-gray);
   height: 44px;
-  margin-top: 12px;
+  margin-top: 24px;
 `;
 
 const HomeImg = styled.img`
@@ -158,7 +158,6 @@ const Bottom = styled.div`
 
 const LangSwitch = styled.div`
   display: inline-flex;
-  padding: 7px 8px;
   gap: 6px;
 `;
 
@@ -207,8 +206,8 @@ const LangSwitchItem = styled(Link, {
 
 const Popover = styled(animated.div)`
   position: fixed;
-  left: 40px;
-  top: 40px;
+  left: 84px;
+  top: 20px;
   padding: 40px 34px;
 
   width: 350px;
@@ -223,7 +222,7 @@ const Popover = styled(animated.div)`
   flex-direction: column;
 
   user-select: none;
-  transform-origin: 16px 16px;
+  transform-origin: 64px center;
 
   @media (max-width: 480px) {
     --pad: 12px;
