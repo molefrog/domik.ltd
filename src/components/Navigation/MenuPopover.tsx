@@ -9,6 +9,7 @@ import lockIcon from "~/assets/icons/lock.svg";
 import menuBorderImg from "~/assets/sprites/menu-borders.png";
 import domikImg from "~/assets/sprites/menu-domik.svg";
 import langStrokeImg from "~/assets/sprites/menu-lang.svg";
+import menuPinImg from "~/assets/sprites/menu-pin.svg";
 
 import { ComponentProps } from "react";
 import { ChapterCheckmark } from "./ChapterCheckmark";
@@ -27,6 +28,8 @@ export const MenuPopover = ({ currentChapter, chapters, style, onClose }: MenuPr
 
   return (
     <Popover style={style}>
+      <Pin src={menuPinImg} aria-hidden="true" />
+
       <Home>
         <HomeImg src={domikImg} alt="Back to home page" />
       </Home>
@@ -204,10 +207,18 @@ const LangSwitchItem = styled(Link, {
     `}
 `;
 
+const Pin = styled.img`
+  position: absolute;
+  top: -28px;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+`;
+
 const Popover = styled(animated.div)`
   position: fixed;
-  left: 84px;
-  top: 20px;
+  left: 80px;
+  top: 40px;
   padding: 40px 34px;
 
   width: 350px;
@@ -228,7 +239,7 @@ const Popover = styled(animated.div)`
     --pad: 12px;
 
     left: var(--pad);
-    top: 72px;
+    top: 74px;
     width: calc(100% - 2 * var(--pad));
     height: auto;
   }

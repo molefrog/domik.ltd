@@ -12,9 +12,9 @@ export const Navigation = (props: NavigationProps) => {
   const [closeDelay, setCloseDelay] = useState(0);
 
   const transitions = useTransition(isOpen, {
-    from: { opacity: 0, translateY: "-100%", rotate: "25deg" },
-    enter: { opacity: 1, translateY: "0", rotate: "0deg" },
-    leave: { opacity: 1, translateY: "-120%", rotate: "-5deg" },
+    from: { opacity: 0, y: "-100%", rotate: "25deg" },
+    enter: { opacity: 1, y: "0", rotate: "0deg" },
+    leave: { opacity: 1, y: "-120%", rotate: "-5deg" },
     config: (_, __, state) => {
       if (state === "leave") {
         return { duration: 600, easing: easings.easeInOutBack };
