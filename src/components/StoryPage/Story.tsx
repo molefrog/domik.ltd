@@ -1,15 +1,15 @@
-import { useState, useEffect, FunctionComponent, useCallback } from "react";
 import styled from "@emotion/styled";
+import { useCallback, useState } from "react";
 import { useLocation, useRoute } from "wouter";
 
 import { ChapterModule, totalNumberOfChapters } from "~/chapters";
 import { NextChapterBanner } from "~/components/NextChapterBanner";
-import { ReadingProgress } from "../ReadingProgress";
 import { Navigation } from "../Navigation";
+import { ReadingProgress } from "../ReadingProgress";
 
 // hooks
-import { useChapterProgress, useSyncState } from "./useChapterProgress";
 import { useDocumentTitle } from "~/hooks/useDocumentTitle";
+import { useChapterProgress, useSyncState } from "./useChapterProgress";
 
 export interface StoryProps {
   chapters: ChapterModule[];
@@ -116,6 +116,11 @@ const Chapters = styled.div`
 
 const ChapterContent = styled.div`
   padding-top: 48px;
+
+  @media (max-width: 768px) {
+    font-size: 18px;
+    line-height: 27px;
+  }
 `;
 
 const Article = styled.article`
