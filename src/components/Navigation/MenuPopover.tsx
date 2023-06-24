@@ -8,6 +8,7 @@ import { animated, SpringValue } from "@react-spring/web";
 import lockIcon from "~/assets/icons/lock.svg";
 import menuBorderImg from "~/assets/sprites/menu-borders.png";
 import domikImg from "~/assets/sprites/menu-domik.svg";
+import langStrokeImg from "~/assets/sprites/menu-lang.svg";
 
 import { ComponentProps } from "react";
 import { ChapterCheckmark } from "./ChapterCheckmark";
@@ -149,19 +150,16 @@ const HomeImg = styled.img`
   transform: rotate(-1deg);
 `;
 
-const LangSwitch = styled.div`
-  display: inline-flex;
-  padding: 7px 8px;
-  border-radius: 8px;
-
-  box-shadow: inset 0px 1px 0px 1px var(--color-embossed-dark);
-  border: 1px solid var(--color-embossed-dark);
-`;
-
 const Bottom = styled.div`
   margin-top: 16px;
   display: flex;
   justify-content: flex-end;
+`;
+
+const LangSwitch = styled.div`
+  display: inline-flex;
+  padding: 7px 8px;
+  gap: 6px;
 `;
 
 const LangSwitchItem = styled(Link, {
@@ -176,11 +174,35 @@ const LangSwitchItem = styled(Link, {
   position: relative;
   top: 1px;
 
+  background: var(--color-embossed);
+  position: relative;
+
+  &:hover {
+    background: var(--color-embossed-dark);
+  }
+
+  &:after {
+    content: "";
+    display: inline-block;
+    position: absolute;
+    background: url(${langStrokeImg}) no-repeat top center / contain;
+    height: 50px;
+    top: calc(100% - 9px);
+    width: 100%;
+    left: 0;
+    opacity: 0;
+  }
+
   ${({ selected }) =>
     selected &&
     `
-      background: var(--color-embossed-dark);
-      font-weight: 600;`}
+      font-weight: 700;
+      color: var(--color-text);
+
+      &:after {
+        opacity: 1;
+      }
+    `}
 `;
 
 const Popover = styled(animated.div)`
