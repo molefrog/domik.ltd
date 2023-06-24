@@ -97,4 +97,8 @@ const LoaderText = styled.div`
   color: var(--color-text-gray);
   margin-top: 12px;
   line-height: 32px;
+
+  @media (max-width: 768px) {
+    font-size: 18px;
+  }
 `;

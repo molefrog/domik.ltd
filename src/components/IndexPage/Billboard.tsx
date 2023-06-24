@@ -1,23 +1,37 @@
 import styled from "@emotion/styled";
 import { SVGTextWithOuterStroke } from "./SVGTextWithOuterStroke";
 import billboardImg from "~/assets/main/main-menu.webp";
-import { ComponentProps } from "react";
+import { ComponentProps, useId } from "react";
 
 import { useI18n } from "~/i18n/hooks";
 
 export const Billboard = (props: ComponentProps<"svg">) => {
   const i18n = useI18n();
 
+  const filterId = useId();
+
   return (
     <svg viewBox="0 0 800 714" {...props}>
+      <defs>
+        <filter id={filterId}>
+          <feDropShadow dx="0" dy="0.4" stdDeviation="1" floodColor="black" floodOpacity="0.4" />
+          <feDropShadow dx="-3" dy="0.4" stdDeviation="3" floodColor="black" floodOpacity="0.5" />
+        </filter>
+      </defs>
+
       <image xlinkHref={billboardImg} x="0" y="0" width="100%" />
 
-      <g transform="rotate(-6) translate(380 220) skewX(-6) scale(1.05)">
-        <Subtitle transform="translate(70, 50)" stroke="white" strokeWidth="8">
+      <g transform="rotate(-6) translate(360 220) skewX(-6) scale(1.05)">
+        <Subtitle
+          style={{ filter: `url(#${filterId})` }}
+          transform="translate(75, 48)"
+          stroke="white"
+          strokeWidth="8"
+        >
           {i18n.t("banner.ltd")}
         </Subtitle>
 
-        <Title stroke="white" strokeWidth="18">
+        <Title style={{ filter: `url(#${filterId})` }} stroke="white" strokeWidth="18">
           {i18n.t("banner.domik")}
         </Title>
       </g>
@@ -30,7 +44,6 @@ const Title = styled(SVGTextWithOuterStroke)`
   letter-spacing: -2px;
   font-weight: 900;
   text-transform: uppercase;
-  filter: drop-shadow(4px 3px 0px black);
 `;
 
 const Subtitle = styled(SVGTextWithOuterStroke)`
@@ -38,5 +51,4 @@ const Subtitle = styled(SVGTextWithOuterStroke)`
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 2px;
-  filter: drop-shadow(2px 1px 0px black);
 `;

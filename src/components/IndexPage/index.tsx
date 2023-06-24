@@ -49,6 +49,11 @@ const Sub = styled.div`
   margin-top: 8px;
   font-size: 18px;
   opacity: 0.75;
+
+  @media (max-width: 768px) {
+    font-size: 16px;
+    margin-top: 4px;
+  }
 `;
 
 const Footer = styled.div`
@@ -61,11 +66,14 @@ const Footer = styled.div`
   font-size: 20px;
   color: var(--color-text-gray);
   text-align: center;
-  text-shadow: 2px 0px 0px var(--color-bg), 0px 2px 0px var(--color-bg);
 
   a {
     color: inherit;
     text-decoration: underline;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 18px;
   }
 `;
 

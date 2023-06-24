@@ -62,6 +62,6 @@ const Menu = styled.div`
   font-size: 18px;
   padding: 2px;
   position: absolute;
-  top: 226px;
+  top: 234px;
   left: 368px;
 `;
