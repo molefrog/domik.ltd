@@ -31,7 +31,9 @@ export const MenuPopover = ({ currentChapter, chapters, style, onClose }: MenuPr
       <Pin src={menuPinImg} aria-hidden="true" />
 
       <Home>
-        <HomeImg src={domikImg} alt="Back to home page" />
+        <Link to="/">
+          <HomeImg src={domikImg} alt="Back to home page" />
+        </Link>
       </Home>
 
       <Chapters>
@@ -128,8 +130,8 @@ const LockedChapter = styled(Chapter)`
   align-items: center;
   justify-content: center;
 
-  > img {
-    opacity: 0.6;
+  > img 
+    opacity: 0.35;
   }
 
   &:hover {
@@ -147,10 +149,16 @@ const Home = styled.div`
 `;
 
 const HomeImg = styled.img`
-  width: 88px;
-  margin-left: -2px;
+  width: 84px;
+  margin-left: 8px;
   margin-top: -18px;
   transform: rotate(-1deg);
+  cursor: pointer;
+  opacity: 0.5;
+
+  &:hover {
+    opacity: 1;
+  }
 `;
 
 const Bottom = styled.div`
