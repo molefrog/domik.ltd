@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback, MouseEventHandler } from "react";
 import { useRoute, useLocation, Link } from "wouter";
 import { useDebounce } from "use-debounce";
 import { useAtom } from "jotai";
@@ -58,6 +58,7 @@ export function CipherPage() {
   const [, setNewChapterUnlocked] = useAtom(newChapterUnlocked);
 
   const firstRender = useRef(true);
+  const randomizeTimersRef = useRef<Array<number>>([]);
   const inputRef = useRef<CipherInputRef>(null);
 
   const { t } = useI18n();
@@ -102,9 +103,11 @@ export function CipherPage() {
       for (let i = 0, ms = 0; i < 4; ++i) {
         ms += rand(100, 500);
 
-        setTimeout(() => {
+        const timer = setTimeout(() => {
           setCipher(rand(0o77777777));
         }, ms);
+
+        randomizeTimersRef.current.push(timer);
       }
     }
   }, []);
@@ -134,9 +137,24 @@ export function CipherPage() {
     })();
   }, [debouncedCipher]);
 
+  /**
+   * Handle click on the close button, gets back to the previous page
+   */
+  const handleClose: MouseEventHandler = useCallback(
+    (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      // stops initial shuffle
+      randomizeTimersRef.current.forEach(clearTimeout);
+      history.back();
+    },
+    [navigate]
+  );
+
   return (
     <Container fadeOut={isLoading}>
-      <Link href="/">
+      <Link href="/" onClick={handleClose}>
         <Close aria-label="Close">
           <img src={closeIcon} alt="Go back"></img>
         </Close>

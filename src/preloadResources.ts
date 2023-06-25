@@ -29,6 +29,7 @@ const resources: ResourceDeclaration[] = [
   { load: () => import("~/assets/sounds/success.m4a?url"), type: "audio" },
   { load: () => import("~/assets/sprites/tv.png?url"), type: "image" },
   { load: () => import("~/assets/sprites/noise.gif?url"), type: "image" },
+  { load: () => import("~/assets/sprites/menu-borders.png?url"), type: "image" },
 ];
 
 export const usePreloadedResources = () => {

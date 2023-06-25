@@ -279,6 +279,7 @@ const Close = styled.button`
   border: none;
   background: none;
   cursor: pointer;
+  color: var(--color-text);
 
   &:hover > svg {
     color: var(--color-selected-vivid);
