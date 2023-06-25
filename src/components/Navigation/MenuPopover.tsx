@@ -13,13 +13,14 @@ import menuPinImg from "~/assets/sprites/menu-pin.svg";
 
 import { ComponentProps } from "react";
 import { ChapterCheckmark } from "./ChapterCheckmark";
+import { CloseIcon } from "./icons";
 
 export interface NavigationProps {
   chapters: ChapterModule[];
   currentChapter: number;
 }
 
-type MenuProps = NavigationProps & { onClose: () => void; style: MenuStyle };
+type MenuProps = NavigationProps & { onClose: (delay?: boolean) => void; style: MenuStyle };
 type MenuStyle = { opacity: SpringValue<number>; rotate: SpringValue<string> };
 
 export const MenuPopover = ({ currentChapter, chapters, style, onClose }: MenuProps) => {
@@ -30,9 +31,15 @@ export const MenuPopover = ({ currentChapter, chapters, style, onClose }: MenuPr
     <Popover style={style}>
       <Pin src={menuPinImg} aria-hidden="true" />
 
+      <Close aria-label="Close menu" onClick={() => onClose(false)}>
+        <CloseIcon />
+      </Close>
+
       <Home>
         <Link to="/">
-          <HomeImg src={domikImg} alt="Back to home page" />
+          <a aria-label="Back to the main screen">
+            <HomeImg src={domikImg} alt="Domik illustration" />
+          </a>
         </Link>
       </Home>
 
@@ -146,15 +153,19 @@ const Home = styled.div`
   border-top: 2px dashed var(--color-subtle-gray);
   height: 44px;
   margin-top: 24px;
+
+  > a {
+    display: inline-block;
+  }
 `;
 
 const HomeImg = styled.img`
-  width: 84px;
+  width: 94px;
   margin-left: 8px;
-  margin-top: -18px;
+  margin-top: -26px;
   transform: rotate(-1deg);
   cursor: pointer;
-  opacity: 0.5;
+  opacity: 0.6;
 
   &:hover {
     opacity: 1;
@@ -252,5 +263,24 @@ const Popover = styled(animated.div)`
     width: calc(100% - 2 * var(--pad));
     min-height: 540px;
     height: auto;
+  }
+`;
+
+const Close = styled.button`
+  position: absolute;
+  top: 25px;
+  right: 20px;
+  width: 54px;
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  appearance: none;
+  border: none;
+  background: none;
+  cursor: pointer;
+
+  &:hover > svg {
+    color: var(--color-selected-vivid);
   }
 `;

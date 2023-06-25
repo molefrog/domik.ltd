@@ -35,7 +35,15 @@ export const Navigation = (props: NavigationProps) => {
   return (
     <div ref={popoverRef}>
       {transitions((style, item) => {
-        return item && <MenuPopover style={style} onClose={() => closeMenu(1000)} {...props} />;
+        return (
+          item && (
+            <MenuPopover
+              style={style}
+              onClose={(delay?: boolean) => closeMenu(delay ? 1000 : 0)}
+              {...props}
+            />
+          )
+        );
       })}
 
       <Toggle aria-label="Open menu" active={isOpen} onClick={() => setIsOpen((x) => !x)}>
