@@ -12,12 +12,12 @@ export const Navigation = (props: NavigationProps) => {
   const [closeDelay, setCloseDelay] = useState(0);
 
   const transitions = useTransition(isOpen, {
-    from: { opacity: 0, y: "-100%", rotate: "25deg" },
+    from: { opacity: 0, y: "-100%", rotate: "-25deg" },
     enter: { opacity: 1, y: "0", rotate: "0deg" },
-    leave: { opacity: 1, y: "-120%", rotate: "-5deg" },
+    leave: { opacity: 1, y: "-120%", rotate: "0deg" },
     config: (_, __, state) => {
       if (state === "leave") {
-        return { duration: 600, easing: easings.easeInOutBack };
+        return { duration: 650, easing: easings.easeInOutBack };
       }
 
       return config.stiff;
@@ -61,6 +61,8 @@ const Toggle = styled.button<{ active: boolean }>`
   outline: none;
   border: 3px solid transparent;
   cursor: pointer;
+  transition: opacity 150ms ease 800ms;
+  z-index: 50;
 
   > img {
     opacity: 0.7;
@@ -70,7 +72,13 @@ const Toggle = styled.button<{ active: boolean }>`
     border-color: var(--color-selected);
   }
 
-  ${({ active }) => active && "border-color: var(--color-selected);"}
+  ${({ active }) =>
+    active &&
+    `
+    opacity: 0;
+    pointer-events: none;
+    transition-delay: 0s;
+  `}
 
   @media (max-width: 480px) {
     left: 12px;

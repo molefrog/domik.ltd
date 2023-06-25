@@ -225,30 +225,32 @@ const Pin = styled.img`
 
 const Popover = styled(animated.div)`
   position: fixed;
-  left: 80px;
+  left: 32px;
   top: 40px;
   padding: 40px 34px;
 
   width: 350px;
-  height: 500px;
+  min-height: 500px;
 
   border-image-source: url(${menuBorderImg});
   border-image-slice: 200 190 fill;
   border-image-width: calc(95px * 0.8) calc(100px * 0.8);
   border-image-repeat: stretch;
+  z-index: 60;
 
   display: flex;
   flex-direction: column;
 
   user-select: none;
-  transform-origin: 64px center;
+  transform-origin: left center;
 
   @media (max-width: 480px) {
     --pad: 12px;
 
     left: var(--pad);
-    top: 74px;
+    top: 32px;
     width: calc(100% - 2 * var(--pad));
+    min-height: 540px;
     height: auto;
   }
 `;
