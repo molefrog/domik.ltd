@@ -11,6 +11,3 @@ It's a fun side-project that I made to practice in story-telling, character desi
 You'll need an **access code** to read the story, you can find the codes for each released chapter [here](https://t.me/domik_ltd).
 
 ![Domik specialises in house construction](src/chapters/4-four/meeting-new-friends.webp)
-
-*:gb: The book is yet to be translated to English, in the meantime, you can play around with the puzzles and check out the source code. Good luck!*
-
