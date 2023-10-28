@@ -1,4 +1,4 @@
-import { useLocation, Router } from "wouter";
+import { useRouter, useParams, Route, Switch } from "wouter";
 import { ReactNode, createContext, useContext } from "react";
 import { useI18n } from "./i18n";
 
@@ -10,24 +10,30 @@ export const useLocale = () => useContext(LocaleContext);
 
 const DEFAULT_LOCALE = "en";
 
-/**
- * Extracts locale from the URL and creates a nested router context
- */
-export const RoutesWithLocale = ({ children }: { children: ReactNode }) => {
-  const [location] = useLocation();
-  const [, locale] = /^\/(ru|en)/i.exec(location) ?? [];
-
-  const currentLocale = (locale ?? DEFAULT_LOCALE).toLowerCase() as Locale;
-  const routerBase = locale ? `/${locale}` : ""; // all nested routes will be relative to /:locale
+export const ExtractLocale = (props: { locale?: Locale; children: ReactNode }) => {
+  // TODO: use `useParams` when wouter ships named params with constraints
+  const paramLocale = useRouter().base.replace("/", "").toLowerCase() as Locale;
+  const locale: Locale = props.locale ?? paramLocale;
 
   const i18n = useI18n();
-  if (i18n.locale() !== currentLocale) i18n.locale(currentLocale);
+  if (i18n.locale() !== locale) i18n.locale(locale);
 
+  return <LocaleContext.Provider value={locale}>{props.children}</LocaleContext.Provider>;
+};
+
+/**
+ * Extracts locale from the URL and creates a nested route
+ */
+export const RoutesWithLocale = ({ children }: { children: ReactNode }) => {
   return (
-    <LocaleContext.Provider value={currentLocale}>
-      <Router key={currentLocale} base={routerBase}>
-        {children}
-      </Router>
-    </LocaleContext.Provider>
+    <Switch>
+      <Route path="/(ru|en)" nest>
+        <ExtractLocale>{children}</ExtractLocale>
+      </Route>
+
+      <Route>
+        <ExtractLocale locale={DEFAULT_LOCALE}>{children}</ExtractLocale>
+      </Route>
+    </Switch>
   );
 };
