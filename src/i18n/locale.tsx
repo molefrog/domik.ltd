@@ -1,5 +1,5 @@
-import { useLocation, Router, useRouter } from "wouter";
-import { ReactNode, createContext, useContext, useLayoutEffect } from "react";
+import { useLocation, Router } from "wouter";
+import { ReactNode, createContext, useContext } from "react";
 import { useI18n } from "./i18n";
 
 const LocaleContext = createContext<Locale>("en");
@@ -25,7 +25,7 @@ export const RoutesWithLocale = ({ children }: { children: ReactNode }) => {
 
   return (
     <LocaleContext.Provider value={currentLocale}>
-      <Router key={currentLocale} base={routerBase} parent={useRouter()}>
+      <Router key={currentLocale} base={routerBase}>
         {children}
       </Router>
     </LocaleContext.Provider>

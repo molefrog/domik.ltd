@@ -25,10 +25,10 @@ const DEFAULT_VALUE = 0o0;
  * Syncs currently selected cipher with the route
  */
 const useCipher = (): [Cipher, (x: Cipher) => void] => {
-  const [match, params] = useRoute<{ cipher: string }>("/x/0o:cipher");
+  const [match, params] = useRoute("/x/:cipher");
   const [, navigate] = useLocation();
 
-  const val = match ? parseInt(params.cipher, 8) : DEFAULT_VALUE;
+  const val = match ? parseInt(params.cipher.replace(/^0o/, ""), 8) : DEFAULT_VALUE;
 
   return [val, (x) => navigate(`/x/0o${x.toString(8).padStart(8, "0")}`, { replace: true })];
 };

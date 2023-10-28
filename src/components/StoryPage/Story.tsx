@@ -81,14 +81,16 @@ export const Story = ({ chapters }: StoryProps) => {
  * @returns {state} current chapter index (starting with 1)
  */
 const useChapterNumberFromRoute = (max: number): [CurrentChapter, (v: CurrentChapter) => void] => {
-  const [match, params] = useRoute("/story/chapter-:num");
+  const [match, params] = useRoute("/story/:chapter");
   const [, navigate] = useLocation();
 
   // extracts number from the route, returns undefined if parsing has failed,
   // or the number is out of bounds
   let number;
-  if (match && params?.num) {
-    const parsed = parseInt(params.num) - 1;
+  if (match) {
+    const idx = params.chapter.replace(/^chapter-/, "");
+
+    const parsed = parseInt(idx) - 1;
     number = parsed <= max ? parsed : undefined;
   }
 
