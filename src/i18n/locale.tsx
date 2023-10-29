@@ -1,39 +1,39 @@
-import { useRouter, useParams, Route, Switch } from "wouter";
-import { ReactNode, createContext, useContext } from "react";
+import { useRouter, useParams, Route, Switch, useRoute } from "wouter";
+import { PropsWithChildren, ReactNode, createContext, useContext } from "react";
 import { useI18n } from "./i18n";
 
-const LocaleContext = createContext<Locale>("en");
-
-export type Locale = "en" | "ru";
-
-export const useLocale = () => useContext(LocaleContext);
-
+const LOCALES = ["en", "ru"] as const;
 const DEFAULT_LOCALE = "en";
 
-export const ExtractLocale = (props: { locale?: Locale; children: ReactNode }) => {
-  // TODO: use `useParams` when wouter ships named params with constraints
-  const paramLocale = useRouter().base.replace("/", "").toLowerCase() as Locale;
-  const locale: Locale = props.locale ?? paramLocale;
+type Locale = (typeof LOCALES)[number];
 
+const LocaleCtx = createContext<Locale>("en");
+
+export const useLocale = () => useContext(LocaleCtx);
+
+const WithLocale = ({ children, locale }: PropsWithChildren<{ locale: Locale }>) => {
+  // setup I18n with the provided locale, so that all translations are updated
   const i18n = useI18n();
   if (i18n.locale() !== locale) i18n.locale(locale);
 
-  return <LocaleContext.Provider value={locale}>{props.children}</LocaleContext.Provider>;
+  return <LocaleCtx.Provider value={locale} children={children} />;
 };
 
 /**
  * Extracts locale from the URL and creates a nested route
  */
 export const RoutesWithLocale = ({ children }: { children: ReactNode }) => {
-  return (
-    <Switch>
-      <Route path="/(ru|en)" nest>
-        <ExtractLocale>{children}</ExtractLocale>
-      </Route>
+  const [, params] = useRoute("/:locale?/*");
+  const locale = params?.locale as Locale;
 
-      <Route>
-        <ExtractLocale locale={DEFAULT_LOCALE}>{children}</ExtractLocale>
+  if (LOCALES.includes(locale)) {
+    return (
+      <Route path={`/:${locale}`} nest>
+        <WithLocale locale={locale} children={children} />
       </Route>
-    </Switch>
-  );
+    );
+  } else {
+    // not a valid locale
+    return <WithLocale locale={DEFAULT_LOCALE} children={children} />;
+  }
 };
