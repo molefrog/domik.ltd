@@ -34,7 +34,7 @@ export const StoryPage = () => {
 
         // dynamically load chapter modules
         const [, ...modules] = await Promise.all([
-          delay(import.meta.env.DEV ? 0 : 2000), // artificial delay
+          delay(import.meta.env.DEV ? 0 : 1000), // artificial delay
           ...chapterModules.slice(0, chaptersUnlocked).map((fn) => fn(locale)),
         ]);
 
