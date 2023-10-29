@@ -19,12 +19,13 @@ export const IndexPage = () => {
       </Menu>
 
       <Footer>
-        {t("indexPage.unlockYourHome")} ·{" "}
-        <LangLink active={locale === "en"} to="~/en/">
+        {t("indexPage.unlockYourHome")}
+        {" · "}
+        <LangLink active={locale === "en"} to="~/en">
           English
-        </LangLink>{" "}
-        ·{" "}
-        <LangLink active={locale === "ru"} to="~/ru/">
+        </LangLink>
+        {" · "}
+        <LangLink active={locale === "ru"} to="~/ru">
           На русском
         </LangLink>
         <Sub>
