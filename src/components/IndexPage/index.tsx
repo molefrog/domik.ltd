@@ -20,11 +20,11 @@ export const IndexPage = () => {
 
       <Footer>
         {t("indexPage.unlockYourHome")} ·{" "}
-        <LangLink active={locale === "en"} to="~/en">
+        <LangLink active={locale === "en"} to="~/en/">
           English
         </LangLink>{" "}
         ·{" "}
-        <LangLink active={locale === "ru"} to="~/ru">
+        <LangLink active={locale === "ru"} to="~/ru/">
           На русском
         </LangLink>
         <Sub>

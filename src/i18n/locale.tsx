@@ -23,7 +23,7 @@ const WithLocale = ({ children, locale }: PropsWithChildren<{ locale: Locale }>)
  * Extracts locale from the URL and creates a nested route
  */
 export const RoutesWithLocale = ({ children }: { children: ReactNode }) => {
-  const [, params] = useRoute("/:locale?/*");
+  const [, params] = useRoute("/:locale?/*"); // TODO: optional wildcards
   const locale = params?.locale as Locale;
 
   if (LOCALES.includes(locale)) {
