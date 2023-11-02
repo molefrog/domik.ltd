@@ -20,16 +20,8 @@ function App() {
       <Body>
         <Switch>
           <Route path="/" component={IndexPage} />
-
-          {/* 
-            temporary fix until regexparam supports optional wildcards 
-            https://github.com/lukeed/regexparam/pull/25
-          */}
-          <Route path="/x" component={CipherPage} />
-          <Route path="/x/*" component={CipherPage} />
-
-          <Route path="/story" component={StoryPage} />
-          <Route path="/story/*" component={StoryPage} />
+          <Route path="/x/*?" component={CipherPage} />
+          <Route path="/story/*?" component={StoryPage} />
 
           {import.meta.env.DEV && <Route path="/playground" component={PlaygroundPage} />}
 

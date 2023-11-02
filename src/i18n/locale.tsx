@@ -1,4 +1,4 @@
-import { Route, useLocation } from "wouter";
+import { Route, useRoute } from "wouter";
 import { PropsWithChildren, ReactNode, createContext, useContext } from "react";
 import { useI18n } from "./i18n";
 
@@ -23,19 +23,17 @@ const WithLocale = ({ children, locale }: PropsWithChildren<{ locale: Locale }>)
  * Extracts locale from the URL and creates a nested route
  */
 export const RoutesWithLocale = ({ children }: { children: ReactNode }) => {
-  // TODO: optional wildcards
-  // const [, params] = useRoute("/:locale/*?");
-  const [location] = useLocation();
-  const locale = location.split("/")[1] as Locale;
+  const [, params] = useRoute("/:locale/*?");
+  const locale = params?.locale as Locale;
 
-  if (LOCALES.includes(locale)) {
-    return (
-      <Route path={`/${locale}`} nest>
-        <WithLocale locale={locale} children={children} />
-      </Route>
-    );
-  } else {
-    // not a valid locale
+  // not a valid locale, fallback to default
+  if (!LOCALES.includes(locale)) {
     return <WithLocale locale={DEFAULT_LOCALE} children={children} />;
   }
+
+  return (
+    <Route path={`/${locale}`} nest>
+      <WithLocale locale={locale} children={children} />
+    </Route>
+  );
 };
