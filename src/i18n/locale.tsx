@@ -5,7 +5,7 @@ import { useI18n } from "./i18n";
 const LOCALES = ["en", "ru"] as const;
 const DEFAULT_LOCALE = "en";
 
-type Locale = (typeof LOCALES)[number];
+export type Locale = (typeof LOCALES)[number];
 
 const LocaleCtx = createContext<Locale>("en");
 
