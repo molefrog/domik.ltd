@@ -1,7 +1,7 @@
-import { lazy, useEffect, useLayoutEffect } from "react";
+import { lazy } from "react";
 import styled from "@emotion/styled";
 
-import { Route, Router, Switch as Switch, useLocation, Redirect, useSearch } from "wouter";
+import { Route, Router, Switch as Switch, Redirect, useSearch } from "wouter";
 import { useHashLocation } from "wouter/use-hash-location";
 import { useBrowserLocation } from "wouter/use-browser-location";
 
@@ -14,16 +14,6 @@ import { usePreloadedResources } from "~/preloadResources";
 import { RoutesWithLocale } from "./i18n/locale";
 
 const PlaygroundPage = lazy(() => import("~/components/PlaygroundPage"));
-
-const RedirectToIndex = () => {
-  const [location] = useLocation();
-
-  // For some reason route inside the Switch receives updates before <RoutesWithLocale />
-  // so it doesn't get the fresh base location. This is a workaround.
-  if (location.startsWith("~/")) return null;
-
-  return <Redirect to="/" />;
-};
 
 function App() {
   usePreloadedResources();
@@ -43,7 +33,7 @@ function App() {
             {import.meta.env.DEV && <Route path="/playground" component={PlaygroundPage} />}
 
             <Route>
-              <RedirectToIndex />
+              <Redirect to="/" />
             </Route>
           </Switch>
 

@@ -41,7 +41,7 @@
     "scroll-into-view": "^1.16.2",
     "use-debounce": "^9.0.2",
     "use-sound": "^4.0.1",
-    "wouter": "dev"
+    "wouter": "^3.0.0-dev.889b8d2"
   },
   "devDependencies": {
     "@mantine/hooks": "^6.0.11",
