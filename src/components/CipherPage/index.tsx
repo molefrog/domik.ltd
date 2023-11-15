@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback, MouseEventHandler } from "react";
-import { useRoute, useLocation, Link } from "wouter";
+import { useRoute, useLocation } from "wouter";
 import { useDebounce } from "use-debounce";
 import { useAtom } from "jotai";
 
@@ -154,11 +154,9 @@ export function CipherPage() {
 
   return (
     <Container fadeOut={isLoading}>
-      <Link href="/" onClick={handleClose}>
-        <Close aria-label="Close">
-          <img src={closeIcon} alt="Go back"></img>
-        </Close>
-      </Link>
+      <Close aria-label="Close" onClick={handleClose}>
+        <img src={closeIcon} alt="Go back"></img>
+      </Close>
 
       <EnterCipher>
         <EnterCipherHeader>{t("cipherPage.title")}</EnterCipherHeader>

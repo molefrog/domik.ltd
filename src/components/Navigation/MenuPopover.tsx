@@ -36,7 +36,7 @@ export const MenuPopover = ({ currentChapter, chapters, style, onClose }: MenuPr
       </Close>
 
       <Home>
-        <Link to="/">
+        <Link to="/" asChild>
           <a aria-label="Back to the main screen">
             <HomeImg src={domikImg} alt="Domik illustration" />
           </a>

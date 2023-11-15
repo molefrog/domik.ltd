@@ -89,8 +89,6 @@ const Button = styled(Link, {
   }
 `;
 
-const SubscribeButton = Button.withComponent("a");
-
 const TextContainer = styled.div`
   position: absolute;
   top: 45%;
