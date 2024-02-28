@@ -58,7 +58,7 @@ export const MenuPopover = ({ currentChapter, chapters, style, onClose }: MenuPr
               key={index}
               active={currentChapter === index}
               href={`/story/chapter-${index + 1}`}
-              onClick={onClose}
+              onClick={() => onClose()}
             >
               <Checkmark completion={completion} />
 
@@ -81,7 +81,7 @@ export const MenuPopover = ({ currentChapter, chapters, style, onClose }: MenuPr
             aria-label="English"
             selected={locale === "en"}
             href={`~/en${currentPath}`}
-            onClick={onClose}
+            onClick={() => onClose()}
           >
             EN
           </LangSwitchItem>
@@ -90,7 +90,7 @@ export const MenuPopover = ({ currentChapter, chapters, style, onClose }: MenuPr
             aria-label="Russian"
             selected={locale === "ru"}
             href={`~/ru${currentPath}`}
-            onClick={onClose}
+            onClick={() => onClose()}
           >
             RU
           </LangSwitchItem>
