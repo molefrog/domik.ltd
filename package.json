@@ -40,6 +40,7 @@
     "react-youtube": "^10.0.0",
     "rosetta": "^1.1.0",
     "scroll-into-view": "^1.16.2",
+    "spoiled": "^0.1.0",
     "use-debounce": "^9.0.2",
     "use-sound": "^4.0.1",
     "wouter": "^3.0.1"
