@@ -96,13 +96,13 @@ export const MapPuzzle = () => {
     >
       <Aside sticky>
         <p>
-          <Spoiler reveal={solved}>
+          <Spoiler hidden={!solved}>
             “According to the book, an idea was expressed in each of the road monuments. The ball of
             rubber string, the lava lamp, and even the toilet had a good reason for being built.”
           </Spoiler>
         </p>
         <p>
-          <Spoiler reveal={solved}>
+          <Spoiler hidden={!solved}>
             “But should there be a reason for everything we do? I mean, sometimes we just act
             spontaneously - it seems right in the moment. And sometimes, it is precisely out of this
             randomness and aimlessness that meaning actually appears.”

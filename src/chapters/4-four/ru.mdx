@@ -181,10 +181,10 @@ export const StarsPuzzle = () => {
     >
       <Aside sticky>
         <p>
-          <Spoiler reveal={solved}>— И всё же, что было в этом волшебном йогурте?</Spoiler>
+          <Spoiler hidden={!solved}>— И всё же, что было в этом волшебном йогурте?</Spoiler>
         </p>
         <p>
-          <Spoiler reveal={solved}>
+          <Spoiler hidden={!solved}>
             — Ничего особенного: витамины для поддержания тонуса, и несколько тонизирующих
             компонентов, ведь конференции требуют много сил и энергии. Вот и всё!
           </Spoiler>

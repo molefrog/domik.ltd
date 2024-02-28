@@ -131,7 +131,7 @@ export const CreditsSection = () => {
   return (
     <>
       <p>
-        <Spoiler reveal={revealTitles}>
+        <Spoiler hidden={!revealTitles}>
           Я сохранил привычку время от времени доставать компас из кармана, крутить его в руках и
           рассматривать циферблат. Эта модель заметно устарела, но теперь меня интересовала лишь
           одна простая функция: напоминать, что где-то там, куда указывала стрелочка, меня ждут
@@ -139,31 +139,31 @@ export const CreditsSection = () => {
         </Spoiler>
       </p>
       <Credits.Credits>
-        <Spoiler reveal={revealTitles}>Моему другу Тихону.</Spoiler>
+        <Spoiler hidden={!revealTitles}>Моему другу Тихону.</Spoiler>
         <Credits.Columns>
-          <Credits.Credit title={<Spoiler reveal={revealTitles}>текст, идея и кодинг</Spoiler>}>
-            <Spoiler reveal={revealTitles}>
+          <Credits.Credit title={<Spoiler hidden={!revealTitles}>текст, идея и кодинг</Spoiler>}>
+            <Spoiler hidden={!revealTitles}>
               <EyedLink href="https://molefrog.com">Лёша Тактаров</EyedLink>
             </Spoiler>
           </Credits.Credit>
-          <Credits.Credit title={<Spoiler reveal={revealTitles}>иллюстрации и персонажи</Spoiler>}>
-            <Spoiler reveal={revealTitles}>
+          <Credits.Credit title={<Spoiler hidden={!revealTitles}>иллюстрации и персонажи</Spoiler>}>
+            <Spoiler hidden={!revealTitles}>
               <EyedLink href="https://www.instagram.com/yulia_mrachnenko/">Юля Мрачненько</EyedLink>
             </Spoiler>
           </Credits.Credit>
-          <Credits.Credit title={<Spoiler reveal={revealTitles}>звуки</Spoiler>}>
-            <Spoiler reveal={revealTitles}>
+          <Credits.Credit title={<Spoiler hidden={!revealTitles}>звуки</Spoiler>}>
+            <Spoiler hidden={!revealTitles}>
               <EyedLink href="https://design.facebook.com/toolsandresources/sound-kit-for-prototypes/">
                 Facebook Sound Kit
               </EyedLink>
             </Spoiler>
             <br />
-            <Spoiler reveal={revealTitles}>
+            <Spoiler hidden={!revealTitles}>
               <EyedLink href="https://freesound.org/">freesound.org</EyedLink>
             </Spoiler>
           </Credits.Credit>
-          <Credits.Credit title={<Spoiler reveal={revealTitles}>шрифт</Spoiler>}>
-            <Spoiler reveal={revealTitles}>
+          <Credits.Credit title={<Spoiler hidden={!revealTitles}>шрифт</Spoiler>}>
+            <Spoiler hidden={!revealTitles}>
               <EyedLink href="https://type.today/en/grato_marker">Grato Marker</EyedLink>
             </Spoiler>
           </Credits.Credit>

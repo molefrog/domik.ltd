@@ -52,7 +52,7 @@ export default function PlaygroundPage() {
       sadness
       <p>
         Что ж, всё оказалось не так плохо, как я думал.{" "}
-        <Spoiler reveal={revealSpoiler} onClick={() => setRevealSpoiler((t) => !t)}>
+        <Spoiler hidden={!revealSpoiler} onClick={() => setRevealSpoiler((t) => !t)}>
           По крайней мере, я смог неторопливо проехать несколько метров. Я делал пару попыток, а
           потом брал небольшой перерыв, и уже через час вождения окончательно перестроился.
         </Spoiler>{" "}

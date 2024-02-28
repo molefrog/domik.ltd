@@ -135,7 +135,7 @@ export const CreditsSection = () => {
   return (
     <>
       <p>
-        <Spoiler reveal={revealTitles}>
+        <Spoiler hidden={!revealTitles}>
           I'd kept the habit of occasionally taking the compass out of my pocket, twirling it around
           it in my hands and studying the dial. This model was already noticeably outdated, but now
           I was only interested in its one simple function: to remind me that somewhere, where the
@@ -143,38 +143,38 @@ export const CreditsSection = () => {
         </Spoiler>
       </p>
       <Credits.Credits>
-        <Spoiler reveal={revealTitles}>To my friend Tikhon.</Spoiler>
+        <Spoiler hidden={!revealTitles}>To my friend Tikhon.</Spoiler>
         <Credits.Columns>
-          <Credits.Credit title={<Spoiler reveal={revealTitles}>Story, design, development</Spoiler>}>
-            <Spoiler reveal={revealTitles}>
+          <Credits.Credit title={<Spoiler hidden={!revealTitles}>Story, design, development</Spoiler>}>
+            <Spoiler hidden={!revealTitles}>
               <EyedLink href="https://molefrog.com">Alexey Taktarov</EyedLink>
             </Spoiler>
           </Credits.Credit>
-          <Credits.Credit title={<Spoiler reveal={revealTitles}>Illustrations, character design</Spoiler>}>
-            <Spoiler reveal={revealTitles}>
+          <Credits.Credit title={<Spoiler hidden={!revealTitles}>Illustrations, character design</Spoiler>}>
+            <Spoiler hidden={!revealTitles}>
               <EyedLink href="https://www.instagram.com/yulia_mrachnenko/">
                 Yulia Mrachnenko
               </EyedLink>
             </Spoiler>
           </Credits.Credit>
-          <Credits.Credit title={<Spoiler reveal={revealTitles}>English translation</Spoiler>}>
-            <Spoiler reveal={revealTitles}>
+          <Credits.Credit title={<Spoiler hidden={!revealTitles}>English translation</Spoiler>}>
+            <Spoiler hidden={!revealTitles}>
               <EyedLink href="https://www.instagram.com/susannah_garden/">Susannah Garden</EyedLink>
             </Spoiler>
           </Credits.Credit>
-          <Credits.Credit title={<Spoiler reveal={revealTitles}>Font used</Spoiler>}>
-            <Spoiler reveal={revealTitles}>
+          <Credits.Credit title={<Spoiler hidden={!revealTitles}>Font used</Spoiler>}>
+            <Spoiler hidden={!revealTitles}>
               <EyedLink href="https://type.today/en/grato_marker">Grato Marker</EyedLink>
             </Spoiler>
           </Credits.Credit>
-          <Credits.Credit title={<Spoiler reveal={revealTitles}>UI Sounds</Spoiler>}>
-            <Spoiler reveal={revealTitles}>
+          <Credits.Credit title={<Spoiler hidden={!revealTitles}>UI Sounds</Spoiler>}>
+            <Spoiler hidden={!revealTitles}>
               <EyedLink href="https://design.facebook.com/toolsandresources/sound-kit-for-prototypes/">
                 Facebook Sound Kit
               </EyedLink>
             </Spoiler>
             <br />
-            <Spoiler reveal={revealTitles}>
+            <Spoiler hidden={!revealTitles}>
               <EyedLink href="https://freesound.org/">freesound.org</EyedLink>
             </Spoiler>
           </Credits.Credit>
