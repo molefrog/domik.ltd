@@ -4,7 +4,6 @@ import isPropValid from "@emotion/is-prop-valid";
 import { css } from "@emotion/react";
 
 import { Spoiler as Spoiled } from "spoiled";
-import "spoiled/esm/style.css";
 
 const supportsCSSHoudini = typeof CSS !== "undefined" && "paintWorklet" in CSS;
 
